@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import {
   IconBack,
   IconCheck,
+  IconChevron,
   IconChevronDown,
   IconClose,
 } from "@/components/Icons";
@@ -341,120 +342,151 @@ export default function OrderTicketPage() {
 
         {step === "review" && (
           <div className="mt-5 flex flex-1 flex-col">
-            <div className="card space-y-3 p-4 text-sm">
-              <Row
-                label="Tahmini hisse"
-                value={`${formatShares(estimatedShares)} (kesirli OK)`}
-              />
-              <Row label="Tahmini toplam" value={formatUSD(estimatedTotal)} />
-              <Row label="Fiyat" value={formatUSD(price)} />
-              <Row label="Komisyon" value="$0" accent />
-              {side === "buy" && (
-                <Row
-                  label="≈ TRY"
-                  value={formatTRY(Math.round(estimatedTotal * USD_TRY))}
-                />
-              )}
-            </div>
+            {/* PR-style review card */}
+            <div className="overflow-hidden rounded-2xl border border-black/10 bg-card shadow-sm">
+              <div className="border-b border-black/5 px-4 py-3.5">
+                <p className="text-[17px] font-bold text-nest">
+                  {side === "buy" ? "Alış" : "Satış"} incelemesi ·{" "}
+                  {instrument.symbol}
+                </p>
+              </div>
 
-            {side === "sell" && tax && (
-              <section className="mt-4 overflow-hidden rounded-2xl border border-black/10 bg-card">
-                <button
-                  type="button"
-                  onClick={() => setTaxOpen((o) => !o)}
-                  className="flex w-full items-center justify-between px-4 py-3.5 text-left"
-                >
-                  <div>
-                    <p className="text-[15px] font-bold text-nest">
-                      Vergi etkisi önizlemesi
-                    </p>
-                    <p className="text-[11px] text-muted">
-                      Tahmini — vergi danışmanı değildir
-                    </p>
-                  </div>
-                  <IconChevronDown
-                    size={18}
-                    className={`text-muted transition-transform ${
-                      taxOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {taxOpen && (
-                  <div className="border-t border-black/5 px-4 pb-4 pt-1">
-                    <dl className="space-y-0 divide-y divide-black/5 text-sm">
-                      <div className="flex justify-between py-2.5">
-                        <dt className="text-muted">Maliyet esası</dt>
-                        <dd className="font-semibold tabular-nums text-nest">
-                          {formatUSD(tax.costBasis)}
-                        </dd>
-                      </div>
-                      <div className="flex justify-between py-2.5">
-                        <dt className="text-muted">Tahmini gelir</dt>
-                        <dd className="font-semibold tabular-nums text-nest">
-                          {formatUSD(tax.proceeds)}
-                        </dd>
-                      </div>
-                      <div className="flex justify-between py-2.5">
-                        <dt className="text-muted">Sermaye kazancı</dt>
-                        <dd
-                          className={`font-semibold tabular-nums ${
-                            tax.gain >= 0 ? "text-nest-light" : "text-danger"
-                          }`}
-                        >
-                          {tax.gain >= 0 ? "+" : ""}
-                          {formatUSD(tax.gain)}
-                        </dd>
-                      </div>
-                      <div className="flex justify-between py-2.5">
-                        <dt className="text-muted">Kısa vadeli (tahmini vergi)</dt>
-                        <dd className="font-semibold tabular-nums text-nest">
-                          {formatUSD(tax.shortTermTax)}
-                          <span className="ml-1 text-[11px] font-normal text-muted">
-                            ({formatUSD(tax.shortTermGain)})
-                          </span>
-                        </dd>
-                      </div>
-                      <div className="flex justify-between py-2.5">
-                        <dt className="text-muted">Uzun vadeli (tahmini vergi)</dt>
-                        <dd className="font-semibold tabular-nums text-nest">
-                          {formatUSD(tax.longTermTax)}
-                          <span className="ml-1 text-[11px] font-normal text-muted">
-                            ({formatUSD(tax.longTermGain)})
-                          </span>
-                        </dd>
-                      </div>
-                      <div className="flex justify-between py-2.5">
-                        <dt className="font-medium text-nest">
-                          {tax.gain >= 0
-                            ? "Tahmini vergi borcu"
-                            : "Tahmini vergi tasarrufu"}
-                        </dt>
-                        <dd className="font-bold tabular-nums text-nest">
-                          {formatUSD(
-                            tax.gain >= 0
-                              ? tax.estimatedTax
-                              : tax.estimatedTaxSaved
-                          )}
-                        </dd>
-                      </div>
-                    </dl>
-                    {tax.washSaleRisk && (
-                      <p className="mt-3 rounded-xl bg-[color-mix(in_srgb,var(--danger)_8%,white)] px-3 py-2 text-[11px] text-danger">
-                        Wash-sale notu: Son 30 günde aynı veya benzer menkul
-                        kıymet alındıysa zarar mahsubu sınırlanabilir
-                        (simülasyon).
-                      </p>
-                    )}
-                    {!tax.washSaleRisk && (
-                      <p className="mt-3 text-[11px] text-muted">
-                        Kısa/uzun vade ayrımı mock lot dağılımına göredir. Gerçek
-                        vergi oranları farklılık gösterebilir.
-                      </p>
-                    )}
+              <div className="divide-y divide-black/5 px-4 text-sm">
+                <div className="flex items-center justify-between py-3.5">
+                  <span className="text-muted">Menkul kıymet</span>
+                  <span className="font-semibold text-nest">
+                    {instrument.name}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-3.5">
+                  <span className="text-muted">Tahmini hisse</span>
+                  <span className="font-semibold tabular-nums text-nest">
+                    {formatShares(estimatedShares)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-3.5">
+                  <span className="text-muted">Tahmini toplam</span>
+                  <span className="font-semibold tabular-nums text-nest">
+                    {formatUSD(estimatedTotal)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-3.5">
+                  <span className="text-muted">Komisyon</span>
+                  <span className="font-semibold text-nest-light">$0</span>
+                </div>
+                {side === "buy" && (
+                  <div className="flex items-center justify-between py-3.5">
+                    <span className="text-muted">≈ TRY</span>
+                    <span className="font-semibold tabular-nums text-nest">
+                      {formatTRY(Math.round(estimatedTotal * USD_TRY))}
+                    </span>
                   </div>
                 )}
-              </section>
-            )}
+              </div>
+
+              {side === "sell" && tax && (
+                <div className="space-y-2 border-t border-black/5 px-3 py-3">
+                  <button
+                    type="button"
+                    onClick={() => setTaxOpen((o) => !o)}
+                    className="flex w-full items-center justify-between rounded-xl border border-nest-blue/25 bg-[#f0f6ff] px-3.5 py-3.5 text-left"
+                  >
+                    <div>
+                      <p className="text-[13px] font-semibold text-nest">
+                        {tax.gain >= 0
+                          ? "Tahmini vergi borcu"
+                          : "Tahmini vergi tasarrufu"}
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-muted">
+                        Satış öncesi vergi etkisi
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[17px] font-bold tabular-nums text-nest">
+                        {formatUSD(
+                          tax.gain >= 0
+                            ? tax.estimatedTax
+                            : tax.estimatedTaxSaved
+                        )}
+                      </span>
+                      <IconChevron
+                        size={16}
+                        className={`text-muted transition-transform ${
+                          taxOpen ? "rotate-90" : ""
+                        }`}
+                      />
+                    </div>
+                  </button>
+
+                  <div className="flex items-center justify-between rounded-xl border border-black/8 px-3.5 py-3.5">
+                    <span className="text-[13px] text-muted">
+                      Tahmini işlem zamanı
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[15px] font-semibold text-nest">
+                        Bugün
+                      </span>
+                      <IconChevron size={16} className="text-muted" />
+                    </div>
+                  </div>
+
+                  {taxOpen && (
+                    <div className="rounded-xl bg-beige/80 px-3.5 py-2">
+                      <dl className="divide-y divide-black/5 text-sm">
+                        <div className="flex justify-between py-2">
+                          <dt className="text-muted">Maliyet esası</dt>
+                          <dd className="font-semibold tabular-nums text-nest">
+                            {formatUSD(tax.costBasis)}
+                          </dd>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <dt className="text-muted">Tahmini gelir</dt>
+                          <dd className="font-semibold tabular-nums text-nest">
+                            {formatUSD(tax.proceeds)}
+                          </dd>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <dt className="text-muted">Sermaye kazancı</dt>
+                          <dd
+                            className={`font-semibold tabular-nums ${
+                              tax.gain >= 0 ? "text-nest-light" : "text-danger"
+                            }`}
+                          >
+                            {tax.gain >= 0 ? "+" : ""}
+                            {formatUSD(tax.gain)}
+                          </dd>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <dt className="text-muted">Kısa vadeli vergi</dt>
+                          <dd className="font-semibold tabular-nums text-nest">
+                            {formatUSD(tax.shortTermTax)}
+                          </dd>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <dt className="text-muted">Uzun vadeli vergi</dt>
+                          <dd className="font-semibold tabular-nums text-nest">
+                            {formatUSD(tax.longTermTax)}
+                          </dd>
+                        </div>
+                      </dl>
+                      {tax.washSaleRisk && (
+                        <p className="mt-2 text-[11px] text-danger">
+                          Wash-sale notu: Son 30 günde aynı veya benzer menkul
+                          kıymet alındıysa zarar mahsubu sınırlanabilir
+                          (simülasyon).
+                        </p>
+                      )}
+                      {!tax.washSaleRisk && (
+                        <p className="mt-2 text-[11px] text-muted">
+                          Tahmini — vergi danışmanı değildir. Gerçek oranlar
+                          farklılık gösterebilir.
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
             <div className="mt-auto pt-8">
               <button

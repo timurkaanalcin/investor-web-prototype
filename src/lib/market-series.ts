@@ -246,3 +246,41 @@ export function formatVolume(n: number): string {
   if (n >= 1e3) return `${(n / 1e3).toLocaleString("tr-TR", { maximumFractionDigits: 1 })}K`;
   return n.toLocaleString("tr-TR");
 }
+
+/** Soft rising account-value series for SDI overview (no range pills). */
+export function getOverviewBalanceSeries(
+  endBalance: number,
+  startBalance: number,
+  points = 48
+): PricePoint[] {
+  const rng = mulberry32(hashStr("overview:sdi"));
+  const out: PricePoint[] = [];
+  const now = Date.now();
+  const dayMs = 24 * 60 * 60 * 1000;
+  // ~18 months of weekly-ish points
+  const spanDays = 18 * 30;
+  let value = startBalance;
+
+  for (let i = 0; i < points; i++) {
+    const progress = i / (points - 1);
+    const target = startBalance + (endBalance - startBalance) * progress;
+    // Gentle sawtooth toward target
+    const noise = (rng() - 0.42) * endBalance * 0.008;
+    value = value * 0.72 + target * 0.28 + noise;
+    if (i === points - 1) value = endBalance;
+    const t = now - (1 - progress) * spanDays * dayMs;
+    const d = new Date(t);
+    const months = [
+      "Oca", "Şub", "Mar", "Nis", "May", "Haz",
+      "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara",
+    ];
+    const label =
+      i === 0
+        ? `${months[d.getMonth()]} ${d.getFullYear()}`
+        : i === points - 1
+          ? "Bugün"
+          : `${months[d.getMonth()]} ${d.getFullYear()}`;
+    out.push({ t, price: roundPrice(Math.max(0, value)), label });
+  }
+  return out;
+}

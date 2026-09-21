@@ -7,6 +7,7 @@ import {
   formatVolume,
   getDayStats,
   getMarketStatus,
+  getOverviewBalanceSeries,
   getSeriesForRange,
   getSparkline,
 } from "@/lib/market-series";
@@ -295,6 +296,73 @@ export function StockPriceChart({
             )}
           </button>
         ))}
+      </div>
+    </div>
+  );
+}
+
+
+const OVERVIEW_FILL = "#B8D4F0";
+const OVERVIEW_STROKE = "#1d6ae5";
+
+/** SDI overview — powder-blue area, no range pills, date → Bugün */
+export function OverviewAreaChart({
+  balance,
+  startBalance,
+  height = 180,
+}: {
+  balance: number;
+  startBalance?: number;
+  height?: number;
+}) {
+  const series = useMemo(() => {
+    const start = startBalance ?? balance / 1.05;
+    return getOverviewBalanceSeries(balance, start, 52);
+  }, [balance, startBalance]);
+
+  const w = 360;
+  const h = height;
+  const padX = 4;
+  const padTop = 8;
+  const padBot = 4;
+
+  const values = series.map((p) => p.price);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || balance * 0.02;
+
+  const coords = series.map((p, i) => {
+    const x = padX + (i / Math.max(1, series.length - 1)) * (w - padX * 2);
+    const y = padTop + (1 - (p.price - min) / span) * (h - padTop - padBot);
+    return { x, y };
+  });
+
+  const line = coords.map((c, i) => `${i === 0 ? "M" : "L"}${c.x},${c.y}`).join(" ");
+  const area = `${line} L${coords[coords.length - 1]?.x ?? 0},${h} L${coords[0]?.x ?? 0},${h} Z`;
+  const firstLabel = series[0]?.label ?? "";
+  const lastLabel = "Bugün";
+
+  return (
+    <div className="w-full">
+      <svg
+        viewBox={`0 0 ${w} ${h}`}
+        className="w-full"
+        role="img"
+        aria-label="Hesap bakiyesi grafiği"
+      >
+        <path d={area} fill={OVERVIEW_FILL} fillOpacity="0.85" />
+        <path
+          d={line}
+          fill="none"
+          stroke={OVERVIEW_STROKE}
+          strokeWidth="2"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="mt-0.5 flex justify-between px-0.5 text-[11px] text-muted">
+        <span>{firstLabel}</span>
+        <span>{lastLabel}</span>
       </div>
     </div>
   );
