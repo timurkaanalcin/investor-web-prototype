@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { NestLogo } from "@/components/NestLogo";
+import { BrandLogo } from "@/components/BrandLogo";
 import {
   IconCalendar,
   IconPiggy,
@@ -22,7 +22,7 @@ export default function GoalsPage() {
   return (
     <div className="px-5 pb-6">
       <header className="flex items-center justify-between pt-5 pb-2">
-        <NestLogo size="sm" showIcon={false} />
+        <BrandLogo size="sm" showIcon={false} />
         <button
           type="button"
           onClick={() => flash("Yeni hedef (prototip)")}
@@ -47,13 +47,13 @@ export default function GoalsPage() {
               <span className="text-2xl font-bold">
                 {formatTRY(featured.current)}
               </span>
-              <span className="text-sm font-semibold text-sage">
+              <span className="text-sm font-semibold text-gold">
                 %{featured.pct}
               </span>
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/20">
               <div
-                className="h-full rounded-full bg-sage"
+                className="h-full rounded-full bg-gold"
                 style={{ width: `${featured.pct}%` }}
               />
             </div>
@@ -61,7 +61,7 @@ export default function GoalsPage() {
               <IconCalendar size={13} /> Tahmini tarih: {featured.eta}
             </p>
           </div>
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sage/30 text-3xl">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/30 text-3xl">
             🛡️
           </div>
         </div>

@@ -199,3 +199,45 @@ export function IconCheck({ size = 16, ...p }: P) {
     </svg>
   );
 }
+
+export function IconTrade({ size = 22, ...p }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M4 7h11M15 7l-3-3M15 7l-3 3" />
+      <path d="M20 17H9M9 17l3-3M9 17l3 3" />
+    </svg>
+  );
+}
+
+export function IconSearch({ size = 18, ...p }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+  );
+}
+
+export function IconBack({ size = 22, ...p }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M15 18 9 12l6-6" />
+    </svg>
+  );
+}
+
+export function IconClose({ size = 22, ...p }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" {...p}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+export function IconChevronDown({ size = 16, ...p }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}

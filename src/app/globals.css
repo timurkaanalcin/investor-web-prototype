@@ -1,24 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6f5f1;
-  --foreground: #1b4332;
-  --nest: #1b4332;
-  --nest-light: #2d6a4f;
-  --sage: #95b8a4;
-  --sage-soft: #d8e8de;
-  --sage-muted: #e8f0eb;
-  --cream: #f6f5f1;
-  --card: #ffffff;
-  --muted: #6b7c72;
+  /* Betterment official tokens */
+  --bt-navy: #000b50;
+  --bt-blue: #1d6ae5;
+  --bt-blue-50: #2c78ea;
+  --bt-blue-40: #5696ee;
+  --bt-blue-30: #87b8f5;
+  --bt-light-blue: #9ec9ff;
+  --bt-gold: #ffc729;
+  --bt-cream: #f9f0e2;
+  --bt-grey-10: #f5f5f5;
+  --bt-grey-20: #e6e6e6;
+  --bt-white: #ffffff;
+  --bt-teal: #226d78;
+  --bt-purple: #703dea;
+  --bt-text-default: #212121;
+  --bt-text-muted: #5c5c5c;
+
+  --background: var(--bt-cream);
+  --foreground: var(--bt-text-default);
+  /* Semantic aliases used by components */
+  --nest: var(--bt-navy);
+  --nest-blue: var(--bt-blue);
+  --nest-light: var(--bt-teal);
+  --sage: var(--bt-blue-30);
+  --sage-soft: var(--bt-light-blue);
+  --sage-muted: #e8f1fc;
+  --cream: var(--bt-cream);
+  --card: var(--bt-white);
+  --muted: var(--bt-text-muted);
   --danger: #c44536;
-  --beige: #e8dfd0;
+  --beige: var(--bt-grey-10);
+  --gold: var(--bt-gold);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-nest: var(--nest);
+  --color-nest-blue: var(--nest-blue);
   --color-nest-light: var(--nest-light);
   --color-sage: var(--sage);
   --color-sage-soft: var(--sage-soft);
@@ -28,6 +49,7 @@
   --color-muted: var(--muted);
   --color-danger: var(--danger);
   --color-beige: var(--beige);
+  --color-gold: var(--gold);
   --font-sans: var(--font-dm-sans);
   --font-serif: var(--font-libre);
 }
@@ -38,21 +60,23 @@ body {
 }
 
 body {
-  background: #e9ebe8;
+  background: var(--bt-grey-10);
   color: var(--foreground);
   font-family: var(--font-dm-sans), system-ui, sans-serif;
 }
 
 .dark body,
 body.dark {
-  background: #0f1a14;
-  --background: #122018;
-  --foreground: #e8f0eb;
-  --card: #1a2e24;
-  --muted: #9bb0a3;
-  --cream: #122018;
-  --sage-muted: #1e3328;
-  --sage-soft: #2a4436;
+  background: #070b24;
+  --background: #0a1040;
+  --foreground: #f5f5f5;
+  --card: #12183a;
+  --muted: #a0a0a0;
+  --cream: #0a1040;
+  --sage-muted: #1a2458;
+  --sage-soft: #2a3a7a;
+  --nest: #9ec9ff;
+  --nest-blue: #5696ee;
 }
 
 .phone-shell {
@@ -73,7 +97,7 @@ body.dark {
   .phone-shell {
     min-height: calc(100dvh - 48px);
     border-radius: 28px;
-    box-shadow: 0 20px 60px rgba(27, 67, 50, 0.18), 0 0 0 1px rgba(27, 67, 50, 0.06);
+    box-shadow: 0 20px 60px rgba(0, 11, 80, 0.18), 0 0 0 1px rgba(0, 11, 80, 0.06);
     overflow: hidden;
   }
 }
@@ -81,11 +105,11 @@ body.dark {
 .card {
   background: var(--card);
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(27, 67, 50, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 11, 80, 0.06);
 }
 
 .btn-primary {
-  background: var(--nest);
+  background: var(--bt-blue);
   color: white;
   border-radius: 14px;
   font-weight: 600;
@@ -96,13 +120,12 @@ body.dark {
 }
 .btn-secondary {
   background: var(--card);
-  color: var(--nest);
-  border: 1.5px solid var(--nest);
+  color: var(--bt-blue);
+  border: 1.5px solid var(--bt-blue);
   border-radius: 14px;
   font-weight: 600;
 }
 
-/* range slider */
 input[type="range"].nest-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -111,10 +134,10 @@ input[type="range"].nest-slider {
   border-radius: 999px;
   background: linear-gradient(
     to right,
-    var(--nest) 0%,
-    var(--nest) var(--pct, 50%),
-    #d5ddd8 var(--pct, 50%),
-    #d5ddd8 100%
+    var(--bt-blue) 0%,
+    var(--bt-blue) var(--pct, 50%),
+    var(--bt-grey-20) var(--pct, 50%),
+    var(--bt-grey-20) 100%
   );
   outline: none;
 }
@@ -123,9 +146,9 @@ input[type="range"].nest-slider::-webkit-slider-thumb {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--nest);
+  background: var(--bt-blue);
   border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(27, 67, 50, 0.35);
+  box-shadow: 0 2px 8px rgba(29, 106, 229, 0.35);
   cursor: pointer;
 }
 
@@ -133,13 +156,13 @@ input[type="range"].nest-slider::-webkit-slider-thumb {
   width: 48px;
   height: 28px;
   border-radius: 999px;
-  background: #c5cec8;
+  background: var(--bt-grey-20);
   position: relative;
   transition: background 0.2s;
   flex-shrink: 0;
 }
 .toggle.on {
-  background: var(--nest-light);
+  background: var(--bt-blue);
 }
 .toggle::after {
   content: "";

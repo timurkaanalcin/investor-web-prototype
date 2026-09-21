@@ -27,14 +27,14 @@ export function LineChart({
     <div className="w-full">
       <svg viewBox={`0 0 ${w} ${height}`} className="w-full h-auto" role="img" aria-label="Portföy grafiği">
         <defs>
-          <linearGradient id="nestFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2D6A4F" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#2D6A4F" stopOpacity="0.02" />
+          <linearGradient id="invFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#1d6ae5" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#1d6ae5" stopOpacity="0.02" />
           </linearGradient>
         </defs>
-        <path d={area} fill="url(#nestFill)" />
-        <path d={line} fill="none" stroke="#1B4332" strokeWidth="2.5" strokeLinejoin="round" />
-        <circle cx={last.x} cy={last.y} r="5" fill="#1B4332" stroke="white" strokeWidth="2" />
+        <path d={area} fill="url(#invFill)" />
+        <path d={line} fill="none" stroke="#1d6ae5" strokeWidth="2.5" strokeLinejoin="round" />
+        <circle cx={last.x} cy={last.y} r="5" fill="#1d6ae5" stroke="white" strokeWidth="2" />
       </svg>
       <div className="mt-1 flex justify-between px-1 text-[10px] text-muted">
         {points.map((p) => (
@@ -65,7 +65,7 @@ export function ProgressRing({
           cy={size / 2}
           r={r}
           fill="none"
-          stroke="#E4EBE6"
+          stroke="#e6e6e6"
           strokeWidth={stroke}
         />
         <circle
@@ -73,7 +73,7 @@ export function ProgressRing({
           cy={size / 2}
           r={r}
           fill="none"
-          stroke="#1B4332"
+          stroke="#1d6ae5"
           strokeWidth={stroke}
           strokeDasharray={c}
           strokeDashoffset={offset}

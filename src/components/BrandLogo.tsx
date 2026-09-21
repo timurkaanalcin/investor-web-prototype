@@ -1,6 +1,7 @@
 import { IconLeaf } from "./Icons";
 
-export function NestLogo({
+/** Investor wordmark — serif logo, Betterment-inspired palette */
+export function BrandLogo({
   size = "md",
   showIcon = true,
 }: {
@@ -14,8 +15,9 @@ export function NestLogo({
     <div className="flex items-center gap-1.5 text-nest">
       {showIcon && <IconLeaf size={icon} className="text-nest" />}
       <span className={`font-serif font-semibold tracking-tight ${text}`}>
-        Nest
+        Investor
       </span>
     </div>
   );
 }
+

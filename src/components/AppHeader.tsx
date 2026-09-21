@@ -1,4 +1,4 @@
-import { NestLogo } from "./NestLogo";
+import { BrandLogo } from "./BrandLogo";
 import { IconBell } from "./Icons";
 
 export function AppHeader({
@@ -14,7 +14,7 @@ export function AppHeader({
         centerLogo ? "justify-center relative" : "justify-between"
       }`}
     >
-      <NestLogo size="sm" />
+      <BrandLogo size="sm" />
       {right !== undefined ? (
         right
       ) : (

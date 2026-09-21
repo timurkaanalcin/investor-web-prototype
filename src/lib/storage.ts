@@ -1,7 +1,7 @@
-const ONBOARDING_KEY = "nest_onboarding_complete";
-const DARK_KEY = "nest_dark_mode";
-const GOAL_KEY = "nest_goal";
-const RISK_KEY = "nest_risk";
+const ONBOARDING_KEY = "investor_onboarding_complete";
+const DARK_KEY = "investor_dark_mode";
+const GOAL_KEY = "investor_goal";
+const RISK_KEY = "investor_risk";
 
 export function isOnboardingComplete(): boolean {
   if (typeof window === "undefined") return true;

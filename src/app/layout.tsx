@@ -15,16 +15,32 @@ const libre = Libre_Baskerville({
   weight: ["400", "700"],
 });
 
+const siteUrl = "https://investor.customer.org.tr";
+
 export const metadata: Metadata = {
-  title: "Nest — Otomatik yatırım",
+  metadataBase: new URL(siteUrl),
+  title: "Investor — Otomatik yatırım",
   description:
-    "Nest web prototipi: Betterment tarzı otomatik yatırım uygulaması (mock veri).",
+    "Investor web prototipi: Betterment tarzı otomatik yatırım uygulaması (mock veri).",
+  applicationName: "Investor",
+  openGraph: {
+    title: "Investor — Otomatik yatırım",
+    description:
+      "Betterment tarzı otomatik yatırım prototipi. Türkçe arayüz, mock veri.",
+    url: siteUrl,
+    siteName: "Investor",
+    locale: "tr_TR",
+    type: "website",
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#1B4332",
+  themeColor: "#000b50",
 };
 
 export default function RootLayout({

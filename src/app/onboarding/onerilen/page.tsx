@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { NestLogo } from "@/components/NestLogo";
+import { BrandLogo } from "@/components/BrandLogo";
 import { DonutChart } from "@/components/Charts";
 import { IconBell, IconDoc, IconInfo, IconTrend } from "@/components/Icons";
 import { RECOMMENDED } from "@/lib/mock-data";
@@ -43,7 +43,7 @@ export default function RecommendedPage() {
   return (
     <div className="flex min-h-full flex-col px-5 pb-8 pt-5">
       <header className="flex items-center justify-between">
-        <NestLogo size="sm" />
+        <BrandLogo size="sm" />
         <button type="button" aria-label="Bildirimler" className="text-nest">
           <IconBell />
         </button>

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { NestLogo } from "@/components/NestLogo";
+import { BrandLogo } from "@/components/BrandLogo";
 import { IconArrowRight, IconCheck, IconInfo } from "@/components/Icons";
 import { saveOnboardingChoices } from "@/lib/storage";
 
@@ -44,7 +44,7 @@ export default function OnboardingPage() {
   return (
     <div className="flex min-h-full flex-col px-5 pb-8 pt-6">
       <div className="flex justify-center">
-        <NestLogo size="md" showIcon={false} />
+        <BrandLogo size="md" showIcon={false} />
       </div>
 
       <div className="mt-5 flex justify-center gap-2">
@@ -71,7 +71,7 @@ export default function OnboardingPage() {
               onClick={() => setGoal(g.id)}
               className={`relative flex items-start gap-3 rounded-2xl border p-4 text-left transition-colors ${
                 selected
-                  ? "border-nest/30 bg-sage-muted"
+                  ? "border-nest-blue/40 bg-sage-muted"
                   : "border-transparent bg-card shadow-sm"
               }`}
             >
@@ -87,7 +87,7 @@ export default function OnboardingPage() {
                 </span>
               </span>
               {selected && (
-                <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-nest text-white">
+                <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-nest-blue text-white">
                   <IconCheck size={12} />
                 </span>
               )}
