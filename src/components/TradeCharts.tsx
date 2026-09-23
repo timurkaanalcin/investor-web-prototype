@@ -11,7 +11,7 @@ import {
   getSeriesForRange,
   getSparkline,
 } from "@/lib/market-series";
-import { formatPct, formatUSD } from "@/lib/mock-data";
+import { formatMoney, formatPct, type TradeCurrency } from "@/lib/mock-data";
 
 const GAIN = "#1a7a4c";
 const LOSS = "#c44536";
@@ -99,10 +99,12 @@ export function StockPriceChart({
   symbol,
   lastPrice,
   changePct,
+  currency = "USD",
 }: {
   symbol: string;
   lastPrice: number;
   changePct: number;
+  currency?: TradeCurrency;
 }) {
   const [range, setRange] = useState<ChartRange>("1G");
   const [hover, setHover] = useState<number | null>(null);
@@ -247,7 +249,7 @@ export function StockPriceChart({
                 fontWeight="600"
                 fontFamily="system-ui,sans-serif"
               >
-                {formatUSD(active.price)}
+                {formatMoney(active.price, currency)}
               </text>
             </g>
           )}
@@ -268,7 +270,7 @@ export function StockPriceChart({
               }`}
             >
               {rangeChange >= 0 ? "+" : ""}
-              {formatUSD(rangeChange)} ({formatPct(rangeChangePct)})
+              {formatMoney(rangeChange, currency)} ({formatPct(rangeChangePct)})
             </p>
           )}
         </div>
@@ -402,10 +404,12 @@ export function DayStatsGrid({
   symbol,
   lastPrice,
   changePct,
+  currency = "USD",
 }: {
   symbol: string;
   lastPrice: number;
   changePct: number;
+  currency?: TradeCurrency;
 }) {
   const stats = useMemo(
     () => getDayStats(symbol, lastPrice, changePct),
@@ -413,10 +417,10 @@ export function DayStatsGrid({
   );
 
   const cells: { label: string; value: string }[] = [
-    { label: "Açılış", value: formatUSD(stats.open) },
-    { label: "Yüksek", value: formatUSD(stats.high) },
-    { label: "Düşük", value: formatUSD(stats.low) },
-    { label: "Önceki kapanış", value: formatUSD(stats.prevClose) },
+    { label: "Açılış", value: formatMoney(stats.open, currency) },
+    { label: "Yüksek", value: formatMoney(stats.high, currency) },
+    { label: "Düşük", value: formatMoney(stats.low, currency) },
+    { label: "Önceki kapanış", value: formatMoney(stats.prevClose, currency) },
     { label: "Hacim", value: formatVolume(stats.volume) },
   ];
 
@@ -439,16 +443,18 @@ export function DayStatsGrid({
 export function PriceHeader({
   lastPrice,
   changePct,
+  currency = "USD",
 }: {
   lastPrice: number;
   changePct: number;
+  currency?: TradeCurrency;
 }) {
   const change = lastPrice - lastPrice / (1 + changePct / 100);
   const up = changePct >= 0;
   return (
     <div>
       <p className="text-[36px] font-bold leading-none tracking-tight text-nest tabular-nums">
-        {formatUSD(lastPrice)}
+        {formatMoney(lastPrice, currency)}
       </p>
       <p
         className={`mt-2 text-[15px] font-semibold tabular-nums ${
@@ -456,7 +462,7 @@ export function PriceHeader({
         }`}
       >
         {up ? "+" : ""}
-        {formatUSD(change)}{" "}
+        {formatMoney(change, currency)}{" "}
         <span className="opacity-90">({formatPct(changePct)})</span>
         <span className="ml-1.5 text-[12px] font-medium text-muted">bugün</span>
       </p>

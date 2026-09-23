@@ -1,3 +1,6 @@
+import type { TradeCurrency, TradeInstrument } from "./trade-instruments";
+import { TRADE_INSTRUMENTS } from "./trade-instruments";
+
 export const USER = {
   name: "Ayşe Yılmaz",
   initials: "AY",
@@ -122,47 +125,48 @@ export function formatPct(n: number): string {
 
 /* ─── Self-directed trading (mock) ─── */
 
-export type TradeInstrument = {
-  symbol: string;
-  name: string;
-  type: "stock" | "etf";
-  price: number;
-  changePct: number;
-  popular?: boolean;
-};
+export type {
+  TradeCurrency,
+  TradeExchange,
+  TradeInstrument,
+} from "./trade-instruments";
+export { TRADE_INSTRUMENTS, TRADE_INSTRUMENT_COUNT } from "./trade-instruments";
 
 export type TradePosition = {
   symbol: string;
   shares: number;
   avgCost: number;
-  /** current market value in USD */
+  /** current market value in instrument currency */
   value: number;
   plPct: number;
+  /** P/L in instrument currency (field name historical) */
   plUsd: number;
 };
 
+/** Mock FX: 1 USD = X quote currency */
 export const USD_TRY = 34.2;
+export const USD_RUB = 92.5;
+export const USD_EUR = 0.92;
+export const USD_GBP = 0.78;
 
-export const TRADE_INSTRUMENTS: TradeInstrument[] = [
-  { symbol: "AAPL", name: "Apple Inc.", type: "stock", price: 227.52, changePct: 0.84, popular: true },
-  { symbol: "MSFT", name: "Microsoft Corp.", type: "stock", price: 428.15, changePct: 0.42, popular: true },
-  { symbol: "GOOGL", name: "Alphabet Inc.", type: "stock", price: 165.38, changePct: -0.31, popular: true },
-  { symbol: "AMZN", name: "Amazon.com Inc.", type: "stock", price: 186.74, changePct: 1.12, popular: true },
-  { symbol: "TSLA", name: "Tesla Inc.", type: "stock", price: 248.98, changePct: -1.85, popular: true },
-  { symbol: "NVDA", name: "NVIDIA Corp.", type: "stock", price: 119.67, changePct: 2.14, popular: true },
-  { symbol: "META", name: "Meta Platforms", type: "stock", price: 572.4, changePct: 0.56 },
-  { symbol: "NFLX", name: "Netflix Inc.", type: "stock", price: 719.51, changePct: 0.92, popular: true },
-  { symbol: "KO", name: "The Coca-Cola Company", type: "stock", price: 69.94, changePct: -0.18 },
-  { symbol: "VOO", name: "Vanguard S&P 500 ETF", type: "etf", price: 518.22, changePct: 0.38, popular: true },
-  { symbol: "QQQ", name: "Invesco QQQ Trust", type: "etf", price: 482.91, changePct: 0.71, popular: true },
-  { symbol: "SPY", name: "SPDR S&P 500 ETF", type: "etf", price: 562.15, changePct: 0.35, popular: true },
-  { symbol: "VTI", name: "Vanguard Total Stock", type: "etf", price: 278.44, changePct: 0.29 },
-  { symbol: "BND", name: "Vanguard Total Bond", type: "etf", price: 74.12, changePct: -0.08 },
-  { symbol: "ARKK", name: "ARK Innovation ETF", type: "etf", price: 48.65, changePct: 1.92 },
-  { symbol: "IWM", name: "iShares Russell 2000", type: "etf", price: 221.3, changePct: -0.45 },
+export const FX_USD: Record<TradeCurrency, number> = {
+  USD: 1,
+  TRY: USD_TRY,
+  RUB: USD_RUB,
+  EUR: USD_EUR,
+  GBP: USD_GBP,
+};
+
+export const TRADE_WATCHLIST = [
+  "THYAO",
+  "GARAN",
+  "AAPL",
+  "NVDA",
+  "VOO",
+  "SBER",
+  "TSLA",
+  "QQQ",
 ];
-
-export const TRADE_WATCHLIST = ["AAPL", "NVDA", "VOO", "TSLA", "QQQ"];
 
 export const TRADE_POSITIONS: TradePosition[] = [
   {
@@ -197,18 +201,84 @@ export const TRADE_POSITIONS: TradePosition[] = [
     plPct: 5.74,
     plUsd: 118.1,
   },
+  {
+    symbol: "THYAO",
+    shares: 45.0,
+    avgCost: 285.0,
+    value: 14062.5,
+    plPct: 9.65,
+    plUsd: 1237.5,
+  },
+  {
+    symbol: "GARAN",
+    shares: 120.0,
+    avgCost: 105.0,
+    value: 14208.0,
+    plPct: 12.76,
+    plUsd: 1608.0,
+  },
 ];
 
 export const TRADE_CASH_USD = 4250.0;
 
+const MONEY_LOCALE: Record<TradeCurrency, string> = {
+  USD: "en-US",
+  TRY: "tr-TR",
+  RUB: "ru-RU",
+  EUR: "de-DE",
+  GBP: "en-GB",
+};
+
+const MONEY_SYMBOL: Record<TradeCurrency, string> = {
+  USD: "$",
+  TRY: "₺",
+  RUB: "₽",
+  EUR: "€",
+  GBP: "£",
+};
+
 export function formatUSD(n: number, digits = 2): string {
+  return formatMoney(n, "USD", digits);
+}
+
+export function formatMoney(
+  n: number,
+  currency: TradeCurrency = "USD",
+  digits = 2
+): string {
+  const sym = MONEY_SYMBOL[currency] ?? "$";
+  const loc = MONEY_LOCALE[currency] ?? "en-US";
   return (
-    "$" +
-    n.toLocaleString("en-US", {
+    sym +
+    n.toLocaleString(loc, {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
     })
   );
+}
+
+/** Convert amount in `from` currency to USD */
+export function toUSD(amount: number, currency: TradeCurrency): number {
+  const rate = FX_USD[currency] || 1;
+  return amount / rate;
+}
+
+/** Convert USD cash to instrument currency for available buying power */
+export function cashInCurrency(currency: TradeCurrency): number {
+  return TRADE_CASH_USD * (FX_USD[currency] || 1);
+}
+
+/** Position market value expressed in USD (for portfolio totals) */
+export function positionValueUSD(p: TradePosition): number {
+  const inst = getInstrument(p.symbol);
+  const ccy = inst?.currency ?? "USD";
+  return toUSD(p.value, ccy);
+}
+
+export function positionPlUSD(p: TradePosition): number {
+  const inst = getInstrument(p.symbol);
+  const ccy = inst?.currency ?? "USD";
+  return toUSD(p.plUsd, ccy);
 }
 
 export function formatShares(n: number): string {

@@ -19,13 +19,14 @@ import {
 import { TickerLogo } from "@/components/TickerLogos";
 import {
   TRADE_CASH_USD,
-  USD_TRY,
+  cashInCurrency,
   estimateTaxImpact,
+  formatMoney,
   formatShares,
-  formatTRY,
   formatUSD,
   getInstrument,
   getPosition,
+  type TradeCurrency,
 } from "@/lib/mock-data";
 
 type Side = "buy" | "sell";
@@ -47,6 +48,28 @@ export default function OrderTicketPage() {
   const [taxOpen, setTaxOpen] = useState(true);
 
   const price = instrument?.price ?? 0;
+  const currency: TradeCurrency = instrument?.currency ?? "USD";
+  const cashAvail = cashInCurrency(currency);
+  const moneyUnit =
+    currency === "TRY"
+      ? "TRY"
+      : currency === "RUB"
+        ? "RUB"
+        : currency === "EUR"
+          ? "EUR"
+          : currency === "GBP"
+            ? "GBP"
+            : "Dolar";
+  const moneyPrefix =
+    currency === "TRY"
+      ? "₺"
+      : currency === "RUB"
+        ? "₽"
+        : currency === "EUR"
+          ? "€"
+          : currency === "GBP"
+            ? "£"
+            : "$";
   const num = parseFloat(amount.replace(",", ".")) || 0;
 
   const estimatedShares = useMemo(() => {
@@ -75,7 +98,7 @@ export default function OrderTicketPage() {
     !!instrument &&
     num > 0 &&
     (side === "buy"
-      ? estimatedTotal <= TRADE_CASH_USD
+      ? estimatedTotal <= cashAvail
       : estimatedShares > 0 &&
         estimatedShares <= (position?.shares ?? 0) + 0.0001);
 
@@ -118,9 +141,9 @@ export default function OrderTicketPage() {
         </p>
         <div className="mt-6 w-full divide-y divide-black/[0.05] rounded-2xl bg-beige/80 px-4 text-left text-[14px] ring-1 ring-black/[0.04]">
           <Row label="Tahmini hisse" value={formatShares(estimatedShares)} />
-          <Row label="Tahmini tutar" value={formatUSD(estimatedTotal)} />
-          <Row label="Fiyat" value={formatUSD(price)} />
-          <Row label="Komisyon" value="$0" accent />
+          <Row label="Tahmini tutar" value={formatMoney(estimatedTotal, currency)} />
+          <Row label="Fiyat" value={formatMoney(price, currency)} />
+          <Row label="Komisyon" value={formatMoney(0, currency)} accent />
         </div>
         <p className="mt-4 text-[11px] text-muted">
           Simülasyon — gerçek işlem yapılmadı.
@@ -147,17 +170,17 @@ export default function OrderTicketPage() {
 
   /* ─── Betterment-style order ticket (Sell KO layout) ─── */
   if (step === "ticket" || step === "review") {
-    const availableUsd = position
+    const availableCashOrPos = position
       ? position.value
       : side === "buy"
-        ? TRADE_CASH_USD
+        ? cashAvail
         : 0;
     const availableShares = position?.shares ?? 0;
     const unitLabel =
       side === "buy"
-        ? "Dolar"
+        ? moneyUnit
         : sellMode === "dollars"
-          ? "Dolar"
+          ? moneyUnit
           : "Hisse";
 
     return (
@@ -207,14 +230,16 @@ export default function OrderTicketPage() {
               {side === "buy" ? (
                 <>
                   <p className="text-[15px] font-semibold text-nest tabular-nums">
-                    {formatUSD(TRADE_CASH_USD)}
+                    {formatMoney(cashAvail, currency)}
                   </p>
-                  <p className="mt-0.5 text-[13px] text-muted">Nakit</p>
+                  <p className="mt-0.5 text-[13px] text-muted">
+                    Nakit ≈ {formatUSD(TRADE_CASH_USD)}
+                  </p>
                 </>
               ) : (
                 <>
                   <p className="text-[15px] font-semibold text-nest tabular-nums">
-                    {formatUSD(availableUsd)}
+                    {formatMoney(availableCashOrPos, currency)}
                   </p>
                   <p className="mt-0.5 text-[13px] text-muted">
                     {formatShares(availableShares)} hisse
@@ -234,7 +259,7 @@ export default function OrderTicketPage() {
                 <div className="relative min-w-0 flex-1">
                   {(side === "buy" || sellMode === "dollars") && (
                     <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[15px] text-muted">
-                      $
+                      {moneyPrefix}
                     </span>
                   )}
                   <input
@@ -247,7 +272,7 @@ export default function OrderTicketPage() {
                     }
                     placeholder={
                       side === "buy" || sellMode === "dollars"
-                        ? "Dolar tutarı gir"
+                        ? `${moneyUnit} tutarı gir`
                         : "Hisse adedi gir"
                     }
                     className={`w-full rounded-xl border-2 border-nest-blue bg-white py-3.5 pr-3 text-[15px] text-nest outline-none ring-nest-blue/20 placeholder:text-muted focus:ring-4 ${
@@ -278,7 +303,7 @@ export default function OrderTicketPage() {
                           setUnitOpen(false);
                         }}
                       >
-                        Dolar
+                        {moneyUnit}
                       </button>
                       <button
                         type="button"
@@ -313,7 +338,7 @@ export default function OrderTicketPage() {
               </button>
             )}
 
-            {side === "buy" && num > TRADE_CASH_USD && (
+            {side === "buy" && num > cashAvail && (
               <p className="mt-3 text-center text-xs font-medium text-danger">
                 Yetersiz nakit bakiyesi
               </p>
@@ -337,7 +362,7 @@ export default function OrderTicketPage() {
                 Devam
               </button>
               <p className="mt-3 text-center text-[11px] text-muted">
-                Kesirli hisse desteklenir · Komisyon $0
+                Kesirli hisse desteklenir · Komisyon {formatMoney(0, currency)}
               </p>
             </div>
           </>
@@ -369,18 +394,20 @@ export default function OrderTicketPage() {
                 <div className="flex items-center justify-between py-3.5">
                   <span className="text-muted">Tahmini toplam</span>
                   <span className="font-semibold tabular-nums text-nest">
-                    {formatUSD(estimatedTotal)}
+                    {formatMoney(estimatedTotal, currency)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-3.5">
                   <span className="text-muted">Komisyon</span>
-                  <span className="font-semibold text-gain">$0</span>
+                  <span className="font-semibold text-gain">
+                    {formatMoney(0, currency)}
+                  </span>
                 </div>
-                {side === "buy" && (
+                {side === "buy" && currency !== "USD" && (
                   <div className="flex items-center justify-between py-3.5">
-                    <span className="text-muted">≈ TRY</span>
+                    <span className="text-muted">≈ USD nakit</span>
                     <span className="font-semibold tabular-nums text-nest">
-                      {formatTRY(Math.round(estimatedTotal * USD_TRY))}
+                      {formatUSD(TRADE_CASH_USD)}
                     </span>
                   </div>
                 )}
@@ -406,11 +433,11 @@ export default function OrderTicketPage() {
                     </div>
                     <div className="flex items-center gap-0.5">
                       <span className="text-[17px] font-bold tabular-nums text-nest">
-                        {formatUSD(
+                        {formatMoney(
                           tax.gain >= 0
                             ? tax.estimatedTax
                             : tax.estimatedTaxSaved
-                        )}
+                        , currency)}
                       </span>
                       <IconChevron
                         size={16}
@@ -439,13 +466,13 @@ export default function OrderTicketPage() {
                         <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Maliyet esası</dt>
                           <dd className="font-semibold tabular-nums text-nest">
-                            {formatUSD(tax.costBasis)}
+                            {formatMoney(tax.costBasis, currency)}
                           </dd>
                         </div>
                         <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Tahmini gelir</dt>
                           <dd className="font-semibold tabular-nums text-nest">
-                            {formatUSD(tax.proceeds)}
+                            {formatMoney(tax.proceeds, currency)}
                           </dd>
                         </div>
                         <div className="flex justify-between py-2.5">
@@ -456,19 +483,19 @@ export default function OrderTicketPage() {
                             }`}
                           >
                             {tax.gain >= 0 ? "+" : ""}
-                            {formatUSD(tax.gain)}
+                            {formatMoney(tax.gain, currency)}
                           </dd>
                         </div>
                         <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Kısa vadeli vergi</dt>
                           <dd className="font-semibold tabular-nums text-nest">
-                            {formatUSD(tax.shortTermTax)}
+                            {formatMoney(tax.shortTermTax, currency)}
                           </dd>
                         </div>
                         <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Uzun vadeli vergi</dt>
                           <dd className="font-semibold tabular-nums text-nest">
-                            {formatUSD(tax.longTermTax)}
+                            {formatMoney(tax.longTermTax, currency)}
                           </dd>
                         </div>
                       </dl>
@@ -527,7 +554,9 @@ export default function OrderTicketPage() {
           <h1 className="truncate text-[17px] font-bold tracking-tight text-nest">
             {instrument.symbol}
           </h1>
-          <p className="truncate text-[12px] text-muted">{instrument.name}</p>
+          <p className="truncate text-[12px] text-muted">
+            {instrument.name} · {instrument.exchange}
+          </p>
         </div>
         <MarketStatusPill />
       </header>
@@ -536,12 +565,14 @@ export default function OrderTicketPage() {
         <PriceHeader
           lastPrice={instrument.price}
           changePct={instrument.changePct}
+          currency={instrument.currency}
         />
         <div className="mt-5 -mx-0.5">
           <StockPriceChart
             symbol={instrument.symbol}
             lastPrice={instrument.price}
             changePct={instrument.changePct}
+            currency={instrument.currency}
           />
         </div>
         <div className="mt-1">
@@ -549,6 +580,7 @@ export default function OrderTicketPage() {
             symbol={instrument.symbol}
             lastPrice={instrument.price}
             changePct={instrument.changePct}
+            currency={instrument.currency}
           />
         </div>
       </section>
@@ -557,13 +589,15 @@ export default function OrderTicketPage() {
         <div className="mt-3 flex items-center justify-between rounded-2xl bg-sage-muted/55 px-4 py-3 text-[13px]">
           <span className="text-muted">Pozisyonun</span>
           <span className="font-semibold text-nest tabular-nums">
-            {formatShares(position.shares)} hisse · {formatUSD(position.value)}
+            {formatShares(position.shares)} hisse ·{" "}
+            {formatMoney(position.value, currency)}
           </span>
         </div>
       )}
 
       <p className="mt-5 text-center text-[11px] leading-relaxed text-muted">
-        Fiyat gecikmeli · simülasyon · Kesirli hisse · Komisyon $0
+        Fiyat gecikmeli · simülasyon · Kesirli hisse · Komisyon{" "}
+        {formatMoney(0, currency)}
       </p>
 
       {/* Sticky dual CTAs */}
