@@ -13,9 +13,35 @@ import {
 } from "@/lib/market-series";
 import { formatPct, formatUSD } from "@/lib/mock-data";
 
-const GAIN = "#226d78";
+const GAIN = "#1a7a4c";
 const LOSS = "#c44536";
 const NAVY = "#000b50";
+const CHART_BLUE = "#1d6ae5";
+
+/** Smooth cubic path through points (Betterment-like soft curve) */
+function smoothPath(
+  coords: { x: number; y: number }[],
+  closeBottom?: { y: number }
+): string {
+  if (coords.length === 0) return "";
+  if (coords.length === 1) return `M${coords[0].x},${coords[0].y}`;
+  let d = `M${coords[0].x},${coords[0].y}`;
+  for (let i = 0; i < coords.length - 1; i++) {
+    const p0 = coords[i === 0 ? 0 : i - 1];
+    const p1 = coords[i];
+    const p2 = coords[i + 1];
+    const p3 = coords[i + 2] ?? p2;
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+    d += ` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
+  }
+  if (closeBottom) {
+    d += ` L${coords[coords.length - 1].x},${closeBottom.y} L${coords[0].x},${closeBottom.y} Z`;
+  }
+  return d;
+}
 
 /** Mini sparkline for trade list rows */
 export function Sparkline({
@@ -44,9 +70,9 @@ export function Sparkline({
   const coords = values.map((v, i) => {
     const x = pad + (i / (values.length - 1)) * (width - pad * 2);
     const y = pad + (1 - (v - min) / span) * (height - pad * 2);
-    return `${x},${y}`;
+    return { x, y };
   });
-  const line = coords.map((c, i) => `${i === 0 ? "M" : "L"}${c}`).join(" ");
+  const line = smoothPath(coords);
 
   return (
     <svg
@@ -68,7 +94,7 @@ export function Sparkline({
   );
 }
 
-/** Full interactive area/line chart — Betterment-style flat chart */
+/** Full interactive area/line chart — brokerage polish */
 export function StockPriceChart({
   symbol,
   lastPrice,
@@ -94,10 +120,10 @@ export function StockPriceChart({
   const color = positive ? GAIN : LOSS;
 
   const w = 360;
-  const h = 240;
-  const padX = 2;
-  const padTop = 16;
-  const padBot = 10;
+  const h = 220;
+  const padX = 4;
+  const padTop = 20;
+  const padBot = 8;
 
   const values = series.map((p) => p.price);
   const min = Math.min(...values);
@@ -110,8 +136,8 @@ export function StockPriceChart({
     return { x, y, ...p };
   });
 
-  const line = coords.map((c, i) => `${i === 0 ? "M" : "L"}${c.x},${c.y}`).join(" ");
-  const area = `${line} L${coords[coords.length - 1]?.x ?? 0},${h} L${coords[0]?.x ?? 0},${h} Z`;
+  const line = smoothPath(coords);
+  const area = smoothPath(coords, { y: h });
 
   const activeIdx = hover ?? coords.length - 1;
   const active = coords[activeIdx] ?? coords[coords.length - 1];
@@ -144,10 +170,7 @@ export function StockPriceChart({
   }
 
   const firstLabel = series[0]?.label ?? "";
-  const midLabel = series[Math.floor(series.length / 2)]?.label ?? "";
   const lastLabel = series[series.length - 1]?.label ?? "";
-
-  // Tooltip position (clamp)
   const tipX = active ? Math.min(Math.max(active.x, 48), w - 48) : 0;
 
   return (
@@ -166,34 +189,18 @@ export function StockPriceChart({
         >
           <defs>
             <linearGradient id={`fill-${gradId}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity="0.32" />
-              <stop offset="55%" stopColor={color} stopOpacity="0.08" />
-              <stop offset="100%" stopColor={color} stopOpacity="0.01" />
+              <stop offset="0%" stopColor={color} stopOpacity="0.28" />
+              <stop offset="60%" stopColor={color} stopOpacity="0.06" />
+              <stop offset="100%" stopColor={color} stopOpacity="0" />
             </linearGradient>
           </defs>
-
-          {[0.2, 0.4, 0.6, 0.8].map((f) => {
-            const y = padTop + f * (h - padTop - padBot);
-            return (
-              <line
-                key={f}
-                x1={padX}
-                x2={w - padX}
-                y1={y}
-                y2={y}
-                stroke={NAVY}
-                strokeOpacity="0.05"
-                strokeWidth="1"
-              />
-            );
-          })}
 
           <path d={area} fill={`url(#fill-${gradId})`} />
           <path
             d={line}
             fill="none"
             stroke={color}
-            strokeWidth="2.5"
+            strokeWidth="2.25"
             strokeLinejoin="round"
             strokeLinecap="round"
           />
@@ -203,39 +210,37 @@ export function StockPriceChart({
               <line
                 x1={active.x}
                 x2={active.x}
-                y1={padTop}
+                y1={padTop - 4}
                 y2={h - padBot}
                 stroke={NAVY}
-                strokeOpacity={hover !== null ? 0.22 : 0}
+                strokeOpacity={hover !== null ? 0.18 : 0}
                 strokeWidth="1"
-                strokeDasharray="3 3"
               />
               <circle
                 cx={active.x}
                 cy={active.y}
-                r={hover !== null ? 5.5 : 4.5}
+                r={hover !== null ? 5 : 0}
                 fill={color}
                 stroke="white"
-                strokeWidth="2.25"
+                strokeWidth="2"
               />
             </>
           )}
 
-          {/* Hover price tooltip */}
           {hover !== null && active && (
             <g>
               <rect
-                x={tipX - 42}
-                y={Math.max(4, active.y - 36)}
-                width="84"
-                height="24"
+                x={tipX - 44}
+                y={Math.max(2, active.y - 34)}
+                width="88"
+                height="22"
                 rx="6"
                 fill={NAVY}
                 opacity="0.92"
               />
               <text
                 x={tipX}
-                y={Math.max(4, active.y - 36) + 16}
+                y={Math.max(2, active.y - 34) + 15}
                 textAnchor="middle"
                 fill="#fff"
                 fontSize="11"
@@ -248,8 +253,7 @@ export function StockPriceChart({
           )}
         </svg>
 
-        {/* Scrub readout under chart top when hovering */}
-        <div className="pointer-events-none absolute left-0 right-0 top-0 flex items-baseline justify-between px-1">
+        <div className="pointer-events-none absolute left-0 right-0 top-0 flex items-baseline justify-between px-0.5">
           <p className="text-[11px] text-muted">
             {hover !== null && active
               ? active.label
@@ -259,8 +263,8 @@ export function StockPriceChart({
           </p>
           {hover === null && (
             <p
-              className={`text-[11px] font-semibold ${
-                rangeChange >= 0 ? "text-nest-light" : "text-danger"
+              className={`text-[11px] font-semibold tabular-nums ${
+                rangeChange >= 0 ? "text-gain" : "text-danger"
               }`}
             >
               {rangeChange >= 0 ? "+" : ""}
@@ -270,29 +274,34 @@ export function StockPriceChart({
         </div>
       </div>
 
-      <div className="mt-1 flex justify-between px-0.5 text-[10px] text-muted">
+      <div className="mt-0.5 flex justify-between px-0.5 text-[11px] text-muted">
         <span>{firstLabel}</span>
-        <span>{midLabel}</span>
         <span>{lastLabel}</span>
       </div>
 
-      {/* Range tabs — underline active (Betterment style) */}
-      <div className="mt-3 flex justify-between border-b border-black/5 px-0.5">
+      {/* Range tabs — underline active */}
+      <div
+        className="mt-3 flex justify-between border-b border-black/[0.06] px-0.5"
+        role="tablist"
+        aria-label="Grafik aralığı"
+      >
         {CHART_RANGES.map((r) => (
           <button
             key={r}
             type="button"
+            role="tab"
+            aria-selected={range === r}
             onClick={() => {
               setRange(r);
               setHover(null);
             }}
-            className={`relative shrink-0 px-1.5 pb-2.5 text-[12px] font-semibold transition-colors ${
+            className={`trade-press relative shrink-0 px-1.5 pb-2.5 text-[12px] font-semibold transition-colors focus-visible:outline-none ${
               range === r ? "text-nest" : "text-muted hover:text-nest"
             }`}
           >
             {r}
             {range === r && (
-              <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-nest-blue" />
+              <span className="absolute inset-x-0.5 bottom-0 h-[2px] rounded-full bg-nest-blue" />
             )}
           </button>
         ))}
@@ -300,7 +309,6 @@ export function StockPriceChart({
     </div>
   );
 }
-
 
 const OVERVIEW_FILL = "#B8D4F0";
 const OVERVIEW_STROKE = "#1d6ae5";
@@ -317,14 +325,14 @@ export function OverviewAreaChart({
 }) {
   const series = useMemo(() => {
     const start = startBalance ?? balance / 1.05;
-    return getOverviewBalanceSeries(balance, start, 52);
+    return getOverviewBalanceSeries(balance, start, 56);
   }, [balance, startBalance]);
 
   const w = 360;
   const h = height;
-  const padX = 4;
-  const padTop = 8;
-  const padBot = 4;
+  const padX = 2;
+  const padTop = 6;
+  const padBot = 2;
 
   const values = series.map((p) => p.price);
   const min = Math.min(...values);
@@ -337,8 +345,8 @@ export function OverviewAreaChart({
     return { x, y };
   });
 
-  const line = coords.map((c, i) => `${i === 0 ? "M" : "L"}${c.x},${c.y}`).join(" ");
-  const area = `${line} L${coords[coords.length - 1]?.x ?? 0},${h} L${coords[0]?.x ?? 0},${h} Z`;
+  const line = smoothPath(coords);
+  const area = smoothPath(coords, { y: h });
   const firstLabel = series[0]?.label ?? "";
   const lastLabel = "Bugün";
 
@@ -350,17 +358,17 @@ export function OverviewAreaChart({
         role="img"
         aria-label="Hesap bakiyesi grafiği"
       >
-        <path d={area} fill={OVERVIEW_FILL} fillOpacity="0.85" />
+        <path d={area} fill={OVERVIEW_FILL} fillOpacity="0.92" />
         <path
           d={line}
           fill="none"
           stroke={OVERVIEW_STROKE}
-          strokeWidth="2"
+          strokeWidth="1.75"
           strokeLinejoin="round"
           strokeLinecap="round"
         />
       </svg>
-      <div className="mt-0.5 flex justify-between px-0.5 text-[11px] text-muted">
+      <div className="mt-1 flex justify-between px-0.5 text-[11px] text-muted">
         <span>{firstLabel}</span>
         <span>{lastLabel}</span>
       </div>
@@ -372,20 +380,19 @@ export function MarketStatusPill() {
   const status = getMarketStatus();
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ${
         status.open
-          ? "bg-[color-mix(in_srgb,#226d78_14%,white)] text-nest-light"
+          ? "bg-[color-mix(in_srgb,#1a7a4c_12%,white)] text-gain"
           : "bg-beige text-muted"
       }`}
     >
       <span
         className={`inline-block h-1.5 w-1.5 rounded-full ${
-          status.open ? "bg-nest-light" : "bg-muted"
+          status.open ? "bg-gain" : "bg-muted"
         }`}
         aria-hidden
       />
       {status.label}
-      <span className="font-normal opacity-70">· {status.clock}</span>
     </span>
   );
 }
@@ -409,18 +416,19 @@ export function DayStatsGrid({
     { label: "Açılış", value: formatUSD(stats.open) },
     { label: "Yüksek", value: formatUSD(stats.high) },
     { label: "Düşük", value: formatUSD(stats.low) },
+    { label: "Önceki kapanış", value: formatUSD(stats.prevClose) },
     { label: "Hacim", value: formatVolume(stats.volume) },
   ];
 
   return (
-    <ul className="divide-y divide-black/5">
+    <ul className="divide-y divide-black/[0.05]">
       {cells.map((c) => (
         <li
           key={c.label}
-          className="flex items-center justify-between py-3 text-sm"
+          className="flex items-center justify-between py-[13px] text-[14px]"
         >
           <span className="text-muted">{c.label}</span>
-          <span className="font-semibold text-nest">{c.value}</span>
+          <span className="font-semibold tabular-nums text-nest">{c.value}</span>
         </li>
       ))}
     </ul>
@@ -439,12 +447,12 @@ export function PriceHeader({
   const up = changePct >= 0;
   return (
     <div>
-      <p className="text-[2rem] font-bold leading-none tracking-tight text-nest tabular-nums">
+      <p className="text-[36px] font-bold leading-none tracking-tight text-nest tabular-nums">
         {formatUSD(lastPrice)}
       </p>
       <p
-        className={`mt-1.5 text-[15px] font-semibold tabular-nums ${
-          up ? "text-nest-light" : "text-danger"
+        className={`mt-2 text-[15px] font-semibold tabular-nums ${
+          up ? "text-gain" : "text-danger"
         }`}
       >
         {up ? "+" : ""}
@@ -455,3 +463,5 @@ export function PriceHeader({
     </div>
   );
 }
+
+export { CHART_BLUE };

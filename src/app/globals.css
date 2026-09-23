@@ -31,6 +31,7 @@
   --card: var(--bt-white);
   --muted: var(--bt-text-muted);
   --danger: #c44536;
+  --gain: #1a7a4c;
   --beige: var(--bt-grey-10);
   --gold: var(--bt-gold);
 }
@@ -48,6 +49,7 @@
   --color-card: var(--card);
   --color-muted: var(--muted);
   --color-danger: var(--danger);
+  --color-gain: var(--gain);
   --color-beige: var(--beige);
   --color-gold: var(--gold);
   --font-sans: var(--font-dm-sans);
@@ -178,4 +180,23 @@ input[type="range"].nest-slider::-webkit-slider-thumb {
 }
 .toggle.on::after {
   transform: translateX(20px);
+}
+
+
+/* Trade micro-interactions — Betterment-like press + focus */
+.trade-press {
+  transition: transform 0.12s ease, opacity 0.12s ease, background-color 0.15s ease;
+}
+.trade-press:active {
+  transform: scale(0.98);
+  opacity: 0.92;
+}
+.trade-press:focus-visible {
+  outline: none;
+}
+
+/* Quiet hairline helper */
+.trade-hairline {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.06);
 }

@@ -251,20 +251,15 @@ export function IconSettings({ size = 18, ...p }: P) {
   );
 }
 
-/** Circular 3×3 grid mark used on SDI title row */
+/** Circular 2×2 grid mark — Betterment SDI product icon */
 export function IconGridDots({ size = 28, ...p }: P) {
   return (
     <svg width={size} height={size} viewBox="0 0 28 28" aria-hidden {...p}>
-      <circle cx="14" cy="14" r="14" fill="#e8f1fc" />
-      <rect x="6" y="6" width="4" height="4" rx="0.8" fill="#1d6ae5" />
-      <rect x="12" y="6" width="4" height="4" rx="0.8" fill="#1d6ae5" />
-      <rect x="18" y="6" width="4" height="4" rx="0.8" fill="#1d6ae5" />
-      <rect x="6" y="12" width="4" height="4" rx="0.8" fill="#1d6ae5" />
-      <rect x="12" y="12" width="4" height="4" rx="0.8" fill="#1d6ae5" />
-      <rect x="18" y="12" width="4" height="4" rx="0.8" fill="#1d6ae5" />
-      <rect x="6" y="18" width="4" height="4" rx="0.8" fill="#1d6ae5" />
-      <rect x="12" y="18" width="4" height="4" rx="0.8" fill="#1d6ae5" />
-      <rect x="18" y="18" width="4" height="4" rx="0.8" fill="#1d6ae5" />
+      <circle cx="14" cy="14" r="14" fill="#1d6ae5" />
+      <rect x="7.5" y="7.5" width="5" height="5" rx="1" fill="#fff" />
+      <rect x="15.5" y="7.5" width="5" height="5" rx="1" fill="#fff" />
+      <rect x="7.5" y="15.5" width="5" height="5" rx="1" fill="#fff" />
+      <rect x="15.5" y="15.5" width="5" height="5" rx="1" fill="#fff" />
     </svg>
   );
 }

@@ -90,7 +90,7 @@ export default function OrderTicketPage() {
 
   if (!instrument) {
     return (
-      <div className="px-5 pb-6 pt-5">
+      <div className="bg-card px-5 pb-6 pt-5">
         <Link
           href="/trade"
           className="inline-flex items-center gap-1 text-sm font-medium text-nest-blue"
@@ -106,28 +106,28 @@ export default function OrderTicketPage() {
 
   if (step === "confirmed") {
     return (
-      <div className="flex flex-col items-center px-5 pb-10 pt-8 text-center">
+      <div className="flex min-h-[100dvh] flex-col items-center bg-card px-5 pb-10 pt-10 text-center">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-sage-muted text-nest-blue">
           <IconCheck size={32} />
         </div>
-        <h1 className="mt-5 font-serif text-2xl font-bold text-nest">
+        <h1 className="mt-5 text-[26px] font-bold tracking-tight text-nest">
           Emir iletildi
         </h1>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-2 text-[14px] text-muted">
           {side === "buy" ? "Alış" : "Satış"} · {instrument.symbol}
         </p>
-        <div className="card mt-6 w-full space-y-3 p-4 text-left text-sm">
+        <div className="mt-6 w-full divide-y divide-black/[0.05] rounded-2xl bg-beige/80 px-4 text-left text-[14px] ring-1 ring-black/[0.04]">
           <Row label="Tahmini hisse" value={formatShares(estimatedShares)} />
           <Row label="Tahmini tutar" value={formatUSD(estimatedTotal)} />
           <Row label="Fiyat" value={formatUSD(price)} />
           <Row label="Komisyon" value="$0" accent />
         </div>
-        <p className="mt-4 text-xs text-muted">
+        <p className="mt-4 text-[11px] text-muted">
           Simülasyon — gerçek işlem yapılmadı.
         </p>
         <Link
           href="/trade"
-          className="btn-primary mt-8 w-full py-3.5 text-center text-base"
+          className="btn-primary trade-press mt-8 w-full py-3.5 text-center text-base"
         >
           Trade&apos;e dön
         </Link>
@@ -137,7 +137,7 @@ export default function OrderTicketPage() {
             setStep("detail");
             setAmount("");
           }}
-          className="btn-secondary mt-3 w-full py-3 text-sm"
+          className="btn-secondary trade-press mt-3 w-full py-3 text-sm"
         >
           Yeni emir
         </button>
@@ -161,7 +161,10 @@ export default function OrderTicketPage() {
           : "Hisse";
 
     return (
-      <div ref={ticketRef} className="flex min-h-[100dvh] flex-col bg-card px-5 pb-8">
+      <div
+        ref={ticketRef}
+        className="flex min-h-[100dvh] flex-col bg-card px-5 pb-8"
+      >
         <header className="flex items-center justify-between pt-5 pb-1">
           <button
             type="button"
@@ -169,7 +172,7 @@ export default function OrderTicketPage() {
             onClick={() =>
               setStep(step === "review" ? "ticket" : "detail")
             }
-            className="rounded-full p-1.5 text-nest hover:bg-beige"
+            className="trade-press rounded-full p-1.5 text-nest hover:bg-beige focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
           >
             <IconBack />
           </button>
@@ -177,43 +180,43 @@ export default function OrderTicketPage() {
             type="button"
             aria-label="Kapat"
             onClick={() => setStep("detail")}
-            className="rounded-full p-1.5 text-nest hover:bg-beige"
+            className="trade-press rounded-full p-1.5 text-nest hover:bg-beige focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
           >
             <IconClose />
           </button>
         </header>
 
-        <h1 className="mt-3 text-[28px] font-bold leading-tight text-nest">
+        <h1 className="mt-4 text-[28px] font-bold leading-tight tracking-tight text-nest">
           {side === "buy" ? "Al" : "Sat"} {instrument.symbol}
         </h1>
 
         {/* Security / Available rows */}
-        <div className="mt-5 divide-y divide-black/10 border-y border-black/10">
+        <div className="mt-6 divide-y divide-black/[0.08] border-y border-black/[0.08]">
           <div className="flex items-start justify-between gap-3 py-4">
-            <span className="text-[15px] text-nest">Menkul kıymet</span>
+            <span className="text-[14px] text-muted">Menkul kıymet</span>
             <div className="text-right">
               <p className="text-[15px] font-semibold text-nest">
                 {instrument.name}
               </p>
-              <p className="text-sm text-muted">{instrument.symbol}</p>
+              <p className="mt-0.5 text-[13px] text-muted">{instrument.symbol}</p>
             </div>
           </div>
           <div className="flex items-start justify-between gap-3 py-4">
-            <span className="text-[15px] text-nest">Kullanılabilir</span>
+            <span className="text-[14px] text-muted">Kullanılabilir</span>
             <div className="text-right">
               {side === "buy" ? (
                 <>
                   <p className="text-[15px] font-semibold text-nest tabular-nums">
                     {formatUSD(TRADE_CASH_USD)}
                   </p>
-                  <p className="text-sm text-muted">Nakit</p>
+                  <p className="mt-0.5 text-[13px] text-muted">Nakit</p>
                 </>
               ) : (
                 <>
                   <p className="text-[15px] font-semibold text-nest tabular-nums">
                     {formatUSD(availableUsd)}
                   </p>
-                  <p className="text-sm text-muted">
+                  <p className="mt-0.5 text-[13px] text-muted">
                     {formatShares(availableShares)} hisse
                   </p>
                 </>
@@ -225,12 +228,12 @@ export default function OrderTicketPage() {
         {step === "ticket" && (
           <>
             {/* Amount card */}
-            <div className="mt-5 rounded-2xl bg-[#f5f5f5] p-4">
+            <div className="mt-5 rounded-2xl bg-[#f5f5f5] p-4 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]">
               <p className="text-[15px] font-bold text-nest">Tutar</p>
               <div className="mt-3 flex items-stretch gap-2">
                 <div className="relative min-w-0 flex-1">
                   {(side === "buy" || sellMode === "dollars") && (
-                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base text-muted">
+                    <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[15px] text-muted">
                       $
                     </span>
                   )}
@@ -247,10 +250,10 @@ export default function OrderTicketPage() {
                         ? "Dolar tutarı gir"
                         : "Hisse adedi gir"
                     }
-                    className={`w-full rounded-xl border-2 border-nest-blue bg-white py-3.5 pr-3 text-[15px] text-nest outline-none placeholder:text-muted ${
+                    className={`w-full rounded-xl border-2 border-nest-blue bg-white py-3.5 pr-3 text-[15px] text-nest outline-none ring-nest-blue/20 placeholder:text-muted focus:ring-4 ${
                       side === "buy" || sellMode === "dollars"
                         ? "pl-7"
-                        : "pl-3"
+                        : "pl-3.5"
                     }`}
                   />
                 </div>
@@ -259,7 +262,7 @@ export default function OrderTicketPage() {
                     type="button"
                     disabled={side === "buy"}
                     onClick={() => side === "sell" && setUnitOpen((o) => !o)}
-                    className="flex h-full min-w-[108px] items-center justify-between gap-1 rounded-xl border border-black/10 bg-white px-3 text-[15px] font-medium text-nest disabled:opacity-90"
+                    className="trade-press flex h-full min-w-[108px] items-center justify-between gap-1 rounded-xl border border-black/10 bg-white px-3 text-[15px] font-medium text-nest disabled:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
                   >
                     {unitLabel}
                     {side === "sell" && <IconChevronDown size={16} />}
@@ -304,7 +307,7 @@ export default function OrderTicketPage() {
                       : position.value.toFixed(2)
                   )
                 }
-                className="mt-4 w-full text-center text-[15px] font-semibold text-nest-blue"
+                className="trade-press mt-4 w-full text-center text-[15px] font-semibold text-nest-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
               >
                 Tüm hisseleri sat
               </button>
@@ -329,7 +332,7 @@ export default function OrderTicketPage() {
                   setTaxOpen(true);
                   setStep("review");
                 }}
-                className="w-full rounded-2xl bg-nest-blue py-4 text-base font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
+                className="trade-press w-full rounded-2xl bg-nest-blue py-4 text-base font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/50 focus-visible:ring-offset-2"
               >
                 Devam
               </button>
@@ -342,16 +345,15 @@ export default function OrderTicketPage() {
 
         {step === "review" && (
           <div className="mt-5 flex flex-1 flex-col">
-            {/* PR-style review card */}
-            <div className="overflow-hidden rounded-2xl border border-black/10 bg-card shadow-sm">
-              <div className="border-b border-black/5 px-4 py-3.5">
-                <p className="text-[17px] font-bold text-nest">
+            <div className="overflow-hidden rounded-2xl bg-card shadow-[0_4px_24px_rgba(0,11,80,0.08)] ring-1 ring-black/[0.06]">
+              <div className="border-b border-black/[0.05] px-4 py-3.5">
+                <p className="text-[17px] font-bold tracking-tight text-nest">
                   {side === "buy" ? "Alış" : "Satış"} incelemesi ·{" "}
                   {instrument.symbol}
                 </p>
               </div>
 
-              <div className="divide-y divide-black/5 px-4 text-sm">
+              <div className="divide-y divide-black/[0.05] px-4 text-[14px]">
                 <div className="flex items-center justify-between py-3.5">
                   <span className="text-muted">Menkul kıymet</span>
                   <span className="font-semibold text-nest">
@@ -372,7 +374,7 @@ export default function OrderTicketPage() {
                 </div>
                 <div className="flex items-center justify-between py-3.5">
                   <span className="text-muted">Komisyon</span>
-                  <span className="font-semibold text-nest-light">$0</span>
+                  <span className="font-semibold text-gain">$0</span>
                 </div>
                 {side === "buy" && (
                   <div className="flex items-center justify-between py-3.5">
@@ -385,11 +387,12 @@ export default function OrderTicketPage() {
               </div>
 
               {side === "sell" && tax && (
-                <div className="space-y-2 border-t border-black/5 px-3 py-3">
+                <div className="space-y-2.5 border-t border-black/[0.05] bg-[#fafbfd] px-3 py-3">
+                  {/* Elevated tax owed card — PR Newswire style */}
                   <button
                     type="button"
                     onClick={() => setTaxOpen((o) => !o)}
-                    className="flex w-full items-center justify-between rounded-xl border border-nest-blue/25 bg-[#f0f6ff] px-3.5 py-3.5 text-left"
+                    className="trade-press flex w-full items-center justify-between rounded-xl bg-card px-3.5 py-3.5 text-left shadow-[0_4px_16px_rgba(0,11,80,0.1)] ring-1 ring-nest-blue/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
                   >
                     <div>
                       <p className="text-[13px] font-semibold text-nest">
@@ -401,7 +404,7 @@ export default function OrderTicketPage() {
                         Satış öncesi vergi etkisi
                       </p>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-0.5">
                       <span className="text-[17px] font-bold tabular-nums text-nest">
                         {formatUSD(
                           tax.gain >= 0
@@ -411,58 +414,58 @@ export default function OrderTicketPage() {
                       </span>
                       <IconChevron
                         size={16}
-                        className={`text-muted transition-transform ${
+                        className={`text-muted/70 transition-transform ${
                           taxOpen ? "rotate-90" : ""
                         }`}
                       />
                     </div>
                   </button>
 
-                  <div className="flex items-center justify-between rounded-xl border border-black/8 px-3.5 py-3.5">
+                  <div className="flex items-center justify-between rounded-xl bg-card px-3.5 py-3.5 ring-1 ring-black/[0.06]">
                     <span className="text-[13px] text-muted">
                       Tahmini işlem zamanı
                     </span>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-0.5">
                       <span className="text-[15px] font-semibold text-nest">
                         Bugün
                       </span>
-                      <IconChevron size={16} className="text-muted" />
+                      <IconChevron size={16} className="text-muted/70" />
                     </div>
                   </div>
 
                   {taxOpen && (
-                    <div className="rounded-xl bg-beige/80 px-3.5 py-2">
-                      <dl className="divide-y divide-black/5 text-sm">
-                        <div className="flex justify-between py-2">
+                    <div className="rounded-xl bg-beige/90 px-3.5 py-1">
+                      <dl className="divide-y divide-black/[0.05] text-[13px]">
+                        <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Maliyet esası</dt>
                           <dd className="font-semibold tabular-nums text-nest">
                             {formatUSD(tax.costBasis)}
                           </dd>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Tahmini gelir</dt>
                           <dd className="font-semibold tabular-nums text-nest">
                             {formatUSD(tax.proceeds)}
                           </dd>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Sermaye kazancı</dt>
                           <dd
                             className={`font-semibold tabular-nums ${
-                              tax.gain >= 0 ? "text-nest-light" : "text-danger"
+                              tax.gain >= 0 ? "text-gain" : "text-danger"
                             }`}
                           >
                             {tax.gain >= 0 ? "+" : ""}
                             {formatUSD(tax.gain)}
                           </dd>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Kısa vadeli vergi</dt>
                           <dd className="font-semibold tabular-nums text-nest">
                             {formatUSD(tax.shortTermTax)}
                           </dd>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-2.5">
                           <dt className="text-muted">Uzun vadeli vergi</dt>
                           <dd className="font-semibold tabular-nums text-nest">
                             {formatUSD(tax.longTermTax)}
@@ -470,14 +473,14 @@ export default function OrderTicketPage() {
                         </div>
                       </dl>
                       {tax.washSaleRisk && (
-                        <p className="mt-2 text-[11px] text-danger">
+                        <p className="mt-1 pb-2 text-[11px] text-danger">
                           Wash-sale notu: Son 30 günde aynı veya benzer menkul
                           kıymet alındıysa zarar mahsubu sınırlanabilir
                           (simülasyon).
                         </p>
                       )}
                       {!tax.washSaleRisk && (
-                        <p className="mt-2 text-[11px] text-muted">
+                        <p className="mt-1 pb-2 text-[11px] text-muted">
                           Tahmini — vergi danışmanı değildir. Gerçek oranlar
                           farklılık gösterebilir.
                         </p>
@@ -492,12 +495,12 @@ export default function OrderTicketPage() {
               <button
                 type="button"
                 onClick={() => setStep("confirmed")}
-                className="w-full rounded-2xl bg-nest-blue py-4 text-base font-bold text-white"
+                className="trade-press w-full rounded-2xl bg-nest-blue py-4 text-base font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/50 focus-visible:ring-offset-2"
               >
                 {side === "buy" ? "Alışı onayla" : "Satışı onayla"}
               </button>
               <p className="mt-3 text-center text-[11px] text-muted">
-                Prototip — gerçek broker bağlantısı yok
+                Simülasyon — gerçek broker bağlantısı yok
               </p>
             </div>
           </div>
@@ -508,40 +511,40 @@ export default function OrderTicketPage() {
 
   /* ─── Symbol detail (chart + sticky Al/Sat) ─── */
   return (
-    <div className="relative px-5 pb-28">
-      <header className="flex items-center gap-2 pt-5 pb-2">
+    <div className="relative bg-card px-5 pb-28">
+      <header className="flex items-center gap-2.5 pt-5 pb-1">
         <Link
           href="/trade"
           aria-label="Geri"
-          className="rounded-full p-1.5 text-nest hover:bg-sage-muted"
+          className="trade-press -ml-1 rounded-full p-1.5 text-nest hover:bg-beige focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
         >
           <IconBack />
         </Link>
-        <span className="shrink-0 overflow-hidden rounded-full">
-          <TickerLogo symbol={instrument.symbol} size={32} />
+        <span className="shrink-0 overflow-hidden rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+          <TickerLogo symbol={instrument.symbol} size={34} />
         </span>
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-lg font-bold text-nest">
+          <h1 className="truncate text-[17px] font-bold tracking-tight text-nest">
             {instrument.symbol}
           </h1>
-          <p className="truncate text-xs text-muted">{instrument.name}</p>
+          <p className="truncate text-[12px] text-muted">{instrument.name}</p>
         </div>
         <MarketStatusPill />
       </header>
 
-      <section className="mt-3">
+      <section className="mt-4">
         <PriceHeader
           lastPrice={instrument.price}
           changePct={instrument.changePct}
         />
-        <div className="mt-4 -mx-1">
+        <div className="mt-5 -mx-0.5">
           <StockPriceChart
             symbol={instrument.symbol}
             lastPrice={instrument.price}
             changePct={instrument.changePct}
           />
         </div>
-        <div className="mt-2">
+        <div className="mt-1">
           <DayStatsGrid
             symbol={instrument.symbol}
             lastPrice={instrument.price}
@@ -551,7 +554,7 @@ export default function OrderTicketPage() {
       </section>
 
       {position && (
-        <div className="mt-4 flex items-center justify-between rounded-2xl bg-sage-muted/60 px-3.5 py-2.5 text-xs">
+        <div className="mt-3 flex items-center justify-between rounded-2xl bg-sage-muted/55 px-4 py-3 text-[13px]">
           <span className="text-muted">Pozisyonun</span>
           <span className="font-semibold text-nest tabular-nums">
             {formatShares(position.shares)} hisse · {formatUSD(position.value)}
@@ -559,24 +562,24 @@ export default function OrderTicketPage() {
         </div>
       )}
 
-      <p className="mt-4 text-center text-[11px] text-muted">
-        Kesirli hisse · Komisyon $0 · Vergi önizlemesi satışta
+      <p className="mt-5 text-center text-[11px] leading-relaxed text-muted">
+        Fiyat gecikmeli · simülasyon · Kesirli hisse · Komisyon $0
       </p>
 
       {/* Sticky dual CTAs */}
-      <div className="fixed bottom-0 left-1/2 z-30 w-full max-w-[390px] -translate-x-1/2 border-t border-black/5 bg-card/95 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md">
+      <div className="fixed bottom-0 left-1/2 z-30 w-full max-w-[390px] -translate-x-1/2 border-t border-black/[0.05] bg-card/95 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md">
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => openTicket("buy")}
-            className="rounded-2xl bg-nest-blue py-3.5 text-base font-bold text-white"
+            className="trade-press rounded-2xl bg-nest-blue py-3.5 text-base font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/50 focus-visible:ring-offset-2"
           >
             Al
           </button>
           <button
             type="button"
             onClick={() => openTicket("sell")}
-            className="rounded-2xl border-2 border-nest bg-nest py-3.5 text-base font-bold text-white"
+            className="trade-press rounded-2xl bg-nest py-3.5 text-base font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest/40 focus-visible:ring-offset-2"
           >
             Sat
           </button>
@@ -596,11 +599,11 @@ function Row({
   accent?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3">
+    <div className="flex items-center justify-between gap-3 py-3">
       <span className="text-muted">{label}</span>
       <span
         className={`font-semibold tabular-nums ${
-          accent ? "text-nest-light" : "text-nest"
+          accent ? "text-gain" : "text-nest"
         }`}
       >
         {value}

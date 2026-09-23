@@ -61,9 +61,10 @@ function generateIntraday(
   const openJitter = (rng() - 0.5) * 0.004 * prevClose;
   let price = prevClose + openJitter;
 
-  // US market mock: 09:30 ET — use a fixed "today" noon UTC+3 equivalent for labels
+  // Mock US equity session labels 09:30–16:00 (independent of local clock)
   const now = Date.now();
-  const sessionStart = now - bars * 5 * 60 * 1000;
+  const sessionStartMins = 9 * 60 + 30;
+  const sessionLenMins = 6.5 * 60; // 390 minutes
   const points: PricePoint[] = [];
   const target = lastPrice;
 
@@ -73,9 +74,11 @@ function generateIntraday(
     const drift = (target - price) * (0.08 + progress * 0.12);
     const noise = (rng() - 0.5) * lastPrice * 0.0022;
     price = Math.max(0.01, price + drift + noise);
-    const t = sessionStart + i * 5 * 60 * 1000;
-    const d = new Date(t);
-    const label = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+    const mins = Math.round(sessionStartMins + progress * sessionLenMins);
+    const hh = Math.floor(mins / 60);
+    const mm = mins % 60;
+    const label = `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+    const t = now - (1 - progress) * sessionLenMins * 60 * 1000;
     points.push({ t, price: roundPrice(price), label });
   }
   // Force last bar to exact lastPrice
@@ -276,7 +279,7 @@ export function getOverviewBalanceSeries(
     ];
     const label =
       i === 0
-        ? `${months[d.getMonth()]} ${d.getFullYear()}`
+        ? "Haz 2024"
         : i === points - 1
           ? "Bugün"
           : `${months[d.getMonth()]} ${d.getFullYear()}`;

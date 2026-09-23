@@ -1,16 +1,16 @@
 import type { ReactNode } from "react";
-/** SVG monogram / stylized marks for trade UI — not trademark logo assets. */
+/** Sharper brand-like SVG marks for trade UI — stylized, not trademark assets. */
 
 type LogoProps = { size?: number; className?: string };
 
 export function LogoAAPL({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <circle cx="16" cy="16" r="15" fill="#111" />
-      {/* Stylized apple-ish monogram (letter + leaf), not trademark artwork */}
-      <ellipse cx="16" cy="18" rx="7" ry="8.5" fill="#fff" />
-      <path d="M16 8c1.5 0 3 1.2 3.2 2.8-1.6.2-3-1-3.2-2.8z" fill="#fff" />
-      <circle cx="16" cy="18" r="2.2" fill="#111" />
+      <circle cx="16" cy="16" r="16" fill="#111111" />
+      <path
+        fill="#fff"
+        d="M20.4 9.1c-.9.1-2 .7-2.6 1.5-.6.7-1.1 1.8-.9 2.8 1 .1 2-.5 2.6-1.3.7-.8 1.1-1.9.9-3zM22.6 16.2c-.1-2.2 1.8-3.3 1.9-3.4-1-1.5-2.7-1.7-3.3-1.7-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-3-.8-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.7 2.3 2.9 2.2 1.2-.1 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.2.9-1.3 1.3-2.5 1.3-2.6-.1 0-2.4-.9-2.6-3.6z"
+      />
     </svg>
   );
 }
@@ -18,10 +18,11 @@ export function LogoAAPL({ size = 28, className }: LogoProps) {
 export function LogoMSFT({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect x="2" y="2" width="13" height="13" rx="1" fill="#f25022" />
-      <rect x="17" y="2" width="13" height="13" rx="1" fill="#7fba00" />
-      <rect x="2" y="17" width="13" height="13" rx="1" fill="#00a4ef" />
-      <rect x="17" y="17" width="13" height="13" rx="1" fill="#ffb900" />
+      <rect width="32" height="32" rx="7" fill="#F3F3F3" />
+      <rect x="5" y="5" width="10" height="10" fill="#F25022" />
+      <rect x="17" y="5" width="10" height="10" fill="#7FBA00" />
+      <rect x="5" y="17" width="10" height="10" fill="#00A4EF" />
+      <rect x="17" y="17" width="10" height="10" fill="#FFB900" />
     </svg>
   );
 }
@@ -29,10 +30,11 @@ export function LogoMSFT({ size = 28, className }: LogoProps) {
 export function LogoGOOG({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <path fill="#4285F4" d="M28.5 16.3c0-.9-.1-1.8-.2-2.6H16.4v5h6.8c-.3 1.5-1.2 2.8-2.5 3.7v3h4.1c2.4-2.2 3.7-5.5 3.7-9.1z" />
-      <path fill="#34A853" d="M16.4 29c3.4 0 6.2-1.1 8.3-3.1l-4.1-3c-1.1.8-2.6 1.2-4.2 1.2-3.2 0-6-2.2-7-5.1H5.2v3.1C7.3 26.4 11.5 29 16.4 29z" />
-      <path fill="#FBBC05" d="M9.4 18.9c-.5-1.4-.5-2.9 0-4.3v-3.1H5.2c-1.7 3.3-1.7 7.2 0 10.5l4.2-3.1z" />
-      <path fill="#EA4335" d="M16.4 8.9c1.8 0 3.5.6 4.8 1.9l3.6-3.6C22.6 5 19.7 3.8 16.4 3.8 11.5 3.8 7.3 6.4 5.2 10.5l4.2 3.1c1-2.9 3.8-4.7 7-4.7z" />
+      <circle cx="16" cy="16" r="16" fill="#fff" />
+      <path fill="#4285F4" d="M27.6 16.3c0-.8-.1-1.6-.2-2.4H16.2v4.5h6.4c-.3 1.4-1.1 2.6-2.4 3.4v2.8h3.8c2.3-2.1 3.6-5.2 3.6-8.3z" />
+      <path fill="#34A853" d="M16.2 28c3.2 0 5.9-1.1 7.8-2.9l-3.8-2.8c-1.1.7-2.4 1.1-4 1.1-3.1 0-5.7-2.1-6.6-4.9H5.5v2.9C7.5 25.6 11.5 28 16.2 28z" />
+      <path fill="#FBBC05" d="M9.6 18.5c-.4-1.3-.4-2.7 0-4v-2.9H5.5c-1.6 3.1-1.6 6.7 0 9.8l4.1-2.9z" />
+      <path fill="#EA4335" d="M16.2 9.2c1.7 0 3.3.6 4.5 1.8l3.4-3.4C21.9 5.5 19.2 4.4 16.2 4.4 11.5 4.4 7.5 6.8 5.5 10.6l4.1 2.9c.9-2.8 3.5-4.3 6.6-4.3z" />
     </svg>
   );
 }
@@ -40,12 +42,26 @@ export function LogoGOOG({ size = 28, className }: LogoProps) {
 export function LogoAMZN({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill="#232F3E" />
-      <text x="16" y="18" textAnchor="middle" fill="#fff" fontSize="14" fontWeight="700" fontFamily="system-ui,sans-serif">
-        a
-      </text>
-      <path d="M8 22c4 3 12 3 16-1" fill="none" stroke="#FF9900" strokeWidth="2" strokeLinecap="round" />
-      <path d="M22 19.5l2.5 1.5-2.8.8" fill="none" stroke="#FF9900" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <rect width="32" height="32" rx="7" fill="#232F3E" />
+      <path
+        fill="#fff"
+        d="M10.2 14.2c0-1.1.9-1.7 2.4-1.7 1.1 0 2 .3 2.7.7l.5-1.5c-.8-.4-2-.7-3.3-.7-2.6 0-4.3 1.4-4.3 3.4 0 2.6 2.4 3.1 4.1 3.5 1.3.3 1.7.6 1.7 1.1 0 .6-.6 1-1.7 1-1.2 0-2.3-.4-3.1-.9l-.5 1.5c.9.5 2.2.9 3.6.9 2.7 0 4.4-1.3 4.4-3.4 0-2.7-2.5-3.2-4.2-3.6-1.2-.3-1.7-.5-1.7-1.1z"
+      />
+      <path
+        d="M8.5 23.2c3.8 2.2 9.2 2.4 13.2.4"
+        fill="none"
+        stroke="#FF9900"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M20.8 21.8l1.9 1.4-2.4.7"
+        fill="none"
+        stroke="#FF9900"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -53,11 +69,10 @@ export function LogoAMZN({ size = 28, className }: LogoProps) {
 export function LogoNVDA({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill="#76B900" />
-      <path
-        fill="#fff"
-        d="M16 6c-5.5 0-8.5 3.2-9.5 5.8 2.2-1.9 4.8-2.8 7.8-2.6 0 0 .1 4.6.1 6.9 0 2.4-.1 5.3-.1 5.3-3.5.3-5.9 1.6-7.3 3C8.2 27 12 28 16 28c7.2 0 11-4.8 11-11S23.2 6 16 6zm0 9.4c0-2.1 0-5.2 0-5.2 3.8.1 6.5 1.6 7.8 3.3-1.3 2.8-4.2 4.5-7.8 4.7V15.4z"
-      />
+      <rect width="32" height="32" rx="7" fill="#76B900" />
+      <ellipse cx="16" cy="16.5" rx="9" ry="5.5" fill="none" stroke="#fff" strokeWidth="1.8" />
+      <circle cx="16" cy="16.5" r="2.4" fill="#fff" />
+      <path d="M16 8.5c0 0 3.5 2.2 3.5 8s-3.5 8-3.5 8" fill="none" stroke="#fff" strokeWidth="1.4" opacity="0.85" />
     </svg>
   );
 }
@@ -65,10 +80,10 @@ export function LogoNVDA({ size = 28, className }: LogoProps) {
 export function LogoMETA({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill="#0668E1" />
+      <rect width="32" height="32" rx="7" fill="#0866FF" />
       <path
         fill="#fff"
-        d="M8.5 20.5c1.2-4.8 3.4-8 5.5-8 1.4 0 2.2 1.1 3.2 3.3.7 1.6 1.4 3.6 2.3 3.6.7 0 1.6-1 2.5-2.7.4 1.9.6 3.2.6 3.8h2.2c0-.9-.3-3-.8-5.1-.6-2.4-1.4-4.6-2.9-4.6-1.5 0-2.5 1.3-3.4 3.1-.7 1.5-1.2 3-1.9 3-1 0-2.2-2.8-3.2-6.2-.4 1.2-.9 2.5-1.5 3.8C9.2 16.5 7.8 19 7.2 20.5h1.3z"
+        d="M8.2 20.8c1.1-4.4 3.1-7.4 5.1-7.4 1.3 0 2 1 3 3 .6 1.5 1.3 3.3 2.1 3.3.7 0 1.5-.9 2.3-2.5.4 1.7.6 2.9.6 3.5h2c0-.8-.3-2.7-.7-4.7-.5-2.2-1.3-4.2-2.7-4.2-1.4 0-2.3 1.2-3.1 2.8-.6 1.4-1.1 2.8-1.8 2.8-.9 0-2-2.6-2.9-5.7-.4 1.1-.8 2.3-1.4 3.5-.9 1.8-2.2 4.1-2.7 5.5h1.2z"
       />
     </svg>
   );
@@ -77,10 +92,10 @@ export function LogoMETA({ size = 28, className }: LogoProps) {
 export function LogoSPY({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill="#1d6ae5" />
-      <path d="M6 12c3-2 6-2 10 0s7 2 10 0" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" />
-      <path d="M6 17c3-2 6-2 10 0s7 2 10 0" fill="none" stroke="#9ec9ff" strokeWidth="2.2" strokeLinecap="round" />
-      <path d="M6 22c3-2 6-2 10 0s7 2 10 0" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" opacity="0.7" />
+      <rect width="32" height="32" rx="7" fill="#1d6ae5" />
+      <path d="M6 12.5c3.2-2.2 6.5-2.2 10.2 0s7 2.2 10 0" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+      <path d="M6 17c3.2-2.2 6.5-2.2 10.2 0s7 2.2 10 0" fill="none" stroke="#9ec9ff" strokeWidth="2" strokeLinecap="round" />
+      <path d="M6 21.5c3.2-2.2 6.5-2.2 10.2 0s7 2.2 10 0" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" opacity="0.65" />
     </svg>
   );
 }
@@ -88,8 +103,9 @@ export function LogoSPY({ size = 28, className }: LogoProps) {
 export function LogoTSLA({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill="#cc0000" />
-      <path fill="#fff" d="M6 10h20l-1.5 2.5H17.5V24h-3V12.5H7.5z" />
+      <rect width="32" height="32" rx="7" fill="#CC0000" />
+      <path fill="#fff" d="M6.5 10.2h19l-1.4 2.4H17.2V24h-2.4V12.6H7.9z" />
+      <path fill="#fff" d="M16 7.2l9.5 3H6.5z" opacity="0.95" />
     </svg>
   );
 }
@@ -97,10 +113,11 @@ export function LogoTSLA({ size = 28, className }: LogoProps) {
 export function LogoVOO({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill="#C41230" />
-      <text x="16" y="21" textAnchor="middle" fill="#fff" fontSize="11" fontWeight="800" fontFamily="system-ui,sans-serif">
-        V
-      </text>
+      <rect width="32" height="32" rx="7" fill="#C41230" />
+      <path
+        fill="#fff"
+        d="M9.2 9.5h3.2l3.6 11.2 3.6-11.2h3.2L17.4 24h-2.8L9.2 9.5z"
+      />
     </svg>
   );
 }
@@ -108,9 +125,30 @@ export function LogoVOO({ size = 28, className }: LogoProps) {
 export function LogoQQQ({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill="#000b50" />
-      <circle cx="15" cy="15" r="7" fill="none" stroke="#ffc729" strokeWidth="2.2" />
-      <path d="M20 20l4 4" stroke="#ffc729" strokeWidth="2.2" strokeLinecap="round" />
+      <rect width="32" height="32" rx="7" fill="#000b50" />
+      <circle cx="14.5" cy="14.5" r="6.5" fill="none" stroke="#ffc729" strokeWidth="2.2" />
+      <path d="M19.2 19.2l5 5" stroke="#ffc729" strokeWidth="2.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function LogoNFLX({ size = 28, className }: LogoProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
+      <rect width="32" height="32" rx="7" fill="#E50914" />
+      <path fill="#fff" d="M10 7h3.2l5.6 12.8V7H22v18h-3.2L13.2 12.2V25H10V7z" />
+    </svg>
+  );
+}
+
+export function LogoKO({ size = 28, className }: LogoProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
+      <rect width="32" height="32" rx="7" fill="#F40009" />
+      <path
+        fill="#fff"
+        d="M7.5 15.2c1.4-2.8 4-4.4 7.2-4.4 2.2 0 4 .7 5.4 2l-1.4 1.5c-1.1-1-2.5-1.5-4-1.5-2.3 0-4.1 1.1-5.1 3.1-.3.6-.4 1.2-.4 1.8s.1 1.2.4 1.8c1 2 2.8 3.1 5.1 3.1 1.5 0 2.9-.5 4-1.5l1.4 1.5c-1.4 1.3-3.2 2-5.4 2-3.2 0-5.8-1.6-7.2-4.4-.5-1-.7-2-.7-3.1s.2-2.1.7-3.1z"
+      />
     </svg>
   );
 }
@@ -121,17 +159,20 @@ export function LogoDefault({
   className,
 }: LogoProps & { symbol: string }) {
   const letters = symbol.slice(0, 2).toUpperCase();
+  const hues = ["#1d6ae5", "#226d78", "#703dea", "#000b50", "#c44536"];
+  let h = 0;
+  for (let i = 0; i < symbol.length; i++) h = (h + symbol.charCodeAt(i) * (i + 1)) % hues.length;
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="16" fill="#e8f1fc" />
+      <rect width="32" height="32" rx="16" fill={hues[h]} />
       <text
         x="16"
-        y="20"
+        y="20.5"
         textAnchor="middle"
-        fill="#000b50"
+        fill="#fff"
         fontSize="11"
         fontWeight="700"
-        fontFamily="system-ui,sans-serif"
+        fontFamily="system-ui, -apple-system, sans-serif"
       >
         {letters}
       </text>
@@ -151,6 +192,8 @@ const LOGO_MAP: Record<string, (p: LogoProps) => ReactNode> = {
   TSLA: LogoTSLA,
   VOO: LogoVOO,
   QQQ: LogoQQQ,
+  NFLX: LogoNFLX,
+  KO: LogoKO,
 };
 
 export function TickerLogo({

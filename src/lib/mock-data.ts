@@ -151,6 +151,8 @@ export const TRADE_INSTRUMENTS: TradeInstrument[] = [
   { symbol: "TSLA", name: "Tesla Inc.", type: "stock", price: 248.98, changePct: -1.85, popular: true },
   { symbol: "NVDA", name: "NVIDIA Corp.", type: "stock", price: 119.67, changePct: 2.14, popular: true },
   { symbol: "META", name: "Meta Platforms", type: "stock", price: 572.4, changePct: 0.56 },
+  { symbol: "NFLX", name: "Netflix Inc.", type: "stock", price: 719.51, changePct: 0.92, popular: true },
+  { symbol: "KO", name: "The Coca-Cola Company", type: "stock", price: 69.94, changePct: -0.18 },
   { symbol: "VOO", name: "Vanguard S&P 500 ETF", type: "etf", price: 518.22, changePct: 0.38, popular: true },
   { symbol: "QQQ", name: "Invesco QQQ Trust", type: "etf", price: 482.91, changePct: 0.71, popular: true },
   { symbol: "SPY", name: "SPDR S&P 500 ETF", type: "etf", price: 562.15, changePct: 0.35, popular: true },
@@ -164,6 +166,14 @@ export const TRADE_WATCHLIST = ["AAPL", "NVDA", "VOO", "TSLA", "QQQ"];
 
 export const TRADE_POSITIONS: TradePosition[] = [
   {
+    symbol: "AMZN",
+    shares: 21.76,
+    avgCost: 168.4,
+    value: 4063.46,
+    plPct: 10.95,
+    plUsd: 399.06,
+  },
+  {
     symbol: "AAPL",
     shares: 12.45,
     avgCost: 198.2,
@@ -172,20 +182,20 @@ export const TRADE_POSITIONS: TradePosition[] = [
     plUsd: 365.04,
   },
   {
-    symbol: "VOO",
-    shares: 4.2,
-    avgCost: 490.1,
-    value: 2176.52,
-    plPct: 5.74,
-    plUsd: 118.1,
-  },
-  {
     symbol: "NVDA",
     shares: 8.0,
     avgCost: 105.5,
     value: 957.36,
     plPct: 13.43,
     plUsd: 113.36,
+  },
+  {
+    symbol: "VOO",
+    shares: 4.2,
+    avgCost: 490.1,
+    value: 2176.52,
+    plPct: 5.74,
+    plUsd: 118.1,
   },
 ];
 
