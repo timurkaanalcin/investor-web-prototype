@@ -29,8 +29,8 @@ export function TabBar() {
                 href={href}
                 className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-1.5 text-[10px] font-medium transition-colors active:scale-95 ${
                   active
-                    ? "bg-sage-muted text-nest-blue"
-                    : "text-muted hover:text-nest-blue"
+                    ? "bg-sage-muted text-nest"
+                    : "text-muted hover:text-nest"
                 }`}
               >
                 <Icon size={20} />

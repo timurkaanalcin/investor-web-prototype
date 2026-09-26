@@ -26,7 +26,7 @@ const FILTERS: { key: Filter; label: string }[] = [
 ];
 
 const SIDE_BADGE: Record<TxSide, string> = {
-  buy: "bg-sage-muted text-nest-blue",
+  buy: "bg-sage-muted text-nest",
   sell: "bg-danger-soft text-danger",
   deposit: "bg-gain-soft text-gain",
   withdraw: "bg-warn-soft text-warn",

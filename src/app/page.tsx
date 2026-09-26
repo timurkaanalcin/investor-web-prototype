@@ -22,7 +22,7 @@ import { getExtraTransactions } from "@/lib/storage";
 const RANGES = ["1H", "1A", "3A", "1Y", "Tümü"] as const;
 
 const SIDE_BADGE: Record<TxSide, string> = {
-  buy: "bg-sage-muted text-nest-blue",
+  buy: "bg-sage-muted text-nest",
   sell: "bg-danger-soft text-danger",
   deposit: "bg-gain-soft text-gain",
   withdraw: "bg-warn-soft text-warn",
@@ -92,7 +92,7 @@ export default function DashboardPage() {
           <h2 className="text-base font-semibold text-nest">Son işlemler</h2>
           <Link
             href="/islemler"
-            className="inline-flex items-center text-sm font-medium text-nest-blue active:opacity-70"
+            className="inline-flex items-center text-sm font-medium text-nest active:opacity-70"
           >
             Tümü <IconChevron size={16} />
           </Link>
@@ -142,7 +142,7 @@ export default function DashboardPage() {
           <h2 className="text-base font-semibold text-nest">Portföyün</h2>
           <Link
             href="/yatir"
-            className="inline-flex items-center text-sm font-medium text-nest-blue active:opacity-70"
+            className="inline-flex items-center text-sm font-medium text-nest active:opacity-70"
           >
             Detaylar <IconChevron size={16} />
           </Link>

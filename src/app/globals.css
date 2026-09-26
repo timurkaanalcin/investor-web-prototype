@@ -88,19 +88,20 @@ body.dark {
   background: #000000;
   color: var(--foreground);
   --background: #000000;
-  --foreground: #f0f4ff;
+  --foreground: #ffffff;
   --card: #121212;
   --sidebar: #000000;
-  --muted: #9aa3c2;
+  --muted: #a3a3a3;
   --cream: #000000;
   --beige: #1a1a1a;
   --sage-muted: #1a1a1a;
   --sage-soft: #2a2a2a;
-  --sage: #87b8f5;
-  --nest: #9ec9ff;
-  --nest-solid: #1d6ae5;
-  --nest-blue: #5696ee;
-  --nest-light: #5ec8b0;
+  --sage: #ffffff;
+  /* Heading/label text: white (was light blue #9ec9ff) */
+  --nest: #ffffff;
+  --nest-solid: #1d6ae5; /* fills: avatar, toasts, chips — keep brand blue */
+  --nest-blue: #1d6ae5; /* functional accents only (dots, active bars, fills) */
+  --nest-light: #5ec8b0; /* gain/teal — do not whiten */
   --border: rgba(255, 255, 255, 0.1);
   --danger: #f07167;
   --gain: #3dba7e;
@@ -304,6 +305,12 @@ body.dark .card {
   border: 1.5px solid var(--bt-blue);
   border-radius: 14px;
   font-weight: 600;
+}
+html.dark .btn-secondary,
+body.dark .btn-secondary {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: #1a1a1a;
 }
 
 input[type="range"].nest-slider {
@@ -736,6 +743,17 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
 }
 .tv-market-closed {
   color: var(--tv-muted);
+}
+
+
+/* Dark: any leftover blue label text → white (fills keep --nest-blue) */
+html.dark .text-nest-blue,
+body.dark .text-nest-blue {
+  color: #ffffff;
+}
+html.dark .hover\:text-nest-blue:hover,
+body.dark .hover\:text-nest-blue:hover {
+  color: #ffffff;
 }
 
 /* ── Profile page (modern fintech, dark-first) ── */

@@ -42,7 +42,7 @@ export function DesktopSidebar() {
               href={href}
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors ${
                 active
-                  ? "bg-sage-muted text-nest-blue"
+                  ? "bg-sage-muted text-nest"
                   : "text-nest/80 hover:bg-beige hover:text-nest"
               }`}
             >
