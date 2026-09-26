@@ -73,15 +73,16 @@ export default function TransactionsPage() {
   }, [filtered]);
 
   return (
-    <div className="px-5 pb-6">
-      <header className="flex items-center justify-between pt-5 pb-2">
-        <BrandLogo size="sm" showIcon={false} />
+    <div className="px-5 pb-6 md:px-0 md:pb-0">
+      <header className="flex items-center justify-between pt-5 pb-2 md:pt-2">
+        <div className="md:hidden"><BrandLogo size="sm" showIcon={false} /></div>
+        <div className="hidden md:block" />
         <span className="text-[11px] font-medium text-muted">
           {all.length} işlem
         </span>
       </header>
 
-      <h1 className="mt-2 text-2xl font-bold text-nest">İşlem geçmişi</h1>
+      <h1 className="mt-2 text-2xl font-bold text-nest md:mt-0 md:text-3xl">İşlem geçmişi</h1>
       <p className="mt-1 text-sm text-muted">
         Alış, satış ve para hareketlerin
       </p>
@@ -133,7 +134,7 @@ export default function TransactionsPage() {
                     <button
                       type="button"
                       onClick={() => setSelected(tx)}
-                      className="flex w-full items-center gap-3 px-3.5 py-3 text-left transition-colors active:bg-sage-muted/50"
+                      className="flex w-full min-h-[52px] items-center gap-3 px-3.5 py-3 text-left transition-colors active:bg-sage-muted/50 md:px-4 md:py-3.5"
                     >
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-sage-muted">
                         {tx.symbol ? (
@@ -189,7 +190,7 @@ export default function TransactionsPage() {
           role="presentation"
         >
           <div
-            className="w-full max-w-[390px] rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
+            className="w-full max-w-[390px] md:max-w-md rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"

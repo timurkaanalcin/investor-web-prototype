@@ -50,13 +50,11 @@ export default function DashboardPage() {
     return CHART_POINTS.slice(-n);
   }, [range]);
 
-  return (
-    <div className="px-5 pb-6">
-      <AppHeader />
-
-      <section className="mt-2">
+  const balanceBlock = (
+    <>
+      <section className="mt-2 md:mt-0">
         <p className="text-sm font-medium text-nest/70">Toplam bakiye</p>
-        <h1 className="mt-1 text-4xl font-bold tracking-tight text-nest">
+        <h1 className="mt-1 text-4xl font-bold tracking-tight text-nest md:text-5xl">
           {formatTRY(TOTAL_BALANCE)}
         </h1>
         <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-sm font-medium text-gain">
@@ -65,14 +63,14 @@ export default function DashboardPage() {
         </p>
       </section>
 
-      <section className="card mt-5 overflow-hidden px-3 pb-3 pt-3">
+      <section className="card mt-5 overflow-hidden px-3 pb-3 pt-3 md:mt-6 md:px-4 md:pb-4 md:pt-4">
         <div className="mb-2 flex gap-1.5 overflow-x-auto px-1">
           {RANGES.map((r) => (
             <button
               key={r}
               type="button"
               onClick={() => setRange(r)}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-colors active:scale-95 ${
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-colors active:scale-95 md:min-h-0 md:px-3 md:py-1.5 md:text-xs ${
                 range === r
                   ? "bg-nest text-white"
                   : "bg-beige text-muted hover:text-nest"
@@ -84,8 +82,12 @@ export default function DashboardPage() {
         </div>
         <LineChart points={points} />
       </section>
+    </>
+  );
 
-      <section className="mt-5">
+  const sideBlock = (
+    <>
+      <section className="mt-5 md:mt-0">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-base font-semibold text-nest">Son işlemler</h2>
           <Link
@@ -100,7 +102,7 @@ export default function DashboardPage() {
             <li key={tx.id}>
               <Link
                 href="/islemler"
-                className="flex items-center gap-3 px-3.5 py-3 transition-colors active:bg-sage-muted/50"
+                className="flex items-center gap-3 px-3.5 py-3 transition-colors active:bg-sage-muted/50 md:py-3.5"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-sage-muted">
                   {tx.symbol ? (
@@ -168,6 +170,17 @@ export default function DashboardPage() {
           </div>
         </Link>
       </section>
+    </>
+  );
+
+  return (
+    <div className="px-5 pb-6 md:px-0 md:pb-0">
+      <AppHeader />
+      {/* Mobile: stacked · Desktop: 2/3 + 1/3 */}
+      <div className="md:desk-grid-home md:mt-2">
+        <div>{balanceBlock}</div>
+        <div>{sideBlock}</div>
+      </div>
     </div>
   );
 }

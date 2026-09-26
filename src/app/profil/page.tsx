@@ -90,13 +90,30 @@ export default function ProfilePage() {
     router.push("/onboarding");
   }
 
+  const avatar = (
+      <div className="mt-6 flex flex-col items-center md:mt-0 md:items-start md:pt-2">
+        <div className="relative">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-nest text-2xl font-bold text-white shadow-md md:h-24 md:w-24 md:text-3xl">
+            {USER.initials}
+          </div>
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-[#22a06b] text-white ring-2 ring-background">
+            <IconShield size={14} />
+          </span>
+        </div>
+        <p className="mt-3 text-lg font-bold text-nest md:text-xl">{USER.name}</p>
+        <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-nest px-2.5 py-1 text-[11px] font-medium text-white">
+          <IconCrown /> {USER.tier}
+        </span>
+      </div>
+  );
+
   return (
-    <div className="px-5 pb-6">
-      <header className="flex items-center justify-between pt-5 pb-2">
+    <div className="px-5 pb-6 md:px-0 md:pb-0">
+      <header className="flex items-center justify-between pt-5 pb-2 md:hidden">
         <button
           type="button"
           aria-label="Menü"
-          className="text-nest active:opacity-70"
+          className="text-nest active:opacity-70 min-h-[44px] min-w-[44px]"
           onClick={() => flash("Menü (prototip)")}
         >
           <IconMenu />
@@ -105,7 +122,7 @@ export default function ProfilePage() {
         <button
           type="button"
           aria-label="Bildirimler"
-          className="relative text-nest active:opacity-70"
+          className="relative text-nest active:opacity-70 min-h-[44px] min-w-[44px]"
           onClick={toggleNotif}
         >
           <IconBell />
@@ -115,22 +132,11 @@ export default function ProfilePage() {
         </button>
       </header>
 
-      <div className="mt-6 flex flex-col items-center">
-        <div className="relative">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-nest text-2xl font-bold text-white shadow-md">
-            {USER.initials}
-          </div>
-          <span className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-[#22a06b] text-white ring-2 ring-background">
-            <IconShield size={14} />
-          </span>
-        </div>
-        <p className="mt-3 text-lg font-bold text-nest">{USER.name}</p>
-        <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-nest px-2.5 py-1 text-[11px] font-medium text-white">
-          <IconCrown /> {USER.tier}
-        </span>
-      </div>
+      <h1 className="mb-6 hidden text-3xl font-bold text-nest md:block">Profil</h1>
 
-      <div className="card mt-6 overflow-hidden">
+      <div className="md:desk-grid-profile">
+        {avatar}
+        <div className="card mt-6 overflow-hidden md:mt-0">
         {(
           [
             { id: "security" as const, label: "Hesap ve güvenlik", icon: IconShield },
@@ -224,6 +230,7 @@ export default function ProfilePage() {
           <span className="flex-1 text-sm font-medium text-danger">Çıkış yap</span>
         </button>
       </div>
+      </div>
 
       {sheet && sheet !== "logout" && (
         <div
@@ -232,7 +239,7 @@ export default function ProfilePage() {
           role="presentation"
         >
           <div
-            className="w-full max-w-[390px] rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
+            className="w-full max-w-[390px] md:max-w-md rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -271,7 +278,7 @@ export default function ProfilePage() {
           role="presentation"
         >
           <div
-            className="w-full max-w-[390px] rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
+            className="w-full max-w-[390px] md:max-w-md rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -302,7 +309,7 @@ export default function ProfilePage() {
       )}
 
       {toast && (
-        <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-nest px-4 py-2 text-xs font-medium text-white shadow-lg">
+        <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 md:bottom-8 rounded-full bg-nest px-4 py-2 text-xs font-medium text-white shadow-lg">
           {toast}
         </div>
       )}

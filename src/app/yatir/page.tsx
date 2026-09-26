@@ -128,88 +128,94 @@ export default function InvestPage() {
   const selectedHolding = HOLDINGS.find((h) => h.id === holdingId);
 
   return (
-    <div className="px-5 pb-6">
+    <div className="px-5 pb-6 md:px-0 md:pb-0">
       <AppHeader centerLogo />
 
-      <div className="mt-2 flex items-center gap-2">
-        <h1 className="font-serif text-3xl font-bold text-nest">Yatır</h1>
+      <div className="mt-2 flex items-center gap-2 md:mt-0">
+        <h1 className="font-serif text-3xl font-bold text-nest md:text-4xl">Yatır</h1>
         <IconInfo className="text-muted" size={18} />
       </div>
 
-      <div className="card mt-5 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-sm text-muted">Otomatik katkı</p>
-            <p className="mt-1 text-2xl font-bold text-nest">
-              {formatTRY(AUTO_CONTRIBUTION)}{" "}
-              <span className="text-base font-medium text-muted">/ ay</span>
-            </p>
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={autoOn}
-            onClick={toggleAuto}
-            className={`toggle ${autoOn ? "on" : ""}`}
-            aria-label="Otomatik katkı"
-          />
-        </div>
-        <p className="mt-3 text-xs text-muted">Sonraki tarih: 25 Eyl</p>
-      </div>
-
-      <button
-        type="button"
-        onClick={() => {
-          setDepositOpen(true);
-          setConfirmDeposit(false);
-        }}
-        className="btn-primary mt-4 w-full py-3.5 text-base active:scale-[0.98]"
-      >
-        Hemen yatır
-      </button>
-
-      <section className="mt-6">
-        <h2 className="mb-3 text-base font-semibold text-nest">Portföyün</h2>
-        <AllocationBar segments={ALLOCATION} />
-
-        <ul className="mt-4 space-y-2">
-          {HOLDINGS.map((h) => (
-            <li key={h.id}>
+      <div className="md:desk-grid-invest md:mt-6">
+        <div>
+          <div className="card mt-5 p-4 md:mt-0 md:p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-sm text-muted">Otomatik katkı</p>
+                <p className="mt-1 text-2xl font-bold text-nest">
+                  {formatTRY(AUTO_CONTRIBUTION)}{" "}
+                  <span className="text-base font-medium text-muted">/ ay</span>
+                </p>
+              </div>
               <button
                 type="button"
-                onClick={() => setHoldingId(h.id)}
-                className="card flex w-full items-center gap-3 p-3.5 text-left transition-transform active:scale-[0.99]"
-              >
-                <HoldingIcon type={h.icon} />
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-nest">{h.name}</p>
-                  <p className="text-xs text-muted">{h.subtitle}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-nest">
-                    {formatTRY(h.value)}
-                  </p>
-                  <p
-                    className={`text-xs font-medium ${
-                      h.change >= 0 ? "text-nest-light" : "text-danger"
-                    }`}
-                  >
-                    {formatPct(h.change)}
-                  </p>
-                </div>
-              </button>
-            </li>
-          ))}
-        </ul>
+                role="switch"
+                aria-checked={autoOn}
+                onClick={toggleAuto}
+                className={`toggle ${autoOn ? "on" : ""}`}
+                aria-label="Otomatik katkı"
+              />
+            </div>
+            <p className="mt-3 text-xs text-muted">Sonraki tarih: 25 Eyl</p>
+          </div>
 
-        <button
-          type="button"
-          onClick={() => setRebalanceOpen(true)}
-          className="btn-secondary mt-4 w-full py-3 text-sm active:scale-[0.98]"
-        >
-          Yeniden dengele
-        </button>
-      </section>
+          <button
+            type="button"
+            onClick={() => {
+              setDepositOpen(true);
+              setConfirmDeposit(false);
+            }}
+            className="btn-primary mt-4 w-full min-h-[44px] py-3.5 text-base active:scale-[0.98]"
+          >
+            Hemen yatır
+          </button>
+
+          <section className="mt-6 md:mt-5">
+            <h2 className="mb-3 text-base font-semibold text-nest">Dağılım</h2>
+            <AllocationBar segments={ALLOCATION} />
+            <button
+              type="button"
+              onClick={() => setRebalanceOpen(true)}
+              className="btn-secondary mt-4 w-full min-h-[44px] py-3 text-sm active:scale-[0.98]"
+            >
+              Yeniden dengele
+            </button>
+          </section>
+        </div>
+
+        <section className="mt-6 md:mt-0">
+          <h2 className="mb-3 text-base font-semibold text-nest">Portföyün</h2>
+          <ul className="space-y-2">
+            {HOLDINGS.map((h) => (
+              <li key={h.id}>
+                <button
+                  type="button"
+                  onClick={() => setHoldingId(h.id)}
+                  className="card flex w-full items-center gap-3 p-3.5 text-left transition-transform active:scale-[0.99] md:min-h-[56px]"
+                >
+                  <HoldingIcon type={h.icon} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-nest">{h.name}</p>
+                    <p className="text-xs text-muted">{h.subtitle}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-semibold text-nest">
+                      {formatTRY(h.value)}
+                    </p>
+                    <p
+                      className={`text-xs font-medium ${
+                        h.change >= 0 ? "text-nest-light" : "text-danger"
+                      }`}
+                    >
+                      {formatPct(h.change)}
+                    </p>
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
 
       {depositOpen && (
         <div
@@ -218,7 +224,7 @@ export default function InvestPage() {
           role="presentation"
         >
           <div
-            className="w-full max-w-[390px] rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
+            className="w-full max-w-[390px] md:max-w-md rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -314,7 +320,7 @@ export default function InvestPage() {
           role="presentation"
         >
           <div
-            className="w-full max-w-[390px] rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
+            className="w-full max-w-[390px] md:max-w-md rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -351,7 +357,7 @@ export default function InvestPage() {
           role="presentation"
         >
           <div
-            className="w-full max-w-[390px] rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
+            className="w-full max-w-[390px] md:max-w-md rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -395,7 +401,7 @@ export default function InvestPage() {
       )}
 
       {toast && (
-        <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-nest px-4 py-2 text-xs font-medium text-white shadow-lg">
+        <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 md:bottom-8 rounded-full bg-nest px-4 py-2 text-xs font-medium text-white shadow-lg">
           {toast}
         </div>
       )}

@@ -33,6 +33,8 @@ import {
   type TradeCurrency,
 } from "@/lib/mock-data";
 import { getMarketStatus } from "@/lib/market-series";
+import { useIsDesktop } from "@/hooks/useMediaQuery";
+import { TradeOrderSidePanel } from "@/components/trade/TradeOrderSidePanel";
 
 type Side = "buy" | "sell";
 type SellMode = "shares" | "dollars";
@@ -42,6 +44,7 @@ type ChartMode = "tradingview" | "basit";
 export default function OrderTicketPage() {
   const params = useParams();
   const symbol = String(params.symbol || "").toUpperCase();
+  const isDesktop = useIsDesktop();
   const instrument = getInstrument(symbol);
   const position = getPosition(symbol);
   const ticketRef = useRef<HTMLDivElement>(null);
@@ -59,8 +62,14 @@ export default function OrderTicketPage() {
   const [chartHeight, setChartHeight] = useState(360);
 
   useEffect(() => {
-    const calc = () =>
-      setChartHeight(Math.min(Math.round(window.innerHeight * 0.52), 520));
+    const calc = () => {
+      const h = window.innerHeight;
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        setChartHeight(Math.max(320, Math.min(Math.round(h - 200), 720)));
+      } else {
+        setChartHeight(Math.min(Math.round(h * 0.52), 520));
+      }
+    };
     calc();
     window.addEventListener("resize", calc);
     return () => window.removeEventListener("resize", calc);
@@ -563,13 +572,13 @@ export default function OrderTicketPage() {
   const changeAbs = price - price / (1 + instrument.changePct / 100);
   const up = instrument.changePct >= 0;
 
-  return (
-    <div className="trade-tv-root flex h-full min-h-0 flex-col overflow-hidden">
+  const detail = (
+    <div className="trade-tv-root flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       <header className="flex shrink-0 items-center gap-2 border-b border-[var(--tv-border)] bg-[var(--tv-panel)] px-3 py-2.5">
         <Link
           href="/trade"
           aria-label="Geri"
-          className="tv-icon-btn trade-press -ml-1"
+          className="tv-icon-btn trade-press -ml-1 md:hidden"
         >
           <IconBack />
         </Link>
@@ -726,7 +735,7 @@ export default function OrderTicketPage() {
         </p>
       </div>
 
-      <div className="tv-sticky-orders">
+      <div className="tv-sticky-orders lg:hidden">
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
@@ -746,6 +755,17 @@ export default function OrderTicketPage() {
       </div>
     </div>
   );
+
+  if (isDesktop) {
+    return (
+      <>
+        {detail}
+        <TradeOrderSidePanel instrument={instrument} />
+      </>
+    );
+  }
+
+  return detail;
 }
 
 function TvRow({
