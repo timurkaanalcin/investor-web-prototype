@@ -200,3 +200,280 @@ input[type="range"].nest-slider::-webkit-slider-thumb {
   height: 1px;
   background: rgba(0, 0, 0, 0.06);
 }
+
+/* ─── TradingView-inspired Trade terminal (scoped) ─── */
+.phone-shell.trade-tv {
+  background: #131722;
+  color: #d1d4dc;
+  --background: #131722;
+  --foreground: #d1d4dc;
+  --card: #1e222d;
+  --muted: #787b86;
+  --nest: #d1d4dc;
+  --nest-blue: #2962ff;
+  --gain: #26a69a;
+  --danger: #ef5350;
+  --beige: #2a2e39;
+  --sage-muted: #2a2e39;
+  --cream: #131722;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(42, 46, 57, 0.9);
+}
+
+.trade-tv-root {
+  --tv-bg: #131722;
+  --tv-panel: #1e222d;
+  --tv-panel-2: #2a2e39;
+  --tv-hover: #363a45;
+  --tv-border: #2a2e39;
+  --tv-text: #d1d4dc;
+  --tv-muted: #787b86;
+  --tv-blue: #2962ff;
+  --tv-green: #26a69a;
+  --tv-red: #ef5350;
+  --tv-yellow: #f0b90b;
+  background: var(--tv-bg);
+  color: var(--tv-text);
+  min-height: 100%;
+}
+
+.tv-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--tv-panel);
+  border-bottom: 1px solid var(--tv-border);
+}
+
+.tv-search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--tv-bg);
+  border: 1px solid var(--tv-border);
+  border-radius: 4px;
+  padding: 7px 10px;
+  color: var(--tv-muted);
+}
+.tv-search:focus-within {
+  border-color: var(--tv-blue);
+}
+.tv-search input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--tv-text);
+  font-size: 13px;
+  min-width: 0;
+}
+.tv-search input::placeholder {
+  color: var(--tv-muted);
+}
+
+.tv-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: var(--tv-muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.tv-icon-btn:hover {
+  background: var(--tv-hover);
+  color: var(--tv-text);
+}
+
+.tv-pills {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--tv-border);
+  background: var(--tv-panel);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.tv-pills::-webkit-scrollbar {
+  display: none;
+}
+.tv-pill {
+  flex-shrink: 0;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--tv-border);
+  background: transparent;
+  color: var(--tv-muted);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.tv-pill:hover {
+  background: var(--tv-hover);
+  color: var(--tv-text);
+}
+.tv-pill.active {
+  background: color-mix(in srgb, var(--tv-blue) 22%, transparent);
+  border-color: var(--tv-blue);
+  color: #fff;
+}
+
+.tv-section-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tv-muted);
+  background: var(--tv-bg);
+}
+
+.tv-watch-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--tv-border) 70%, transparent);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.1s;
+}
+.tv-watch-row:hover {
+  background: var(--tv-hover);
+}
+
+.tv-mono {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.tv-chip-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--tv-panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tv-text);
+}
+
+.tv-change-up {
+  color: var(--tv-green);
+}
+.tv-change-down {
+  color: var(--tv-red);
+}
+
+.tv-account-strip {
+  border-top: 1px solid var(--tv-border);
+  background: var(--tv-panel);
+  padding: 10px 12px 14px;
+}
+
+.tv-btn-buy {
+  background: var(--tv-green);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 4px;
+  border: 0;
+  cursor: pointer;
+}
+.tv-btn-buy:hover {
+  filter: brightness(1.08);
+}
+.tv-btn-sell {
+  background: var(--tv-red);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 4px;
+  border: 0;
+  cursor: pointer;
+}
+.tv-btn-sell:hover {
+  filter: brightness(1.08);
+}
+.tv-btn-buy:disabled,
+.tv-btn-sell:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.tv-sticky-orders {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  width: 100%;
+  max-width: 390px;
+  background: color-mix(in srgb, var(--tv-panel) 94%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--tv-border);
+  padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+}
+
+.tv-ex-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: var(--tv-panel-2);
+  color: var(--tv-muted);
+  border: 1px solid var(--tv-border);
+}
+
+.tv-panel {
+  background: var(--tv-panel);
+  border: 1px solid var(--tv-border);
+  border-radius: 4px;
+}
+
+.tv-input {
+  width: 100%;
+  background: var(--tv-bg);
+  border: 1px solid var(--tv-border);
+  border-radius: 4px;
+  color: var(--tv-text);
+  padding: 12px 12px;
+  font-size: 15px;
+  outline: none;
+}
+.tv-input:focus {
+  border-color: var(--tv-blue);
+}
+.tv-input::placeholder {
+  color: var(--tv-muted);
+}
+
+.tv-divider {
+  height: 1px;
+  background: var(--tv-border);
+}
+
+.tv-market-open {
+  color: var(--tv-green);
+}
+.tv-market-closed {
+  color: var(--tv-muted);
+}

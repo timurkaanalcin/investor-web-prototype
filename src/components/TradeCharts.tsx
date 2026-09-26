@@ -50,19 +50,23 @@ export function Sparkline({
   changePct,
   width = 64,
   height = 28,
+  upColor,
+  downColor,
 }: {
   symbol: string;
   lastPrice: number;
   changePct: number;
   width?: number;
   height?: number;
+  upColor?: string;
+  downColor?: string;
 }) {
   const values = useMemo(
     () => getSparkline(symbol, lastPrice, changePct),
     [symbol, lastPrice, changePct]
   );
   const positive = changePct >= 0;
-  const color = positive ? GAIN : LOSS;
+  const color = positive ? (upColor ?? GAIN) : (downColor ?? LOSS);
   const min = Math.min(...values);
   const max = Math.max(...values);
   const span = max - min || 1;
@@ -425,7 +429,7 @@ export function DayStatsGrid({
   ];
 
   return (
-    <ul className="divide-y divide-black/[0.05]">
+    <ul className="divide-y divide-[color-mix(in_srgb,var(--muted)_28%,transparent)]">
       {cells.map((c) => (
         <li
           key={c.label}

@@ -13,7 +13,7 @@ declare global {
 }
 
 const TV_SCRIPT = "https://s3.tradingview.com/tv.js";
-const HEIGHT = 460;
+const HEIGHT = 540;
 
 let scriptPromise: Promise<void> | null = null;
 
@@ -51,12 +51,17 @@ function loadTradingViewScript(): Promise<void> {
 type Props = {
   instrument: Pick<TradeInstrument, "symbol" | "exchange" | "type" | "name">;
   height?: number;
+  theme?: "dark" | "light";
 };
 
 /**
  * Official TradingView Advanced Chart embed — client-only for static export.
  */
-export function TradingViewChart({ instrument, height = HEIGHT }: Props) {
+export function TradingViewChart({
+  instrument,
+  height = HEIGHT,
+  theme = "dark",
+}: Props) {
   const rawId = useId().replace(/:/g, "");
   const containerId = `tv_${instrument.symbol}_${rawId}`;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -66,6 +71,7 @@ export function TradingViewChart({ instrument, height = HEIGHT }: Props) {
   );
 
   const tvSymbol = toTradingViewSymbol(instrument);
+  const isDark = theme === "dark";
 
   useEffect(() => {
     let cancelled = false;
@@ -89,39 +95,67 @@ export function TradingViewChart({ instrument, height = HEIGHT }: Props) {
           symbol: tvSymbol,
           interval: "D",
           timezone: "Europe/Istanbul",
-          theme: "light",
+          theme: isDark ? "dark" : "light",
           style: "1",
           locale: "tr",
-          toolbar_bg: "#f9f0e2",
+          toolbar_bg: isDark ? "#1e222d" : "#f9f0e2",
           enable_publishing: false,
           allow_symbol_change: false,
-          hide_side_toolbar: false,
-          hide_top_toolbar: false,
+          hide_side_toolbar: true,
+          hide_top_toolbar: true,
           hide_legend: false,
           save_image: false,
-          withdateranges: true,
+          withdateranges: false,
           details: false,
           hotlist: false,
           calendar: false,
           studies: [],
           container_id: containerId,
-          overrides: {
-            "paneProperties.background": "#ffffff",
-            "paneProperties.backgroundType": "solid",
-            "paneProperties.vertGridProperties.color": "rgba(0, 11, 80, 0.06)",
-            "paneProperties.horzGridProperties.color": "rgba(0, 11, 80, 0.06)",
-            "scalesProperties.textColor": "#5c5c5c",
-            "mainSeriesProperties.candleStyle.upColor": "#1a7a4c",
-            "mainSeriesProperties.candleStyle.downColor": "#c44536",
-            "mainSeriesProperties.candleStyle.borderUpColor": "#1a7a4c",
-            "mainSeriesProperties.candleStyle.borderDownColor": "#c44536",
-            "mainSeriesProperties.candleStyle.wickUpColor": "#1a7a4c",
-            "mainSeriesProperties.candleStyle.wickDownColor": "#c44536",
-          },
+          overrides: isDark
+            ? {
+                "paneProperties.background": "#131722",
+                "paneProperties.backgroundType": "solid",
+                "paneProperties.vertGridProperties.color": "#2a2e39",
+                "paneProperties.horzGridProperties.color": "#2a2e39",
+                "scalesProperties.textColor": "#d1d4dc",
+                "mainSeriesProperties.candleStyle.upColor": "#26a69a",
+                "mainSeriesProperties.candleStyle.downColor": "#ef5350",
+                "mainSeriesProperties.candleStyle.borderUpColor": "#26a69a",
+                "mainSeriesProperties.candleStyle.borderDownColor": "#ef5350",
+                "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a",
+                "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350",
+              }
+            : {
+                "paneProperties.background": "#ffffff",
+                "paneProperties.backgroundType": "solid",
+                "paneProperties.vertGridProperties.color":
+                  "rgba(0, 11, 80, 0.06)",
+                "paneProperties.horzGridProperties.color":
+                  "rgba(0, 11, 80, 0.06)",
+                "scalesProperties.textColor": "#5c5c5c",
+                "mainSeriesProperties.candleStyle.upColor": "#1a7a4c",
+                "mainSeriesProperties.candleStyle.downColor": "#c44536",
+                "mainSeriesProperties.candleStyle.borderUpColor": "#1a7a4c",
+                "mainSeriesProperties.candleStyle.borderDownColor": "#c44536",
+                "mainSeriesProperties.candleStyle.wickUpColor": "#1a7a4c",
+                "mainSeriesProperties.candleStyle.wickDownColor": "#c44536",
+              },
           disabled_features: [
+            "header_widget",
+            "header_widget_dom_node",
             "header_symbol_search",
+            "header_resolutions",
+            "header_chart_type",
             "header_compare",
+            "header_undo_redo",
             "header_screenshot",
+            "header_fullscreen_button",
+            "header_settings",
+            "header_indicators",
+            "timeframes_toolbar",
+            "control_bar",
+            "edit_buttons_in_legend",
+            "border_around_the_chart",
             "display_market_status",
           ],
           enabled_features: ["hide_left_toolbar_by_default"],
@@ -145,27 +179,47 @@ export function TradingViewChart({ instrument, height = HEIGHT }: Props) {
       }
       widgetRef.current = null;
     };
-  }, [tvSymbol, containerId]);
+  }, [tvSymbol, containerId, isDark]);
 
   return (
     <div className="w-full">
       <div
-        className="relative overflow-hidden rounded-2xl bg-card shadow-[0_4px_24px_rgba(0,11,80,0.08)] ring-1 ring-black/[0.06]"
+        className={`relative overflow-hidden ${
+          isDark
+            ? "rounded-none border-y border-[#2a2e39] bg-[#131722]"
+            : "rounded-2xl bg-card shadow-[0_4px_24px_rgba(0,11,80,0.08)] ring-1 ring-black/[0.06]"
+        }`}
         style={{ height }}
       >
         {(status === "loading" || status === "error") && (
           <div
-            className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-[#fafbfd] px-6 text-center"
+            className={`absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 px-6 text-center ${
+              isDark ? "bg-[#131722]" : "bg-[#fafbfd]"
+            }`}
             aria-live="polite"
           >
             {status === "loading" ? (
-              <p className="text-[13px] text-muted">TradingView yükleniyor…</p>
+              <p
+                className={`text-[13px] ${
+                  isDark ? "text-[#787b86]" : "text-muted"
+                }`}
+              >
+                TradingView yükleniyor…
+              </p>
             ) : (
               <>
-                <p className="text-[14px] font-semibold text-nest">
+                <p
+                  className={`text-[14px] font-semibold ${
+                    isDark ? "text-[#d1d4dc]" : "text-nest"
+                  }`}
+                >
                   Grafik yüklenemedi
                 </p>
-                <p className="text-[12px] text-muted">
+                <p
+                  className={`text-[12px] ${
+                    isDark ? "text-[#787b86]" : "text-muted"
+                  }`}
+                >
                   Basit moda geçerek Investor grafiğini kullanabilirsiniz.
                 </p>
               </>
@@ -179,9 +233,17 @@ export function TradingViewChart({ instrument, height = HEIGHT }: Props) {
           style={{ minHeight: height }}
         />
       </div>
-      <p className="mt-2 text-center text-[11px] leading-relaxed text-muted">
+      <p
+        className={`mt-2 text-center text-[11px] leading-relaxed ${
+          isDark ? "text-[#787b86]" : "text-muted"
+        }`}
+      >
         Canlı TradingView grafiği · sembol borsaya göre eşlenir
-        <span className="mx-1 text-black/20">·</span>
+        <span
+          className={`mx-1 ${isDark ? "text-[#2a2e39]" : "text-black/20"}`}
+        >
+          ·
+        </span>
         <span className="tabular-nums">{tvSymbol}</span>
       </p>
     </div>

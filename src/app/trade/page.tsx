@@ -3,13 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
-  IconChevron,
   IconClose,
-  IconGridDots,
-  IconPlus,
   IconSearch,
+  IconSettings,
 } from "@/components/Icons";
-import { OverviewAreaChart } from "@/components/TradeCharts";
+import { Sparkline } from "@/components/TradeCharts";
 import { TickerLogo } from "@/components/TickerLogos";
 import {
   TRADE_CASH_USD,
@@ -18,7 +16,6 @@ import {
   formatMoney,
   formatPct,
   formatShares,
-  FX_USD,
   formatUSD,
   getInstrument,
   positionPlUSD,
@@ -63,15 +60,10 @@ function shortCompanyName(name: string): string {
     .trim();
 }
 
-function exchangeBadge(ex: TradeExchange): string {
-  if (ex === "NASDAQ" || ex === "NYSE") return ex;
-  return ex;
-}
-
 export default function TradeHomePage() {
   const [query, setQuery] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
   const [filter, setFilter] = useState<FilterKey>("all");
+  const [positionsOpen, setPositionsOpen] = useState(true);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const filtered = useMemo(() => {
@@ -100,309 +92,249 @@ export default function TradeHomePage() {
     0
   );
   const positionsPl = TRADE_POSITIONS.reduce((s, p) => s + positionPlUSD(p), 0);
-  const costBasisUsd = TRADE_POSITIONS.reduce((s, p) => {
-    const inst = getInstrument(p.symbol);
-    const ccy = (inst?.currency ?? "USD") as TradeCurrency;
-    const rate = FX_USD[ccy] || 1;
-    return s + (p.avgCost * p.shares) / rate;
-  }, 0);
   const balance = positionsValue + TRADE_CASH_USD;
-  const allTimePct = costBasisUsd > 0 ? (positionsPl / costBasisUsd) * 100 : 0;
-  const startBalance = balance - positionsPl;
 
   useEffect(() => {
-    if (showSearch) {
-      const t = setTimeout(() => searchRef.current?.focus(), 40);
-      return () => clearTimeout(t);
-    }
-  }, [showSearch]);
+    searchRef.current?.focus();
+  }, []);
 
-  function openAddAsset() {
-    setShowSearch(true);
-    setQuery("");
-    setFilter("all");
-  }
-
-  function closeSearch() {
-    setShowSearch(false);
-    setQuery("");
-    setFilter("all");
-  }
-
-  /* ─── Add-asset search sheet ─── */
-  if (showSearch) {
-    return (
-      <div className="flex min-h-[100dvh] flex-col bg-card px-5 pb-10 pt-4">
-        <header className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={closeSearch}
-            aria-label="Kapat"
-            className="trade-press rounded-full p-1.5 text-nest hover:bg-beige focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
-          >
-            <IconClose />
-          </button>
-          <p className="text-[15px] font-semibold text-nest">Varlık ekle</p>
-          <span className="w-9" aria-hidden />
-        </header>
-
-        <div className="relative mt-5">
-          <IconSearch
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
-            size={18}
-          />
+  return (
+    <div className="trade-tv-root flex min-h-[100dvh] flex-col pb-4">
+      {/* Top bar — symbol search */}
+      <div className="tv-topbar">
+        <div className="tv-search">
+          <IconSearch size={15} />
           <input
             ref={searchRef}
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Sembol, isim veya borsa ara…"
-            className="w-full rounded-full border border-black/[0.06] bg-beige py-3.5 pl-11 pr-4 text-[15px] text-nest outline-none placeholder:text-muted focus:border-nest-blue/40 focus:bg-card focus:ring-2 focus:ring-nest-blue/25"
-            aria-label="Ara"
+            placeholder="Sembol ara…"
+            aria-label="Sembol ara"
           />
+          {query && (
+            <button
+              type="button"
+              aria-label="Temizle"
+              className="tv-icon-btn !h-6 !w-6"
+              onClick={() => setQuery("")}
+            >
+              <IconClose size={14} />
+            </button>
+          )}
         </div>
+        <Link
+          href="/profil"
+          className="tv-icon-btn"
+          aria-label="Ayarlar"
+          title="Ayarlar"
+        >
+          <IconSettings size={16} />
+        </Link>
+      </div>
 
-        <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {FILTERS.map((f) => {
-            const active = filter === f.key;
-            return (
-              <button
-                key={f.key}
-                type="button"
-                onClick={() => setFilter(f.key)}
-                className={`trade-press shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40 ${
-                  active
-                    ? "bg-nest text-white"
-                    : "bg-beige text-nest hover:bg-beige/80"
-                }`}
-              >
-                {f.label}
-              </button>
-            );
-          })}
+      <div className="flex items-center justify-between px-3 py-2">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#787b86]">
+            Investor Trade
+          </p>
+          <p className="text-[13px] font-semibold text-[#d1d4dc]">
+            İzleme listesi
+          </p>
         </div>
+        <p className="tv-mono text-[11px] text-[#787b86]">
+          {TRADE_INSTRUMENTS.length} sembol
+        </p>
+      </div>
 
-        <section className="mt-4 flex-1">
-          <h2 className="mb-2 px-0.5 text-[13px] font-semibold uppercase tracking-wide text-muted">
+      {/* Exchange filter pills */}
+      <div className="tv-pills" role="tablist" aria-label="Borsa filtresi">
+        {FILTERS.map((f) => (
+          <button
+            key={f.key}
+            type="button"
+            role="tab"
+            aria-selected={filter === f.key}
+            onClick={() => setFilter(f.key)}
+            className={`tv-pill trade-press${filter === f.key ? " active" : ""}`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Column headers */}
+      <div className="flex items-center gap-2 border-b border-[#2a2e39] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-[#787b86]">
+        <span className="w-7" aria-hidden />
+        <span className="min-w-0 flex-1">Sembol</span>
+        <span className="w-14 text-center">Grafik</span>
+        <span className="w-[4.75rem] text-right">Son / %</span>
+      </div>
+
+      {/* Watchlist */}
+      <section className="flex-1">
+        <div className="tv-section-label">
+          <span>
             {query.trim() || filter !== "all"
               ? `Sonuçlar (${filtered.length})`
               : "Popüler"}
-          </h2>
-          <InstrumentList items={listItems} />
-        </section>
-
-        <p className="mt-4 text-center text-[11px] text-muted">
-          Fiyat gecikmeli · simülasyon · {TRADE_INSTRUMENTS.length}+ enstrüman
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-[100dvh] bg-card px-5 pb-10 pt-3">
-      <div className="flex items-center justify-between">
-        <Link
-          href="/"
-          className="trade-press -ml-1 rounded-full px-1.5 py-1 text-[22px] leading-none text-nest/35 hover:text-nest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
-          aria-label="Ana sayfa"
-        >
-          ‹
-        </Link>
-        <Link
-          href="/profil"
-          className="trade-press rounded-lg px-1 py-0.5 text-[15px] font-semibold text-nest-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
-        >
-          Ayarlar
-        </Link>
-      </div>
-
-      <div className="mt-4 flex items-center gap-3">
-        <IconGridDots size={34} />
-        <h1 className="text-[21px] font-semibold leading-tight tracking-[-0.01em] text-nest">
-          Kendi yönettiğin yatırım
-        </h1>
-      </div>
-
-      <section className="mt-7">
-        <p className="flex items-center gap-1.5 text-[13px] font-medium text-muted">
-          Bakiye
-          <span
-            className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border border-muted/45 text-[9px] font-semibold leading-none text-muted"
-            aria-hidden
-          >
-            i
           </span>
-        </p>
-        <p className="mt-1.5 text-[34px] font-bold leading-none tracking-tight text-nest tabular-nums">
-          {formatUSD(balance)}
-        </p>
-        <p
-          className={`mt-2.5 text-[15px] font-semibold tabular-nums ${
-            positionsPl >= 0 ? "text-gain" : "text-danger"
-          }`}
-        >
-          {positionsPl >= 0 ? "+" : ""}
-          {formatUSD(positionsPl)} ({formatPct(allTimePct)}) tüm zamanlar
-        </p>
+        </div>
+        <Watchlist items={listItems} />
       </section>
 
-      <div className="mt-6 -mx-0.5">
-        <OverviewAreaChart
-          balance={balance}
-          startBalance={Math.max(startBalance * 0.92, startBalance - 800)}
-          height={168}
-        />
-      </div>
-
-      <section className="relative z-[1] -mt-2 overflow-hidden rounded-[18px] bg-card shadow-[0_-2px_20px_rgba(0,11,80,0.05),0_10px_28px_rgba(0,11,80,0.08)] ring-1 ring-black/[0.04]">
-        <div className="flex items-center justify-between px-4 pb-0.5 pt-[18px]">
-          <h2 className="text-[17px] font-bold tracking-[-0.01em] text-nest">
-            Varlıklar
-          </h2>
-          <button
-            type="button"
-            onClick={openAddAsset}
-            className="trade-press inline-flex items-center gap-1.5 rounded-lg text-[15px] font-semibold text-nest-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40"
-          >
-            <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full border-[1.5px] border-nest-blue text-nest-blue">
-              <IconPlus size={11} />
-            </span>
-            Varlık ekle
-          </button>
-        </div>
-
-        {TRADE_POSITIONS.length === 0 ? (
-          <div className="px-4 py-10 text-center">
-            <p className="text-[15px] font-semibold text-nest">
-              Henüz varlık yok
+      {/* Account / positions strip */}
+      <section className="tv-account-strip mt-auto">
+        <button
+          type="button"
+          onClick={() => setPositionsOpen((o) => !o)}
+          className="trade-press flex w-full items-center justify-between text-left"
+        >
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#787b86]">
+              Hesap
             </p>
-            <p className="mt-1 text-[13px] text-muted">
-              Hisse veya ETF ekleyerek başla.
+            <p className="tv-mono mt-0.5 text-[16px] font-bold text-[#d1d4dc]">
+              {formatUSD(balance)}
             </p>
-            <button
-              type="button"
-              onClick={openAddAsset}
-              className="btn-primary mt-5 inline-flex px-5 py-2.5 text-sm"
-            >
-              Varlık ekle
-            </button>
           </div>
-        ) : (
-          <ul>
-            {TRADE_POSITIONS.map((p, idx) => {
-              const inst = getInstrument(p.symbol);
-              const company = inst
-                ? shortCompanyName(inst.name)
-                : p.symbol;
-              const ccy = (inst?.currency ?? "USD") as TradeCurrency;
-              return (
-                <li key={p.symbol}>
-                  {idx > 0 && (
-                    <div className="mx-4 h-px bg-black/[0.05]" aria-hidden />
-                  )}
-                  <Link
-                    href={`/trade/${p.symbol}`}
-                    className="trade-press flex items-center gap-3 px-4 py-[15px] transition-colors hover:bg-sage-muted/35 focus-visible:outline-none focus-visible:bg-sage-muted/40"
-                  >
-                    <span className="shrink-0 overflow-hidden rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
-                      <TickerLogo symbol={p.symbol} size={40} />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[15px] font-semibold leading-snug text-nest">
-                        {company}
-                      </p>
-                      <p className="mt-0.5 text-[13px] leading-snug text-muted">
-                        {p.symbol}
-                        {inst?.exchange ? (
-                          <span className="ml-1.5 rounded bg-beige px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted">
-                            {exchangeBadge(inst.exchange)}
-                          </span>
-                        ) : null}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[15px] font-semibold leading-snug text-nest tabular-nums">
-                        {formatMoney(p.value, ccy)}
-                      </p>
-                      <p className="mt-0.5 text-[13px] leading-snug text-muted tabular-nums">
-                        {formatShares(p.shares)} hisse
-                      </p>
-                    </div>
-                    <IconChevron
-                      size={15}
-                      className="shrink-0 text-muted/55"
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="text-right">
+            <p
+              className={`tv-mono text-[13px] font-semibold ${
+                positionsPl >= 0 ? "tv-change-up" : "tv-change-down"
+              }`}
+            >
+              {positionsPl >= 0 ? "+" : ""}
+              {formatUSD(positionsPl)}
+            </p>
+            <p className="text-[11px] text-[#787b86]">
+              {positionsOpen ? "Pozisyonları gizle" : "Pozisyonları göster"}
+            </p>
+          </div>
+        </button>
+
+        {positionsOpen && (
+          <div className="mt-3 overflow-hidden rounded border border-[#2a2e39] bg-[#131722]">
+            {TRADE_POSITIONS.length === 0 ? (
+              <p className="px-3 py-4 text-center text-[13px] text-[#787b86]">
+                Henüz pozisyon yok
+              </p>
+            ) : (
+              <ul>
+                {TRADE_POSITIONS.map((p) => {
+                  const inst = getInstrument(p.symbol);
+                  const company = inst
+                    ? shortCompanyName(inst.name)
+                    : p.symbol;
+                  const ccy = (inst?.currency ?? "USD") as TradeCurrency;
+                  const up = p.plPct >= 0;
+                  return (
+                    <li key={p.symbol}>
+                      <Link
+                        href={`/trade/${p.symbol}`}
+                        className="tv-watch-row !border-[#2a2e39]/70"
+                      >
+                        <span className="tv-chip-logo">
+                          <TickerLogo symbol={p.symbol} size={28} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[13px] font-semibold text-[#d1d4dc]">
+                            {p.symbol}
+                          </p>
+                          <p className="truncate text-[11px] text-[#787b86]">
+                            {formatShares(p.shares)} hisse · {company}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="tv-mono text-[13px] font-semibold text-[#d1d4dc]">
+                            {formatMoney(p.value, ccy)}
+                          </p>
+                          <p
+                            className={`tv-mono text-[11px] font-semibold ${
+                              up ? "tv-change-up" : "tv-change-down"
+                            }`}
+                          >
+                            {formatPct(p.plPct)}
+                          </p>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            <div className="flex items-center justify-between border-t border-[#2a2e39] px-3 py-2.5 text-[12px]">
+              <span className="text-[#787b86]">Nakit (USD)</span>
+              <span className="tv-mono font-semibold text-[#d1d4dc]">
+                {formatUSD(TRADE_CASH_USD)}
+              </span>
+            </div>
+          </div>
         )}
 
-        <div className="border-t border-black/[0.05] px-4 py-3.5">
-          <div className="flex items-center justify-between text-[13px]">
-            <span className="text-muted">Nakit (USD)</span>
-            <span className="font-semibold text-nest tabular-nums">
-              {formatUSD(TRADE_CASH_USD)}
-            </span>
-          </div>
-        </div>
+        <p className="mt-3 text-center text-[10px] text-[#787b86]">
+          Fiyat gecikmeli · simülasyon · {TRADE_INSTRUMENTS.length} enstrüman
+        </p>
       </section>
-
-      <p className="mt-5 text-center text-[11px] leading-relaxed text-muted">
-        Fiyat gecikmeli · simülasyon
-      </p>
     </div>
   );
 }
 
-function InstrumentList({ items }: { items: TradeInstrument[] }) {
+function Watchlist({ items }: { items: TradeInstrument[] }) {
   if (items.length === 0) {
     return (
-      <p className="rounded-2xl bg-beige px-4 py-8 text-center text-[14px] text-muted">
+      <p className="px-4 py-10 text-center text-[13px] text-[#787b86]">
         Eşleşen enstrüman yok
       </p>
     );
   }
+
   return (
-    <ul className="overflow-hidden rounded-2xl bg-card ring-1 ring-black/[0.05]">
-      {items.map((i, idx) => (
-        <li key={i.symbol}>
-          {idx > 0 && (
-            <div className="mx-4 h-px bg-black/[0.05]" aria-hidden />
-          )}
-          <Link
-            href={`/trade/${i.symbol}`}
-            className="trade-press flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-sage-muted/40 focus-visible:outline-none focus-visible:bg-sage-muted/40"
-          >
-            <span className="shrink-0 overflow-hidden rounded-full">
-              <TickerLogo symbol={i.symbol} size={40} />
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <p className="text-[15px] font-semibold text-nest">{i.symbol}</p>
-                <span className="rounded bg-beige px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted">
-                  {exchangeBadge(i.exchange)}
-                </span>
+    <ul>
+      {items.map((i) => {
+        const up = i.changePct >= 0;
+        return (
+          <li key={i.symbol}>
+            <Link href={`/trade/${i.symbol}`} className="tv-watch-row">
+              <span className="tv-chip-logo">
+                <TickerLogo symbol={i.symbol} size={28} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-[13px] font-semibold leading-tight text-[#d1d4dc]">
+                    {i.symbol}
+                  </p>
+                  <span className="tv-ex-badge">{i.exchange}</span>
+                </div>
+                <p className="truncate text-[11px] leading-tight text-[#787b86]">
+                  {i.name}
+                </p>
               </div>
-              <p className="truncate text-[13px] text-muted">{i.name}</p>
-            </div>
-            <div className="min-w-[4.75rem] text-right">
-              <p className="text-[15px] font-semibold text-nest tabular-nums">
-                {formatMoney(i.price, i.currency)}
-              </p>
-              <p
-                className={`text-[12px] font-semibold tabular-nums ${
-                  i.changePct >= 0 ? "text-gain" : "text-danger"
-                }`}
-              >
-                {formatPct(i.changePct)}
-              </p>
-            </div>
-            <IconChevron size={14} className="shrink-0 text-muted/55" />
-          </Link>
-        </li>
-      ))}
+              <Sparkline
+                symbol={i.symbol}
+                lastPrice={i.price}
+                changePct={i.changePct}
+                width={56}
+                height={24}
+                upColor="#26a69a"
+                downColor="#ef5350"
+              />
+              <div className="min-w-[4.75rem] text-right">
+                <p className="tv-mono text-[13px] font-semibold leading-tight text-[#d1d4dc]">
+                  {formatMoney(i.price, i.currency)}
+                </p>
+                <p
+                  className={`tv-mono text-[11px] font-semibold leading-tight ${
+                    up ? "tv-change-up" : "tv-change-down"
+                  }`}
+                >
+                  {formatPct(i.changePct)}
+                </p>
+              </div>
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 }
