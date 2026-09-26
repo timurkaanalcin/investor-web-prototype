@@ -135,7 +135,7 @@ body.dark {
   .phone-shell:not(.trade-tv) {
     min-height: calc(100dvh - 48px);
     border-radius: 28px;
-    box-shadow: 0 20px 60px rgba(0, 11, 80, 0.18), 0 0 0 1px rgba(0, 11, 80, 0.06);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06);
     overflow: hidden;
   }
   html.dark .phone-shell:not(.trade-tv),
@@ -148,7 +148,7 @@ body.dark {
 @media (min-width: 768px) {
   body:not(:has(.phone-shell.trade-tv)) {
     padding: 0;
-    background: linear-gradient(160deg, #f3ebe0 0%, #e8eef8 55%, #dde6f5 100%);
+    background: linear-gradient(160deg, #f3ebe0 0%, #efe8dc 55%, #e8e0d4 100%);
   }
   html.dark body:not(:has(.phone-shell.trade-tv)),
   body.dark:not(:has(.phone-shell.trade-tv)) {
@@ -179,7 +179,7 @@ body.dark {
     flex-direction: column;
     background: var(--sidebar);
     border-right: 1px solid var(--border);
-    box-shadow: 4px 0 24px rgba(0, 11, 80, 0.04);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.04);
   }
 
   html.dark .desktop-sidebar,
