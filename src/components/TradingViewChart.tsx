@@ -98,7 +98,7 @@ export function TradingViewChart({
           theme: isDark ? "dark" : "light",
           style: "1",
           locale: "tr",
-          toolbar_bg: isDark ? "#1e222d" : "#f9f0e2",
+          toolbar_bg: isDark ? "#1e222d" : "#f0f3fa",
           enable_publishing: false,
           allow_symbol_change: false,
           hide_side_toolbar: true,
@@ -128,17 +128,15 @@ export function TradingViewChart({
             : {
                 "paneProperties.background": "#ffffff",
                 "paneProperties.backgroundType": "solid",
-                "paneProperties.vertGridProperties.color":
-                  "rgba(0, 11, 80, 0.06)",
-                "paneProperties.horzGridProperties.color":
-                  "rgba(0, 11, 80, 0.06)",
-                "scalesProperties.textColor": "#5c5c5c",
-                "mainSeriesProperties.candleStyle.upColor": "#1a7a4c",
-                "mainSeriesProperties.candleStyle.downColor": "#c44536",
-                "mainSeriesProperties.candleStyle.borderUpColor": "#1a7a4c",
-                "mainSeriesProperties.candleStyle.borderDownColor": "#c44536",
-                "mainSeriesProperties.candleStyle.wickUpColor": "#1a7a4c",
-                "mainSeriesProperties.candleStyle.wickDownColor": "#c44536",
+                "paneProperties.vertGridProperties.color": "#e0e3eb",
+                "paneProperties.horzGridProperties.color": "#e0e3eb",
+                "scalesProperties.textColor": "#131722",
+                "mainSeriesProperties.candleStyle.upColor": "#26a69a",
+                "mainSeriesProperties.candleStyle.downColor": "#ef5350",
+                "mainSeriesProperties.candleStyle.borderUpColor": "#26a69a",
+                "mainSeriesProperties.candleStyle.borderDownColor": "#ef5350",
+                "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a",
+                "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350",
               },
           disabled_features: [
             "header_widget",
@@ -184,24 +182,24 @@ export function TradingViewChart({
   return (
     <div className="w-full">
       <div
-        className={`relative overflow-hidden ${
+        className={`relative overflow-hidden rounded-none border-y ${
           isDark
-            ? "rounded-none border-y border-[#2a2e39] bg-[#131722]"
-            : "rounded-2xl bg-card shadow-[0_4px_24px_rgba(0,11,80,0.08)] ring-1 ring-black/[0.06]"
+            ? "border-[#2a2e39] bg-[#131722]"
+            : "border-[#e0e3eb] bg-[#ffffff]"
         }`}
         style={{ height }}
       >
         {(status === "loading" || status === "error") && (
           <div
             className={`absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 px-6 text-center ${
-              isDark ? "bg-[#131722]" : "bg-[#fafbfd]"
+              isDark ? "bg-[#131722]" : "bg-[#ffffff]"
             }`}
             aria-live="polite"
           >
             {status === "loading" ? (
               <p
                 className={`text-[13px] ${
-                  isDark ? "text-[#787b86]" : "text-muted"
+                  isDark ? "text-[#787b86]" : "text-[#6a6d78]"
                 }`}
               >
                 TradingView yükleniyor…
@@ -210,14 +208,14 @@ export function TradingViewChart({
               <>
                 <p
                   className={`text-[14px] font-semibold ${
-                    isDark ? "text-[#d1d4dc]" : "text-nest"
+                    isDark ? "text-[#d1d4dc]" : "text-[#131722]"
                   }`}
                 >
                   Grafik yüklenemedi
                 </p>
                 <p
                   className={`text-[12px] ${
-                    isDark ? "text-[#787b86]" : "text-muted"
+                    isDark ? "text-[#787b86]" : "text-[#6a6d78]"
                   }`}
                 >
                   Basit moda geçerek Investor grafiğini kullanabilirsiniz.
@@ -235,12 +233,12 @@ export function TradingViewChart({
       </div>
       <p
         className={`mt-2 text-center text-[11px] leading-relaxed ${
-          isDark ? "text-[#787b86]" : "text-muted"
+          isDark ? "text-[#787b86]" : "text-[#6a6d78]"
         }`}
       >
         Canlı TradingView grafiği · sembol borsaya göre eşlenir
         <span
-          className={`mx-1 ${isDark ? "text-[#2a2e39]" : "text-black/20"}`}
+          className={`mx-1 ${isDark ? "text-[#2a2e39]" : "text-[#e0e3eb]"}`}
         >
           ·
         </span>

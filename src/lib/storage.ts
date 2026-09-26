@@ -40,3 +40,17 @@ export function getOnboardingChoices(): { goal: string; risk: string } {
     risk: localStorage.getItem(RISK_KEY) || "dengeli",
   };
 }
+
+const TRADE_THEME_KEY = "investor_trade_theme";
+
+export type TradeTheme = "dark" | "light";
+
+export function getTradeTheme(): TradeTheme {
+  if (typeof window === "undefined") return "dark";
+  const v = localStorage.getItem(TRADE_THEME_KEY);
+  return v === "light" ? "light" : "dark";
+}
+
+export function setTradeTheme(theme: TradeTheme): void {
+  localStorage.setItem(TRADE_THEME_KEY, theme);
+}

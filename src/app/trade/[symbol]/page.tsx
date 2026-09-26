@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -10,6 +10,8 @@ import {
   IconChevronDown,
   IconClose,
   IconMenu,
+  IconMoon,
+  IconSun,
 } from "@/components/Icons";
 import {
   DayStatsGrid,
@@ -17,6 +19,7 @@ import {
 } from "@/components/TradeCharts";
 import { TradingViewChart } from "@/components/TradingViewChart";
 import { TickerLogo } from "@/components/TickerLogos";
+import { useTradeTheme } from "@/components/TradeTheme";
 import {
   TRADE_CASH_USD,
   cashInCurrency,
@@ -51,6 +54,17 @@ export default function OrderTicketPage() {
   const [sellMode, setSellMode] = useState<SellMode>("dollars");
   const [unitOpen, setUnitOpen] = useState(false);
   const [taxOpen, setTaxOpen] = useState(true);
+
+  const { theme, toggle } = useTradeTheme();
+  const [chartHeight, setChartHeight] = useState(360);
+
+  useEffect(() => {
+    const calc = () =>
+      setChartHeight(Math.min(Math.round(window.innerHeight * 0.52), 520));
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
 
   const price = instrument?.price ?? 0;
   const currency: TradeCurrency = instrument?.currency ?? "USD";
@@ -118,14 +132,14 @@ export default function OrderTicketPage() {
 
   if (!instrument) {
     return (
-      <div className="trade-tv-root px-4 pb-6 pt-5">
+      <div className="trade-tv-root h-full overflow-y-auto px-4 pb-6 pt-5">
         <Link
           href="/trade"
           className="inline-flex items-center gap-1 text-sm font-medium text-[#2962ff]"
         >
           <IconBack size={18} /> Trade
         </Link>
-        <p className="mt-8 text-center text-[#787b86]">
+        <p className="mt-8 text-center text-[var(--tv-muted)]">
           Enstrüman bulunamadı: {symbol}
         </p>
       </div>
@@ -134,23 +148,23 @@ export default function OrderTicketPage() {
 
   if (step === "confirmed") {
     return (
-      <div className="trade-tv-root flex min-h-[100dvh] flex-col items-center px-5 pb-10 pt-10 text-center">
+      <div className="trade-tv-root flex h-full min-h-0 flex-col items-center overflow-y-auto px-5 pb-10 pt-10 text-center">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#26a69a]/20 text-[#26a69a]">
           <IconCheck size={32} />
         </div>
-        <h1 className="mt-5 text-[24px] font-bold tracking-tight text-[#d1d4dc]">
+        <h1 className="mt-5 text-[24px] font-bold tracking-tight text-[var(--tv-text)]">
           Emir iletildi
         </h1>
-        <p className="mt-2 text-[14px] text-[#787b86]">
+        <p className="mt-2 text-[14px] text-[var(--tv-muted)]">
           {side === "buy" ? "Alış" : "Satış"} · {instrument.symbol}
         </p>
-        <div className="tv-panel mt-6 w-full divide-y divide-[#2a2e39] px-4 text-left text-[14px]">
+        <div className="tv-panel mt-6 w-full divide-y divide-[var(--tv-border)] px-4 text-left text-[14px]">
           <TvRow label="Tahmini hisse" value={formatShares(estimatedShares)} />
           <TvRow label="Tahmini tutar" value={formatMoney(estimatedTotal, currency)} />
           <TvRow label="Fiyat" value={formatMoney(price, currency)} />
           <TvRow label="Komisyon" value={formatMoney(0, currency)} accent />
         </div>
-        <p className="mt-4 text-[11px] text-[#787b86]">
+        <p className="mt-4 text-[11px] text-[var(--tv-muted)]">
           Simülasyon — gerçek işlem yapılmadı.
         </p>
         <Link
@@ -165,7 +179,7 @@ export default function OrderTicketPage() {
             setStep("detail");
             setAmount("");
           }}
-          className="trade-press mt-3 w-full rounded border border-[#2a2e39] bg-[#1e222d] py-3 text-sm font-semibold text-[#d1d4dc]"
+          className="trade-press mt-3 w-full rounded border border-[var(--tv-border)] bg-[var(--tv-panel)] py-3 text-sm font-semibold text-[var(--tv-text)]"
         >
           Yeni emir
         </button>
@@ -191,7 +205,7 @@ export default function OrderTicketPage() {
     return (
       <div
         ref={ticketRef}
-        className="trade-tv-root flex min-h-[100dvh] flex-col px-4 pb-8"
+        className="trade-tv-root flex h-full min-h-0 flex-col overflow-y-auto px-4 pb-8"
       >
         <header className="flex items-center justify-between pt-4 pb-1">
           <button
@@ -214,41 +228,41 @@ export default function OrderTicketPage() {
           </button>
         </header>
 
-        <h1 className="mt-3 text-[26px] font-bold leading-tight tracking-tight text-[#d1d4dc]">
+        <h1 className="mt-3 text-[26px] font-bold leading-tight tracking-tight text-[var(--tv-text)]">
           <span className={side === "buy" ? "text-[#26a69a]" : "text-[#ef5350]"}>
             {side === "buy" ? "Al" : "Sat"}
           </span>{" "}
           {instrument.symbol}
         </h1>
 
-        <div className="mt-5 divide-y divide-[#2a2e39] border-y border-[#2a2e39]">
+        <div className="mt-5 divide-y divide-[var(--tv-border)] border-y border-[var(--tv-border)]">
           <div className="flex items-start justify-between gap-3 py-3.5">
-            <span className="text-[13px] text-[#787b86]">Menkul kıymet</span>
+            <span className="text-[13px] text-[var(--tv-muted)]">Menkul kıymet</span>
             <div className="text-right">
-              <p className="text-[14px] font-semibold text-[#d1d4dc]">
+              <p className="text-[14px] font-semibold text-[var(--tv-text)]">
                 {instrument.name}
               </p>
-              <p className="mt-0.5 text-[12px] text-[#787b86]">{instrument.symbol}</p>
+              <p className="mt-0.5 text-[12px] text-[var(--tv-muted)]">{instrument.symbol}</p>
             </div>
           </div>
           <div className="flex items-start justify-between gap-3 py-3.5">
-            <span className="text-[13px] text-[#787b86]">Kullanılabilir</span>
+            <span className="text-[13px] text-[var(--tv-muted)]">Kullanılabilir</span>
             <div className="text-right">
               {side === "buy" ? (
                 <>
-                  <p className="tv-mono text-[14px] font-semibold text-[#d1d4dc]">
+                  <p className="tv-mono text-[14px] font-semibold text-[var(--tv-text)]">
                     {formatMoney(cashAvail, currency)}
                   </p>
-                  <p className="mt-0.5 text-[12px] text-[#787b86]">
+                  <p className="mt-0.5 text-[12px] text-[var(--tv-muted)]">
                     Nakit ≈ {formatUSD(TRADE_CASH_USD)}
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="tv-mono text-[14px] font-semibold text-[#d1d4dc]">
+                  <p className="tv-mono text-[14px] font-semibold text-[var(--tv-text)]">
                     {formatMoney(availableCashOrPos, currency)}
                   </p>
-                  <p className="mt-0.5 text-[12px] text-[#787b86]">
+                  <p className="mt-0.5 text-[12px] text-[var(--tv-muted)]">
                     {formatShares(availableShares)} hisse
                   </p>
                 </>
@@ -260,11 +274,11 @@ export default function OrderTicketPage() {
         {step === "ticket" && (
           <>
             <div className="tv-panel mt-5 p-3.5">
-              <p className="text-[13px] font-bold text-[#d1d4dc]">Tutar</p>
+              <p className="text-[13px] font-bold text-[var(--tv-text)]">Tutar</p>
               <div className="mt-3 flex items-stretch gap-2">
                 <div className="relative min-w-0 flex-1">
                   {(side === "buy" || sellMode === "dollars") && (
-                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#787b86]">
+                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[var(--tv-muted)]">
                       {moneyPrefix}
                     </span>
                   )}
@@ -293,16 +307,16 @@ export default function OrderTicketPage() {
                     type="button"
                     disabled={side === "buy"}
                     onClick={() => side === "sell" && setUnitOpen((o) => !o)}
-                    className="trade-press flex h-full min-w-[100px] items-center justify-between gap-1 rounded border border-[#2a2e39] bg-[#131722] px-3 text-[14px] font-medium text-[#d1d4dc] disabled:opacity-90"
+                    className="trade-press flex h-full min-w-[100px] items-center justify-between gap-1 rounded border border-[var(--tv-border)] bg-[var(--tv-bg)] px-3 text-[14px] font-medium text-[var(--tv-text)] disabled:opacity-90"
                   >
                     {unitLabel}
                     {side === "sell" && <IconChevronDown size={16} />}
                   </button>
                   {unitOpen && side === "sell" && (
-                    <div className="absolute right-0 z-20 mt-1 w-full overflow-hidden rounded border border-[#2a2e39] bg-[#1e222d] shadow-lg">
+                    <div className="absolute right-0 z-20 mt-1 w-full overflow-hidden rounded border border-[var(--tv-border)] bg-[var(--tv-panel)] shadow-lg">
                       <button
                         type="button"
-                        className="block w-full px-3 py-2.5 text-left text-sm text-[#d1d4dc] hover:bg-[#363a45]"
+                        className="block w-full px-3 py-2.5 text-left text-sm text-[var(--tv-text)] hover:bg-[var(--tv-hover)]"
                         onClick={() => {
                           setSellMode("dollars");
                           setAmount("");
@@ -313,7 +327,7 @@ export default function OrderTicketPage() {
                       </button>
                       <button
                         type="button"
-                        className="block w-full px-3 py-2.5 text-left text-sm text-[#d1d4dc] hover:bg-[#363a45]"
+                        className="block w-full px-3 py-2.5 text-left text-sm text-[var(--tv-text)] hover:bg-[var(--tv-hover)]"
                         onClick={() => {
                           setSellMode("shares");
                           setAmount("");
@@ -369,7 +383,7 @@ export default function OrderTicketPage() {
               >
                 Devam
               </button>
-              <p className="mt-3 text-center text-[11px] text-[#787b86]">
+              <p className="mt-3 text-center text-[11px] text-[var(--tv-muted)]">
                 Kesirli hisse desteklenir · Komisyon {formatMoney(0, currency)}
               </p>
             </div>
@@ -379,42 +393,42 @@ export default function OrderTicketPage() {
         {step === "review" && (
           <div className="mt-5 flex flex-1 flex-col">
             <div className="tv-panel overflow-hidden">
-              <div className="border-b border-[#2a2e39] px-4 py-3">
-                <p className="text-[16px] font-bold tracking-tight text-[#d1d4dc]">
+              <div className="border-b border-[var(--tv-border)] px-4 py-3">
+                <p className="text-[16px] font-bold tracking-tight text-[var(--tv-text)]">
                   {side === "buy" ? "Alış" : "Satış"} incelemesi ·{" "}
                   {instrument.symbol}
                 </p>
               </div>
 
-              <div className="divide-y divide-[#2a2e39] px-4 text-[14px]">
+              <div className="divide-y divide-[var(--tv-border)] px-4 text-[14px]">
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-[#787b86]">Menkul kıymet</span>
-                  <span className="font-semibold text-[#d1d4dc]">
+                  <span className="text-[var(--tv-muted)]">Menkul kıymet</span>
+                  <span className="font-semibold text-[var(--tv-text)]">
                     {instrument.name}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-[#787b86]">Tahmini hisse</span>
-                  <span className="tv-mono font-semibold text-[#d1d4dc]">
+                  <span className="text-[var(--tv-muted)]">Tahmini hisse</span>
+                  <span className="tv-mono font-semibold text-[var(--tv-text)]">
                     {formatShares(estimatedShares)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-[#787b86]">Tahmini toplam</span>
-                  <span className="tv-mono font-semibold text-[#d1d4dc]">
+                  <span className="text-[var(--tv-muted)]">Tahmini toplam</span>
+                  <span className="tv-mono font-semibold text-[var(--tv-text)]">
                     {formatMoney(estimatedTotal, currency)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-[#787b86]">Komisyon</span>
+                  <span className="text-[var(--tv-muted)]">Komisyon</span>
                   <span className="font-semibold text-[#26a69a]">
                     {formatMoney(0, currency)}
                   </span>
                 </div>
                 {side === "buy" && currency !== "USD" && (
                   <div className="flex items-center justify-between py-3">
-                    <span className="text-[#787b86]">≈ USD nakit</span>
-                    <span className="tv-mono font-semibold text-[#d1d4dc]">
+                    <span className="text-[var(--tv-muted)]">≈ USD nakit</span>
+                    <span className="tv-mono font-semibold text-[var(--tv-text)]">
                       {formatUSD(TRADE_CASH_USD)}
                     </span>
                   </div>
@@ -422,24 +436,24 @@ export default function OrderTicketPage() {
               </div>
 
               {side === "sell" && tax && (
-                <div className="space-y-2.5 border-t border-[#2a2e39] bg-[#131722] px-3 py-3">
+                <div className="space-y-2.5 border-t border-[var(--tv-border)] bg-[var(--tv-bg)] px-3 py-3">
                   <button
                     type="button"
                     onClick={() => setTaxOpen((o) => !o)}
-                    className="trade-press flex w-full items-center justify-between rounded border border-[#2a2e39] bg-[#1e222d] px-3.5 py-3 text-left"
+                    className="trade-press flex w-full items-center justify-between rounded border border-[var(--tv-border)] bg-[var(--tv-panel)] px-3.5 py-3 text-left"
                   >
                     <div>
-                      <p className="text-[13px] font-semibold text-[#d1d4dc]">
+                      <p className="text-[13px] font-semibold text-[var(--tv-text)]">
                         {tax.gain >= 0
                           ? "Tahmini vergi borcu"
                           : "Tahmini vergi tasarrufu"}
                       </p>
-                      <p className="mt-0.5 text-[11px] text-[#787b86]">
+                      <p className="mt-0.5 text-[11px] text-[var(--tv-muted)]">
                         Satış öncesi vergi etkisi
                       </p>
                     </div>
                     <div className="flex items-center gap-0.5">
-                      <span className="tv-mono text-[16px] font-bold text-[#d1d4dc]">
+                      <span className="tv-mono text-[16px] font-bold text-[var(--tv-text)]">
                         {formatMoney(
                           tax.gain >= 0
                             ? tax.estimatedTax
@@ -448,39 +462,39 @@ export default function OrderTicketPage() {
                       </span>
                       <IconChevron
                         size={16}
-                        className={`text-[#787b86] transition-transform ${
+                        className={`text-[var(--tv-muted)] transition-transform ${
                           taxOpen ? "rotate-90" : ""
                         }`}
                       />
                     </div>
                   </button>
 
-                  <div className="flex items-center justify-between rounded border border-[#2a2e39] bg-[#1e222d] px-3.5 py-3">
-                    <span className="text-[13px] text-[#787b86]">
+                  <div className="flex items-center justify-between rounded border border-[var(--tv-border)] bg-[var(--tv-panel)] px-3.5 py-3">
+                    <span className="text-[13px] text-[var(--tv-muted)]">
                       Tahmini işlem zamanı
                     </span>
-                    <span className="text-[14px] font-semibold text-[#d1d4dc]">
+                    <span className="text-[14px] font-semibold text-[var(--tv-text)]">
                       Bugün
                     </span>
                   </div>
 
                   {taxOpen && (
-                    <div className="rounded border border-[#2a2e39] bg-[#1e222d] px-3.5 py-1">
-                      <dl className="divide-y divide-[#2a2e39] text-[13px]">
+                    <div className="rounded border border-[var(--tv-border)] bg-[var(--tv-panel)] px-3.5 py-1">
+                      <dl className="divide-y divide-[var(--tv-border)] text-[13px]">
                         <div className="flex justify-between py-2.5">
-                          <dt className="text-[#787b86]">Maliyet esası</dt>
-                          <dd className="tv-mono font-semibold text-[#d1d4dc]">
+                          <dt className="text-[var(--tv-muted)]">Maliyet esası</dt>
+                          <dd className="tv-mono font-semibold text-[var(--tv-text)]">
                             {formatMoney(tax.costBasis, currency)}
                           </dd>
                         </div>
                         <div className="flex justify-between py-2.5">
-                          <dt className="text-[#787b86]">Tahmini gelir</dt>
-                          <dd className="tv-mono font-semibold text-[#d1d4dc]">
+                          <dt className="text-[var(--tv-muted)]">Tahmini gelir</dt>
+                          <dd className="tv-mono font-semibold text-[var(--tv-text)]">
                             {formatMoney(tax.proceeds, currency)}
                           </dd>
                         </div>
                         <div className="flex justify-between py-2.5">
-                          <dt className="text-[#787b86]">Sermaye kazancı</dt>
+                          <dt className="text-[var(--tv-muted)]">Sermaye kazancı</dt>
                           <dd
                             className={`tv-mono font-semibold ${
                               tax.gain >= 0
@@ -493,14 +507,14 @@ export default function OrderTicketPage() {
                           </dd>
                         </div>
                         <div className="flex justify-between py-2.5">
-                          <dt className="text-[#787b86]">Kısa vadeli vergi</dt>
-                          <dd className="tv-mono font-semibold text-[#d1d4dc]">
+                          <dt className="text-[var(--tv-muted)]">Kısa vadeli vergi</dt>
+                          <dd className="tv-mono font-semibold text-[var(--tv-text)]">
                             {formatMoney(tax.shortTermTax, currency)}
                           </dd>
                         </div>
                         <div className="flex justify-between py-2.5">
-                          <dt className="text-[#787b86]">Uzun vadeli vergi</dt>
-                          <dd className="tv-mono font-semibold text-[#d1d4dc]">
+                          <dt className="text-[var(--tv-muted)]">Uzun vadeli vergi</dt>
+                          <dd className="tv-mono font-semibold text-[var(--tv-text)]">
                             {formatMoney(tax.longTermTax, currency)}
                           </dd>
                         </div>
@@ -513,7 +527,7 @@ export default function OrderTicketPage() {
                         </p>
                       )}
                       {!tax.washSaleRisk && (
-                        <p className="mt-1 pb-2 text-[11px] text-[#787b86]">
+                        <p className="mt-1 pb-2 text-[11px] text-[var(--tv-muted)]">
                           Tahmini — vergi danışmanı değildir. Gerçek oranlar
                           farklılık gösterebilir.
                         </p>
@@ -534,7 +548,7 @@ export default function OrderTicketPage() {
               >
                 {side === "buy" ? "Alışı onayla" : "Satışı onayla"}
               </button>
-              <p className="mt-3 text-center text-[11px] text-[#787b86]">
+              <p className="mt-3 text-center text-[11px] text-[var(--tv-muted)]">
                 Simülasyon — gerçek broker bağlantısı yok
               </p>
             </div>
@@ -550,8 +564,8 @@ export default function OrderTicketPage() {
   const up = instrument.changePct >= 0;
 
   return (
-    <div className="trade-tv-root relative pb-28">
-      <header className="flex items-center gap-2 border-b border-[#2a2e39] bg-[#1e222d] px-3 py-2.5">
+    <div className="trade-tv-root flex h-full min-h-0 flex-col overflow-hidden">
+      <header className="flex shrink-0 items-center gap-2 border-b border-[var(--tv-border)] bg-[var(--tv-panel)] px-3 py-2.5">
         <Link
           href="/trade"
           aria-label="Geri"
@@ -564,12 +578,12 @@ export default function OrderTicketPage() {
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <h1 className="truncate text-[15px] font-bold tracking-tight text-[#d1d4dc]">
+            <h1 className="truncate text-[15px] font-bold tracking-tight text-[var(--tv-text)]">
               {instrument.symbol}
             </h1>
             <span className="tv-ex-badge">{instrument.exchange}</span>
           </div>
-          <p className="truncate text-[11px] text-[#787b86]">
+          <p className="truncate text-[11px] text-[var(--tv-muted)]">
             {instrument.name}
           </p>
         </div>
@@ -577,17 +591,26 @@ export default function OrderTicketPage() {
           className={`inline-flex items-center gap-1.5 rounded px-2 py-1 text-[10px] font-semibold ${
             market.open
               ? "bg-[#26a69a]/15 text-[#26a69a]"
-              : "bg-[#2a2e39] text-[#787b86]"
+              : "bg-[var(--tv-panel-2)] text-[var(--tv-muted)]"
           }`}
         >
           <span
             className={`inline-block h-1.5 w-1.5 rounded-full ${
-              market.open ? "bg-[#26a69a]" : "bg-[#787b86]"
+              market.open ? "bg-[#26a69a]" : "bg-[var(--tv-muted)]"
             }`}
             aria-hidden
           />
           {market.label}
         </span>
+        <button
+          type="button"
+          className="tv-icon-btn trade-press"
+          aria-label={theme === "dark" ? "Beyaz tema" : "Siyah tema"}
+          title={theme === "dark" ? "Beyaz" : "Siyah"}
+          onClick={toggle}
+        >
+          {theme === "dark" ? <IconSun size={16} /> : <IconMoon size={16} />}
+        </button>
         <div className="relative">
           <button
             type="button"
@@ -599,13 +622,13 @@ export default function OrderTicketPage() {
             <IconMenu size={18} />
           </button>
           {menuOpen && (
-            <div className="absolute right-0 z-40 mt-1 w-44 overflow-hidden rounded border border-[#2a2e39] bg-[#1e222d] shadow-xl">
+            <div className="absolute right-0 z-40 mt-1 w-44 overflow-hidden rounded border border-[var(--tv-border)] bg-[var(--tv-panel)] shadow-xl">
               <button
                 type="button"
                 className={`block w-full px-3 py-2.5 text-left text-[13px] ${
                   chartMode === "tradingview"
-                    ? "bg-[#2962ff]/20 font-semibold text-[#d1d4dc]"
-                    : "text-[#d1d4dc] hover:bg-[#363a45]"
+                    ? "bg-[#2962ff]/20 font-semibold text-[var(--tv-text)]"
+                    : "text-[var(--tv-text)] hover:bg-[var(--tv-hover)]"
                 }`}
                 onClick={() => {
                   setChartMode("tradingview");
@@ -618,8 +641,8 @@ export default function OrderTicketPage() {
                 type="button"
                 className={`block w-full px-3 py-2.5 text-left text-[13px] ${
                   chartMode === "basit"
-                    ? "bg-[#2962ff]/20 font-semibold text-[#d1d4dc]"
-                    : "text-[#d1d4dc] hover:bg-[#363a45]"
+                    ? "bg-[#2962ff]/20 font-semibold text-[var(--tv-text)]"
+                    : "text-[var(--tv-text)] hover:bg-[var(--tv-hover)]"
                 }`}
                 onClick={() => {
                   setChartMode("basit");
@@ -633,66 +656,68 @@ export default function OrderTicketPage() {
         </div>
       </header>
 
-      <section className="px-3 pt-3">
-        <p className="tv-mono text-[32px] font-bold leading-none tracking-tight text-[#d1d4dc]">
-          {formatMoney(instrument.price, instrument.currency)}
-        </p>
-        <p
-          className={`tv-mono mt-1.5 text-[14px] font-semibold ${
-            up ? "tv-change-up" : "tv-change-down"
-          }`}
-        >
-          {up ? "+" : ""}
-          {formatMoney(changeAbs, instrument.currency)}{" "}
-          <span className="opacity-90">({formatPct(instrument.changePct)})</span>
-          <span className="ml-1.5 text-[11px] font-medium text-[#787b86]">
-            bugün
-          </span>
-        </p>
-      </section>
+      <div className="tv-detail-scroll">
+        <section className="px-3 pt-3">
+          <p className="tv-mono text-[32px] font-bold leading-none tracking-tight text-[var(--tv-text)]">
+            {formatMoney(instrument.price, instrument.currency)}
+          </p>
+          <p
+            className={`tv-mono mt-1.5 text-[14px] font-semibold ${
+              up ? "tv-change-up" : "tv-change-down"
+            }`}
+          >
+            {up ? "+" : ""}
+            {formatMoney(changeAbs, instrument.currency)}{" "}
+            <span className="opacity-90">({formatPct(instrument.changePct)})</span>
+            <span className="ml-1.5 text-[11px] font-medium text-[var(--tv-muted)]">
+              bugün
+            </span>
+          </p>
+        </section>
 
-      <section className="mt-3">
-        {chartMode === "tradingview" ? (
-          <TradingViewChart
-            instrument={instrument}
-            theme="dark"
-            height={540}
-          />
-        ) : (
-          <div className="border-y border-[#2a2e39] bg-[#131722] px-3 py-2">
-            <StockPriceChart
-              symbol={instrument.symbol}
-              lastPrice={instrument.price}
-              changePct={instrument.changePct}
-              currency={instrument.currency}
+        <section className="mt-3">
+          {chartMode === "tradingview" ? (
+            <TradingViewChart
+              instrument={instrument}
+              theme={theme}
+              height={chartHeight}
             />
+          ) : (
+            <div className="border-y border-[var(--tv-border)] bg-[var(--tv-bg)] px-3 py-2">
+              <StockPriceChart
+                symbol={instrument.symbol}
+                lastPrice={instrument.price}
+                changePct={instrument.changePct}
+                currency={instrument.currency}
+              />
+            </div>
+          )}
+        </section>
+
+        <section className="mt-1 px-3">
+          <DarkDayStats
+            symbol={instrument.symbol}
+            lastPrice={instrument.price}
+            changePct={instrument.changePct}
+            currency={instrument.currency}
+          />
+        </section>
+
+        {position && (
+          <div className="mx-3 mt-3 flex items-center justify-between rounded border border-[var(--tv-border)] bg-[var(--tv-panel)] px-3.5 py-2.5 text-[13px]">
+            <span className="text-[var(--tv-muted)]">Pozisyonun</span>
+            <span className="tv-mono font-semibold text-[var(--tv-text)]">
+              {formatShares(position.shares)} hisse ·{" "}
+              {formatMoney(position.value, currency)}
+            </span>
           </div>
         )}
-      </section>
 
-      <section className="mt-1 px-3">
-        <DarkDayStats
-          symbol={instrument.symbol}
-          lastPrice={instrument.price}
-          changePct={instrument.changePct}
-          currency={instrument.currency}
-        />
-      </section>
-
-      {position && (
-        <div className="mx-3 mt-3 flex items-center justify-between rounded border border-[#2a2e39] bg-[#1e222d] px-3.5 py-2.5 text-[13px]">
-          <span className="text-[#787b86]">Pozisyonun</span>
-          <span className="tv-mono font-semibold text-[#d1d4dc]">
-            {formatShares(position.shares)} hisse ·{" "}
-            {formatMoney(position.value, currency)}
-          </span>
-        </div>
-      )}
-
-      <p className="mt-4 px-3 text-center text-[10px] leading-relaxed text-[#787b86]">
-        Investor Trade · fiyat gecikmeli · simülasyon · Kesirli hisse · Komisyon{" "}
-        {formatMoney(0, currency)}
-      </p>
+        <p className="mt-4 px-3 pb-4 text-center text-[10px] leading-relaxed text-[var(--tv-muted)]">
+          Investor Trade · fiyat gecikmeli · simülasyon · Kesirli hisse · Komisyon{" "}
+          {formatMoney(0, currency)}
+        </p>
+      </div>
 
       <div className="tv-sticky-orders">
         <div className="grid grid-cols-2 gap-2.5">
@@ -727,10 +752,10 @@ function TvRow({
 }) {
   return (
     <div className="flex items-center justify-between gap-3 py-3">
-      <span className="text-[#787b86]">{label}</span>
+      <span className="text-[var(--tv-muted)]">{label}</span>
       <span
         className={`tv-mono font-semibold ${
-          accent ? "text-[#26a69a]" : "text-[#d1d4dc]"
+          accent ? "text-[#26a69a]" : "text-[var(--tv-text)]"
         }`}
       >
         {value}
@@ -752,7 +777,7 @@ function DarkDayStats({
   currency: TradeCurrency;
 }) {
   return (
-    <div className="[&_li]:border-[#2a2e39] [&_li_span:first-child]:text-[#787b86] [&_li_span:last-child]:text-[#d1d4dc] [&_ul]:divide-[#2a2e39]">
+    <div className="[&_li]:border-[var(--tv-border)] [&_li_span:first-child]:text-[var(--tv-muted)] [&_li_span:last-child]:text-[var(--tv-text)] [&_ul]:divide-[var(--tv-border)]">
       <DayStatsGrid
         symbol={symbol}
         lastPrice={lastPrice}

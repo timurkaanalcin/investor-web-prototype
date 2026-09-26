@@ -4,11 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   IconClose,
+  IconMoon,
   IconSearch,
   IconSettings,
+  IconSun,
 } from "@/components/Icons";
 import { Sparkline } from "@/components/TradeCharts";
 import { TickerLogo } from "@/components/TickerLogos";
+import { useTradeTheme } from "@/components/TradeTheme";
 import {
   TRADE_CASH_USD,
   TRADE_INSTRUMENTS,
@@ -61,6 +64,7 @@ function shortCompanyName(name: string): string {
 }
 
 export default function TradeHomePage() {
+  const { theme, toggle } = useTradeTheme();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FilterKey>("all");
   const [positionsOpen, setPositionsOpen] = useState(true);
@@ -99,80 +103,89 @@ export default function TradeHomePage() {
   }, []);
 
   return (
-    <div className="trade-tv-root flex min-h-[100dvh] flex-col pb-4">
-      {/* Top bar — symbol search */}
-      <div className="tv-topbar">
-        <div className="tv-search">
-          <IconSearch size={15} />
-          <input
-            ref={searchRef}
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Sembol ara…"
-            aria-label="Sembol ara"
-          />
-          {query && (
-            <button
-              type="button"
-              aria-label="Temizle"
-              className="tv-icon-btn !h-6 !w-6"
-              onClick={() => setQuery("")}
-            >
-              <IconClose size={14} />
-            </button>
-          )}
-        </div>
-        <Link
-          href="/profil"
-          className="tv-icon-btn"
-          aria-label="Ayarlar"
-          title="Ayarlar"
-        >
-          <IconSettings size={16} />
-        </Link>
-      </div>
-
-      <div className="flex items-center justify-between px-3 py-2">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#787b86]">
-            Investor Trade
-          </p>
-          <p className="text-[13px] font-semibold text-[#d1d4dc]">
-            İzleme listesi
-          </p>
-        </div>
-        <p className="tv-mono text-[11px] text-[#787b86]">
-          {TRADE_INSTRUMENTS.length} sembol
-        </p>
-      </div>
-
-      {/* Exchange filter pills */}
-      <div className="tv-pills" role="tablist" aria-label="Borsa filtresi">
-        {FILTERS.map((f) => (
+    <div className="trade-tv-root flex h-full min-h-0 flex-col overflow-hidden">
+      {/* Fixed top: search + theme + brand + pills + headers */}
+      <div className="shrink-0">
+        <div className="tv-topbar">
+          <div className="tv-search">
+            <IconSearch size={15} />
+            <input
+              ref={searchRef}
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Sembol ara…"
+              aria-label="Sembol ara"
+            />
+            {query && (
+              <button
+                type="button"
+                aria-label="Temizle"
+                className="tv-icon-btn !h-6 !w-6"
+                onClick={() => setQuery("")}
+              >
+                <IconClose size={14} />
+              </button>
+            )}
+          </div>
           <button
-            key={f.key}
             type="button"
-            role="tab"
-            aria-selected={filter === f.key}
-            onClick={() => setFilter(f.key)}
-            className={`tv-pill trade-press${filter === f.key ? " active" : ""}`}
+            className="tv-icon-btn"
+            aria-label={theme === "dark" ? "Beyaz tema" : "Siyah tema"}
+            title={theme === "dark" ? "Beyaz" : "Siyah"}
+            onClick={toggle}
           >
-            {f.label}
+            {theme === "dark" ? <IconSun size={16} /> : <IconMoon size={16} />}
           </button>
-        ))}
+          <Link
+            href="/profil"
+            className="tv-icon-btn"
+            aria-label="Ayarlar"
+            title="Ayarlar"
+          >
+            <IconSettings size={16} />
+          </Link>
+        </div>
+
+        <div className="flex items-center justify-between px-3 py-2">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--tv-muted)]">
+              Investor Trade
+            </p>
+            <p className="text-[13px] font-semibold text-[var(--tv-text)]">
+              İzleme listesi
+            </p>
+          </div>
+          <p className="tv-mono text-[11px] text-[var(--tv-muted)]">
+            {TRADE_INSTRUMENTS.length} sembol
+          </p>
+        </div>
+
+        <div className="tv-pills" role="tablist" aria-label="Borsa filtresi">
+          {FILTERS.map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              role="tab"
+              aria-selected={filter === f.key}
+              onClick={() => setFilter(f.key)}
+              className={`tv-pill trade-press${filter === f.key ? " active" : ""}`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2 border-b border-[var(--tv-border)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--tv-muted)]">
+          <span className="w-7" aria-hidden />
+          <span className="min-w-0 flex-1">Sembol</span>
+          <span className="w-14 text-center">Grafik</span>
+          <span className="w-[4.75rem] text-right">Son / %</span>
+        </div>
       </div>
 
-      {/* Column headers */}
-      <div className="flex items-center gap-2 border-b border-[#2a2e39] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-[#787b86]">
-        <span className="w-7" aria-hidden />
-        <span className="min-w-0 flex-1">Sembol</span>
-        <span className="w-14 text-center">Grafik</span>
-        <span className="w-[4.75rem] text-right">Son / %</span>
-      </div>
-
-      {/* Watchlist */}
-      <section className="flex-1">
+      {/* ONLY scroll region: watchlist */}
+      <section className="tv-watch-scroll">
         <div className="tv-section-label">
           <span>
             {query.trim() || filter !== "all"
@@ -183,18 +196,18 @@ export default function TradeHomePage() {
         <Watchlist items={listItems} />
       </section>
 
-      {/* Account / positions strip */}
-      <section className="tv-account-strip mt-auto">
+      {/* Fixed bottom: account strip */}
+      <section className="tv-account-strip">
         <button
           type="button"
           onClick={() => setPositionsOpen((o) => !o)}
           className="trade-press flex w-full items-center justify-between text-left"
         >
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#787b86]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[var(--tv-muted)]">
               Hesap
             </p>
-            <p className="tv-mono mt-0.5 text-[16px] font-bold text-[#d1d4dc]">
+            <p className="tv-mono mt-0.5 text-[16px] font-bold text-[var(--tv-text)]">
               {formatUSD(balance)}
             </p>
           </div>
@@ -207,16 +220,16 @@ export default function TradeHomePage() {
               {positionsPl >= 0 ? "+" : ""}
               {formatUSD(positionsPl)}
             </p>
-            <p className="text-[11px] text-[#787b86]">
+            <p className="text-[11px] text-[var(--tv-muted)]">
               {positionsOpen ? "Pozisyonları gizle" : "Pozisyonları göster"}
             </p>
           </div>
         </button>
 
         {positionsOpen && (
-          <div className="mt-3 overflow-hidden rounded border border-[#2a2e39] bg-[#131722]">
+          <div className="mt-3 max-h-[28vh] overflow-y-auto overscroll-contain rounded border border-[var(--tv-border)] bg-[var(--tv-bg)]">
             {TRADE_POSITIONS.length === 0 ? (
-              <p className="px-3 py-4 text-center text-[13px] text-[#787b86]">
+              <p className="px-3 py-4 text-center text-[13px] text-[var(--tv-muted)]">
                 Henüz pozisyon yok
               </p>
             ) : (
@@ -232,21 +245,21 @@ export default function TradeHomePage() {
                     <li key={p.symbol}>
                       <Link
                         href={`/trade/${p.symbol}`}
-                        className="tv-watch-row !border-[#2a2e39]/70"
+                        className="tv-watch-row"
                       >
                         <span className="tv-chip-logo">
                           <TickerLogo symbol={p.symbol} size={28} />
                         </span>
                         <div className="min-w-0 flex-1">
-                          <p className="text-[13px] font-semibold text-[#d1d4dc]">
+                          <p className="text-[13px] font-semibold text-[var(--tv-text)]">
                             {p.symbol}
                           </p>
-                          <p className="truncate text-[11px] text-[#787b86]">
+                          <p className="truncate text-[11px] text-[var(--tv-muted)]">
                             {formatShares(p.shares)} hisse · {company}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="tv-mono text-[13px] font-semibold text-[#d1d4dc]">
+                          <p className="tv-mono text-[13px] font-semibold text-[var(--tv-text)]">
                             {formatMoney(p.value, ccy)}
                           </p>
                           <p
@@ -263,16 +276,16 @@ export default function TradeHomePage() {
                 })}
               </ul>
             )}
-            <div className="flex items-center justify-between border-t border-[#2a2e39] px-3 py-2.5 text-[12px]">
-              <span className="text-[#787b86]">Nakit (USD)</span>
-              <span className="tv-mono font-semibold text-[#d1d4dc]">
+            <div className="flex items-center justify-between border-t border-[var(--tv-border)] px-3 py-2.5 text-[12px]">
+              <span className="text-[var(--tv-muted)]">Nakit (USD)</span>
+              <span className="tv-mono font-semibold text-[var(--tv-text)]">
                 {formatUSD(TRADE_CASH_USD)}
               </span>
             </div>
           </div>
         )}
 
-        <p className="mt-3 text-center text-[10px] text-[#787b86]">
+        <p className="mt-3 text-center text-[10px] text-[var(--tv-muted)]">
           Fiyat gecikmeli · simülasyon · {TRADE_INSTRUMENTS.length} enstrüman
         </p>
       </section>
@@ -283,7 +296,7 @@ export default function TradeHomePage() {
 function Watchlist({ items }: { items: TradeInstrument[] }) {
   if (items.length === 0) {
     return (
-      <p className="px-4 py-10 text-center text-[13px] text-[#787b86]">
+      <p className="px-4 py-10 text-center text-[13px] text-[var(--tv-muted)]">
         Eşleşen enstrüman yok
       </p>
     );
@@ -301,12 +314,12 @@ function Watchlist({ items }: { items: TradeInstrument[] }) {
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <p className="text-[13px] font-semibold leading-tight text-[#d1d4dc]">
+                  <p className="text-[13px] font-semibold leading-tight text-[var(--tv-text)]">
                     {i.symbol}
                   </p>
                   <span className="tv-ex-badge">{i.exchange}</span>
                 </div>
-                <p className="truncate text-[11px] leading-tight text-[#787b86]">
+                <p className="truncate text-[11px] leading-tight text-[var(--tv-muted)]">
                   {i.name}
                 </p>
               </div>
@@ -320,7 +333,7 @@ function Watchlist({ items }: { items: TradeInstrument[] }) {
                 downColor="#ef5350"
               />
               <div className="min-w-[4.75rem] text-right">
-                <p className="tv-mono text-[13px] font-semibold leading-tight text-[#d1d4dc]">
+                <p className="tv-mono text-[13px] font-semibold leading-tight text-[var(--tv-text)]">
                   {formatMoney(i.price, i.currency)}
                 </p>
                 <p

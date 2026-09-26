@@ -25,7 +25,7 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="flex flex-1 items-center justify-center py-24 text-muted text-sm">
+      <div className="flex min-h-0 flex-1 items-center justify-center py-24 text-sm text-muted">
         Yükleniyor…
       </div>
     );
