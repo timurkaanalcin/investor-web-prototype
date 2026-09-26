@@ -16,6 +16,7 @@ import {
   PriceHeader,
   StockPriceChart,
 } from "@/components/TradeCharts";
+import { TradingViewChart } from "@/components/TradingViewChart";
 import { TickerLogo } from "@/components/TickerLogos";
 import {
   TRADE_CASH_USD,
@@ -32,6 +33,7 @@ import {
 type Side = "buy" | "sell";
 type SellMode = "shares" | "dollars";
 type Step = "detail" | "ticket" | "review" | "confirmed";
+type ChartMode = "basit" | "tradingview";
 
 export default function OrderTicketPage() {
   const params = useParams();
@@ -41,6 +43,7 @@ export default function OrderTicketPage() {
   const ticketRef = useRef<HTMLDivElement>(null);
 
   const [step, setStep] = useState<Step>("detail");
+  const [chartMode, setChartMode] = useState<ChartMode>("basit");
   const [side, setSide] = useState<Side>("buy");
   const [amount, setAmount] = useState("");
   const [sellMode, setSellMode] = useState<SellMode>("dollars");
@@ -567,13 +570,47 @@ export default function OrderTicketPage() {
           changePct={instrument.changePct}
           currency={instrument.currency}
         />
-        <div className="mt-5 -mx-0.5">
-          <StockPriceChart
-            symbol={instrument.symbol}
-            lastPrice={instrument.price}
-            changePct={instrument.changePct}
-            currency={instrument.currency}
-          />
+
+        {/* Chart mode: Basit (Investor) | TradingView */}
+        <div
+          className="mt-4 flex rounded-xl bg-beige p-1 ring-1 ring-black/[0.04]"
+          role="tablist"
+          aria-label="Grafik modu"
+        >
+          {(
+            [
+              { id: "basit" as const, label: "Basit" },
+              { id: "tradingview" as const, label: "TradingView" },
+            ] as const
+          ).map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={chartMode === tab.id}
+              onClick={() => setChartMode(tab.id)}
+              className={`trade-press flex-1 rounded-lg py-2 text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nest-blue/40 ${
+                chartMode === tab.id
+                  ? "bg-card text-nest shadow-[0_1px_3px_rgba(0,11,80,0.12)]"
+                  : "text-muted hover:text-nest"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-4 -mx-0.5">
+          {chartMode === "basit" ? (
+            <StockPriceChart
+              symbol={instrument.symbol}
+              lastPrice={instrument.price}
+              changePct={instrument.changePct}
+              currency={instrument.currency}
+            />
+          ) : (
+            <TradingViewChart instrument={instrument} />
+          )}
         </div>
         <div className="mt-1">
           <DayStatsGrid
