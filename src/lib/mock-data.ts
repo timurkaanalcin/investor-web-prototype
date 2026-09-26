@@ -93,15 +93,15 @@ export const HOLDINGS = [
 ];
 
 export const ALLOCATION = [
-  { label: "Hisse ETF", pct: 70, color: "#000b50" },
-  { label: "Tahvil ETF", pct: 20, color: "#1d6ae5" },
-  { label: "Nakit", pct: 10, color: "#9ec9ff" },
+  { label: "Hisse ETF", pct: 70, color: "#111111" },
+  { label: "Tahvil ETF", pct: 20, color: "#737373" },
+  { label: "Nakit", pct: 10, color: "#d4d4d4" },
 ];
 
 export const RECOMMENDED = [
-  { label: "Hisse", pct: 70, color: "#000b50" },
-  { label: "Tahvil", pct: 20, color: "#1d6ae5" },
-  { label: "Nakit", pct: 10, color: "#f9f0e2" },
+  { label: "Hisse", pct: 70, color: "#111111" },
+  { label: "Tahvil", pct: 20, color: "#737373" },
+  { label: "Nakit", pct: 10, color: "#d4d4d4" },
 ];
 
 export const AUTO_CONTRIBUTION = 2500;

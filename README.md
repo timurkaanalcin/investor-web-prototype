@@ -59,13 +59,14 @@ npm start
 
 ## Marka & renkler
 
-Betterment.com resmi token’ları:
+Nötr marka paleti (mavi kaldırıldı):
 
-- Navy `#000b50` — logo, koyu paneller, öne çıkan hedef kartı
-- Blue `#1d6ae5` — birincil CTA, aktif sekmeler
+- Black `#111111` — logo, birincil CTA, aktif sekmeler (açık tema)
+- White / gri — koyu tema CTA, toggle, vurgu çubukları
 - Gold `#ffc729` — vurgu / rozet
-- Cream `#f9f0e2` — sayfa arka planı
-- Teal `#226d78` — pozitif getiri
+- Cream `#f9f0e2` — açık tema arka planı
+- Teal `#226d78` / `#26a69a` — pozitif getiri / Trade Al
+- Red `#c44536` / `#ef5350` — tehlike / Trade Sat
 
 Logo: serif **Investor**; arayüz: sans-serif.
 

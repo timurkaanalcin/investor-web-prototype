@@ -144,7 +144,7 @@ export default function OrderTicketPage() {
       <div className="trade-tv-root h-full overflow-y-auto px-4 pb-6 pt-5">
         <Link
           href="/trade"
-          className="inline-flex items-center gap-1 text-sm font-medium text-[#2962ff]"
+          className="inline-flex items-center gap-1 text-sm font-medium text-[var(--tv-text)]"
         >
           <IconBack size={18} /> Trade
         </Link>
@@ -361,7 +361,7 @@ export default function OrderTicketPage() {
                       : position.value.toFixed(2)
                   )
                 }
-                className="trade-press mt-4 w-full text-center text-[14px] font-semibold text-[#2962ff]"
+                className="trade-press mt-4 w-full text-center text-[14px] font-semibold text-[var(--tv-text)]"
               >
                 Tüm hisseleri sat
               </button>
@@ -636,7 +636,7 @@ export default function OrderTicketPage() {
                 type="button"
                 className={`block w-full px-3 py-2.5 text-left text-[13px] ${
                   chartMode === "tradingview"
-                    ? "bg-[#2962ff]/20 font-semibold text-[var(--tv-text)]"
+                    ? "bg-[color-mix(in_srgb,var(--tv-text)_18%,transparent)] font-semibold text-[var(--tv-text)]"
                     : "text-[var(--tv-text)] hover:bg-[var(--tv-hover)]"
                 }`}
                 onClick={() => {
@@ -650,7 +650,7 @@ export default function OrderTicketPage() {
                 type="button"
                 className={`block w-full px-3 py-2.5 text-left text-[13px] ${
                   chartMode === "basit"
-                    ? "bg-[#2962ff]/20 font-semibold text-[var(--tv-text)]"
+                    ? "bg-[color-mix(in_srgb,var(--tv-text)_18%,transparent)] font-semibold text-[var(--tv-text)]"
                     : "text-[var(--tv-text)] hover:bg-[var(--tv-hover)]"
                 }`}
                 onClick={() => {

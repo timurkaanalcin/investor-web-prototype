@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  /* Betterment official tokens */
-  --bt-navy: #000b50;
-  --bt-blue: #1d6ae5;
-  --bt-blue-50: #2c78ea;
-  --bt-blue-40: #5696ee;
-  --bt-blue-30: #87b8f5;
-  --bt-light-blue: #9ec9ff;
+  /* Brand tokens — blue purged; neutrals + gold/teal accents */
+  --bt-navy: #111111;
+  --bt-blue: #111111; /* legacy alias → black (was #1d6ae5) */
+  --bt-blue-50: #2a2a2a;
+  --bt-blue-40: #525252;
+  --bt-blue-30: #a3a3a3;
+  --bt-light-blue: #e5e5e5;
   --bt-gold: #ffc729;
   --bt-cream: #f9f0e2;
   --bt-grey-10: #f5f5f5;
   --bt-grey-20: #e6e6e6;
   --bt-white: #ffffff;
   --bt-teal: #226d78;
-  --bt-purple: #703dea;
+  --bt-purple: #525252; /* neutralized (was purple brand) */
   --bt-text-default: #212121;
   --bt-text-muted: #5c5c5c;
 
@@ -22,12 +22,12 @@
   --foreground: var(--bt-text-default);
   /* Semantic aliases used by components */
   --nest: var(--bt-navy);
-  --nest-solid: var(--bt-navy); /* fills that stay navy (avatar, toasts, chips) */
-  --nest-blue: var(--bt-blue);
+  --nest-solid: #111111; /* fills: avatar, toasts, chips */
+  --nest-blue: #111111; /* accents: dots, active bars */
   --nest-light: var(--bt-teal);
-  --sage: var(--bt-blue-30);
-  --sage-soft: var(--bt-light-blue);
-  --sage-muted: #e8f1fc;
+  --sage: #a3a3a3;
+  --sage-soft: #e5e5e5;
+  --sage-muted: #f0f0f0;
   --cream: var(--bt-cream);
   --card: var(--bt-white);
   --muted: var(--bt-text-muted);
@@ -35,13 +35,13 @@
   --gain: #1a7a4c;
   --beige: var(--bt-grey-10);
   --gold: var(--bt-gold);
-  --border: rgba(0, 11, 80, 0.08);
+  --border: rgba(0, 0, 0, 0.08);
   --sidebar: var(--bt-white);
   --danger-soft: #fef2f2;
   --gain-soft: #ecfdf5;
   --warn-soft: #fffbeb;
   --warn: #b45309;
-  --shadow-card: 0 2px 12px rgba(0, 11, 80, 0.06);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 @theme inline {
@@ -97,10 +97,10 @@ body.dark {
   --sage-muted: #1a1a1a;
   --sage-soft: #2a2a2a;
   --sage: #ffffff;
-  /* Heading/label text: white (was light blue #9ec9ff) */
+  /* Heading/label text: white; fills/accents: neutrals (blue purged) */
   --nest: #ffffff;
-  --nest-solid: #1d6ae5; /* fills: avatar, toasts, chips — keep brand blue */
-  --nest-blue: #1d6ae5; /* functional accents only (dots, active bars, fills) */
+  --nest-solid: #1a1a1a; /* fills: avatar, toasts, chips */
+  --nest-blue: #ffffff; /* accents: dots, active bars */
   --nest-light: #5ec8b0; /* gain/teal — do not whiten */
   --border: rgba(255, 255, 255, 0.1);
   --danger: #f07167;
@@ -290,8 +290,8 @@ body.dark .card {
 }
 
 .btn-primary {
-  background: var(--bt-blue);
-  color: white;
+  background: #111111;
+  color: #ffffff;
   border-radius: 14px;
   font-weight: 600;
   transition: opacity 0.15s;
@@ -299,10 +299,15 @@ body.dark .card {
 .btn-primary:hover {
   opacity: 0.92;
 }
+html.dark .btn-primary,
+body.dark .btn-primary {
+  background: #ffffff;
+  color: #000000;
+}
 .btn-secondary {
   background: var(--card);
-  color: var(--bt-blue);
-  border: 1.5px solid var(--bt-blue);
+  color: #111111;
+  border: 1.5px solid #111111;
   border-radius: 14px;
   font-weight: 600;
 }
@@ -321,22 +326,38 @@ input[type="range"].nest-slider {
   border-radius: 999px;
   background: linear-gradient(
     to right,
-    var(--bt-blue) 0%,
-    var(--bt-blue) var(--pct, 50%),
+    #111111 0%,
+    #111111 var(--pct, 50%),
     var(--bt-grey-20) var(--pct, 50%),
     var(--bt-grey-20) 100%
   );
   outline: none;
+}
+html.dark input[type="range"].nest-slider,
+body.dark input[type="range"].nest-slider {
+  background: linear-gradient(
+    to right,
+    #ffffff 0%,
+    #ffffff var(--pct, 50%),
+    #333333 var(--pct, 50%),
+    #333333 100%
+  );
 }
 input[type="range"].nest-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--bt-blue);
+  background: #111111;
   border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(29, 106, 229, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   cursor: pointer;
+}
+html.dark input[type="range"].nest-slider::-webkit-slider-thumb,
+body.dark input[type="range"].nest-slider::-webkit-slider-thumb {
+  background: #ffffff;
+  border-color: #111111;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
 .toggle {
@@ -349,7 +370,11 @@ input[type="range"].nest-slider::-webkit-slider-thumb {
   flex-shrink: 0;
 }
 .toggle.on {
-  background: var(--bt-blue);
+  background: #111111;
+}
+html.dark .toggle.on,
+body.dark .toggle.on {
+  background: #ffffff;
 }
 .toggle::after {
   content: "";
@@ -436,7 +461,7 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
   --tv-border: #1a1a1a;
   --tv-text: #d1d4dc;
   --tv-muted: #787b86;
-  --tv-blue: #2962ff;
+  --tv-blue: #ffffff; /* chrome accent — was TradingView blue */
   --tv-green: #26a69a;
   --tv-red: #ef5350;
   --tv-yellow: #f0b90b;
@@ -445,7 +470,7 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
   --card: #0d0d0d;
   --muted: #787b86;
   --nest: #d1d4dc;
-  --nest-blue: #2962ff;
+  --nest-blue: #ffffff;
   --gain: #26a69a;
   --danger: #ef5350;
   --beige: #1a1a1a;
@@ -464,7 +489,7 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
   --tv-border: #e0e3eb;
   --tv-text: #131722;
   --tv-muted: #6a6d78;
-  --tv-blue: #2962ff;
+  --tv-blue: #131722; /* chrome accent — was TradingView blue */
   --tv-green: #26a69a;
   --tv-red: #ef5350;
   --tv-yellow: #f0b90b;
@@ -473,7 +498,7 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
   --card: #f0f3fa;
   --muted: #6a6d78;
   --nest: #131722;
-  --nest-blue: #2962ff;
+  --nest-blue: #131722;
   --gain: #26a69a;
   --danger: #ef5350;
   --beige: #e0e3eb;
@@ -572,9 +597,14 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
   color: var(--tv-text);
 }
 .tv-pill.active {
-  background: color-mix(in srgb, var(--tv-blue) 22%, transparent);
-  border-color: var(--tv-blue);
-  color: #fff;
+  background: color-mix(in srgb, var(--tv-text) 18%, transparent);
+  border-color: var(--tv-text);
+  color: var(--tv-text);
+}
+.phone-shell.trade-tv.trade-tv-dark .tv-pill.active {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: #ffffff;
+  color: #ffffff;
 }
 
 .tv-section-label {
@@ -746,7 +776,7 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
 }
 
 
-/* Dark: any leftover blue label text → white (fills keep --nest-blue) */
+/* Dark: nest-blue text/fills already white via token; keep explicit override */
 html.dark .text-nest-blue,
 body.dark .text-nest-blue {
   color: #ffffff;
@@ -804,8 +834,8 @@ body.dark .hover\:text-nest-blue:hover {
 .profile-page .profile-avatar-ring {
   box-shadow:
     0 0 0 3px var(--background),
-    0 0 0 5px color-mix(in srgb, var(--nest-blue) 55%, transparent),
-    0 8px 24px rgba(29, 106, 229, 0.28);
+    0 0 0 5px color-mix(in srgb, var(--nest-blue) 40%, transparent),
+    0 8px 24px rgba(0, 0, 0, 0.18);
 }
 .profile-page .profile-sheet {
   background: var(--card);
@@ -822,7 +852,7 @@ body.dark .hover\:text-nest-blue:hover {
   background: #d1d5db;
 }
 .profile-page .toggle.on {
-  background: #1d6ae5;
+  background: #111111;
 }
 .profile-page .toggle::after {
   top: 2px;
@@ -871,8 +901,8 @@ html.dark .profile-page .profile-avatar-ring,
 body.dark .profile-page .profile-avatar-ring {
   box-shadow:
     0 0 0 3px #000000,
-    0 0 0 5px rgba(29, 106, 229, 0.65),
-    0 0 28px rgba(29, 106, 229, 0.35);
+    0 0 0 5px rgba(255, 255, 255, 0.55),
+    0 0 28px rgba(255, 255, 255, 0.18);
 }
 html.dark .profile-page .profile-sheet,
 body.dark .profile-page .profile-sheet {
@@ -890,7 +920,7 @@ body.dark .profile-page .toggle {
 }
 html.dark .profile-page .toggle.on,
 body.dark .profile-page .toggle.on {
-  background: #1d6ae5;
+  background: #ffffff;
 }
 
 @media (min-width: 768px) {

@@ -92,9 +92,9 @@ export function LogoMETA({ size = 28, className }: LogoProps) {
 export function LogoSPY({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="7" fill="#1d6ae5" />
+      <rect width="32" height="32" rx="7" fill="#111111" />
       <path d="M6 12.5c3.2-2.2 6.5-2.2 10.2 0s7 2.2 10 0" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-      <path d="M6 17c3.2-2.2 6.5-2.2 10.2 0s7 2.2 10 0" fill="none" stroke="#9ec9ff" strokeWidth="2" strokeLinecap="round" />
+      <path d="M6 17c3.2-2.2 6.5-2.2 10.2 0s7 2.2 10 0" fill="none" stroke="#e5e5e5" strokeWidth="2" strokeLinecap="round" />
       <path d="M6 21.5c3.2-2.2 6.5-2.2 10.2 0s7 2.2 10 0" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" opacity="0.65" />
     </svg>
   );
@@ -125,7 +125,7 @@ export function LogoVOO({ size = 28, className }: LogoProps) {
 export function LogoQQQ({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect width="32" height="32" rx="7" fill="#000b50" />
+      <rect width="32" height="32" rx="7" fill="#111111" />
       <circle cx="14.5" cy="14.5" r="6.5" fill="none" stroke="#ffc729" strokeWidth="2.2" />
       <path d="M19.2 19.2l5 5" stroke="#ffc729" strokeWidth="2.2" strokeLinecap="round" />
     </svg>
@@ -159,7 +159,7 @@ export function LogoDefault({
   className,
 }: LogoProps & { symbol: string }) {
   const letters = symbol.slice(0, 2).toUpperCase();
-  const hues = ["#1d6ae5", "#226d78", "#703dea", "#000b50", "#c44536"];
+  const hues = ["#111111", "#226d78", "#525252", "#737373", "#c44536"];
   let h = 0;
   for (let i = 0; i < symbol.length; i++) h = (h + symbol.charCodeAt(i) * (i + 1)) % hues.length;
   return (

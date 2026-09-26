@@ -264,7 +264,7 @@ export function IconSettings({ size = 18, ...p }: P) {
 export function IconGridDots({ size = 28, ...p }: P) {
   return (
     <svg width={size} height={size} viewBox="0 0 28 28" aria-hidden {...p}>
-      <circle cx="14" cy="14" r="14" fill="#1d6ae5" />
+      <circle cx="14" cy="14" r="14" fill="currentColor" />
       <rect x="7.5" y="7.5" width="5" height="5" rx="1" fill="#fff" />
       <rect x="15.5" y="7.5" width="5" height="5" rx="1" fill="#fff" />
       <rect x="7.5" y="15.5" width="5" height="5" rx="1" fill="#fff" />

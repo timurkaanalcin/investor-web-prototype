@@ -28,13 +28,13 @@ export function LineChart({
       <svg viewBox={`0 0 ${w} ${height}`} className="w-full h-auto" role="img" aria-label="Portföy grafiği">
         <defs>
           <linearGradient id="invFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#1d6ae5" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#1d6ae5" stopOpacity="0.02" />
+            <stop offset="0%" stopColor="var(--nest-blue)" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="var(--nest-blue)" stopOpacity="0.02" />
           </linearGradient>
         </defs>
         <path d={area} fill="url(#invFill)" />
-        <path d={line} fill="none" stroke="#1d6ae5" strokeWidth="2.5" strokeLinejoin="round" />
-        <circle cx={last.x} cy={last.y} r="5" fill="#1d6ae5" stroke="white" strokeWidth="2" />
+        <path d={line} fill="none" stroke="var(--nest-blue)" strokeWidth="2.5" strokeLinejoin="round" />
+        <circle cx={last.x} cy={last.y} r="5" fill="var(--nest-blue)" stroke="white" strokeWidth="2" />
       </svg>
       <div className="mt-1 flex justify-between px-1 text-[10px] text-muted">
         {points.map((p) => (
@@ -73,7 +73,7 @@ export function ProgressRing({
           cy={size / 2}
           r={r}
           fill="none"
-          stroke="#1d6ae5"
+          stroke="var(--nest-blue)"
           strokeWidth={stroke}
           strokeDasharray={c}
           strokeDashoffset={offset}

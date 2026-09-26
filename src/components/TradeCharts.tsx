@@ -15,8 +15,8 @@ import { formatMoney, formatPct, type TradeCurrency } from "@/lib/mock-data";
 
 const GAIN = "#1a7a4c";
 const LOSS = "#c44536";
-const NAVY = "#000b50";
-const CHART_BLUE = "#1d6ae5";
+const NAVY = "#111111";
+const CHART_BLUE = "#111111";
 
 /** Smooth cubic path through points (Betterment-like soft curve) */
 function smoothPath(
@@ -317,7 +317,7 @@ export function StockPriceChart({
 }
 
 const OVERVIEW_FILL = "#B8D4F0";
-const OVERVIEW_STROKE = "#1d6ae5";
+const OVERVIEW_STROKE = "#111111";
 
 /** SDI overview — powder-blue area, no range pills, date → Bugün */
 export function OverviewAreaChart({
