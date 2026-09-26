@@ -52,7 +52,7 @@ export default function OnboardingPage() {
           <span
             key={i}
             className={`h-1.5 w-1.5 rounded-full ${
-              i === 0 ? "bg-nest" : "bg-black/15"
+              i === 0 ? "bg-nest-solid" : "bg-border"
             }`}
           />
         ))}

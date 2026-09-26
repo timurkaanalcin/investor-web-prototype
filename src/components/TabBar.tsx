@@ -16,7 +16,7 @@ export function TabBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="tab-bar sticky bottom-0 z-20 border-t border-black/5 bg-card/95 backdrop-blur-md px-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1.5 md:hidden">
+    <nav className="tab-bar sticky bottom-0 z-20 border-t border-border bg-card/95 backdrop-blur-md px-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1.5 md:hidden">
       <ul className="flex items-stretch justify-around">
         {TABS.map(({ href, label, icon: Icon }) => {
           const active =

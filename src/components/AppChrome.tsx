@@ -7,13 +7,17 @@ import { TabBar } from "./TabBar";
 import { DesktopSidebar } from "./DesktopSidebar";
 import { OnboardingGate } from "./OnboardingGate";
 import { TradeThemeProvider } from "./TradeTheme";
-import { getTradeTheme, type TradeTheme } from "@/lib/storage";
+import { applyDarkMode, getTradeTheme, type TradeTheme } from "@/lib/storage";
 
 export function AppChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isOnboarding = pathname.startsWith("/onboarding");
   const isTrade = pathname === "/trade" || pathname.startsWith("/trade/");
   const [tradeTheme, setTradeTheme] = useState<TradeTheme>("dark");
+
+  useEffect(() => {
+    applyDarkMode();
+  }, []);
 
   useEffect(() => {
     if (isTrade) setTradeTheme(getTradeTheme());

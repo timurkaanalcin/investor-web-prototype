@@ -27,9 +27,9 @@ const FILTERS: { key: Filter; label: string }[] = [
 
 const SIDE_BADGE: Record<TxSide, string> = {
   buy: "bg-sage-muted text-nest-blue",
-  sell: "bg-red-50 text-danger",
-  deposit: "bg-emerald-50 text-gain",
-  withdraw: "bg-amber-50 text-amber-700",
+  sell: "bg-danger-soft text-danger",
+  deposit: "bg-gain-soft text-gain",
+  withdraw: "bg-warn-soft text-warn",
 };
 
 function sideSignColor(side: TxSide): string {
@@ -95,7 +95,7 @@ export default function TransactionsPage() {
             onClick={() => setFilter(f.key)}
             className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors active:scale-95 ${
               filter === f.key
-                ? "bg-nest text-white"
+                ? "bg-nest-solid text-white"
                 : "bg-card text-nest shadow-sm"
             }`}
           >
@@ -128,7 +128,7 @@ export default function TransactionsPage() {
               <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
                 {label}
               </h2>
-              <ul className="card overflow-hidden divide-y divide-black/5">
+              <ul className="card overflow-hidden divide-y divide-border">
                 {items.map((tx) => (
                   <li key={tx.id}>
                     <button

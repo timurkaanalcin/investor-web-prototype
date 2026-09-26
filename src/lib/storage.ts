@@ -26,7 +26,16 @@ export function getDarkMode(): boolean {
 
 export function setDarkMode(on: boolean): void {
   localStorage.setItem(DARK_KEY, on ? "1" : "0");
+  document.documentElement.classList.toggle("dark", on);
   document.body.classList.toggle("dark", on);
+}
+
+/** Apply persisted chrome theme (non-trade). Safe to call on mount. */
+export function applyDarkMode(): boolean {
+  const on = getDarkMode();
+  document.documentElement.classList.toggle("dark", on);
+  document.body.classList.toggle("dark", on);
+  return on;
 }
 
 export function saveOnboardingChoices(goal: string, risk: string): void {

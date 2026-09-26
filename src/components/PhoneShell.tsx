@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { getDarkMode } from "@/lib/storage";
+import { applyDarkMode } from "@/lib/storage";
 
 export function PhoneShell({
   children,
@@ -14,7 +14,7 @@ export function PhoneShell({
   layout?: "phone" | "app" | "trade";
 }) {
   useEffect(() => {
-    document.body.classList.toggle("dark", getDarkMode());
+    applyDarkMode();
   }, []);
 
   const base =

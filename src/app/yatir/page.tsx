@@ -267,7 +267,7 @@ export default function InvestPage() {
                       onClick={() => setAmount(String(a))}
                       className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
                         amount === String(a)
-                          ? "bg-nest text-white"
+                          ? "bg-nest-solid text-white"
                           : "bg-beige text-nest"
                       }`}
                     >
@@ -401,7 +401,7 @@ export default function InvestPage() {
       )}
 
       {toast && (
-        <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 md:bottom-8 rounded-full bg-nest px-4 py-2 text-xs font-medium text-white shadow-lg">
+        <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 md:bottom-8 rounded-full bg-nest-solid px-4 py-2 text-xs font-medium text-white shadow-lg">
           {toast}
         </div>
       )}

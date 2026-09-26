@@ -49,8 +49,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr">
-      <body className={`${dmSans.variable} ${libre.variable} antialiased`}>
+    <html lang="tr" suppressHydrationWarning>
+      <body
+        className={`${dmSans.variable} ${libre.variable} antialiased`}
+        suppressHydrationWarning
+      >
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var on=localStorage.getItem('investor_dark_mode')==='1';document.documentElement.classList.toggle('dark',on);document.body.classList.toggle('dark',on);}catch(e){}})();",
+          }}
+        />
         <AppChrome>{children}</AppChrome>
       </body>
     </html>

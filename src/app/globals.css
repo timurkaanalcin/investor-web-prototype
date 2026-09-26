@@ -22,6 +22,7 @@
   --foreground: var(--bt-text-default);
   /* Semantic aliases used by components */
   --nest: var(--bt-navy);
+  --nest-solid: var(--bt-navy); /* fills that stay navy (avatar, toasts, chips) */
   --nest-blue: var(--bt-blue);
   --nest-light: var(--bt-teal);
   --sage: var(--bt-blue-30);
@@ -34,12 +35,20 @@
   --gain: #1a7a4c;
   --beige: var(--bt-grey-10);
   --gold: var(--bt-gold);
+  --border: rgba(0, 11, 80, 0.08);
+  --sidebar: var(--bt-white);
+  --danger-soft: #fef2f2;
+  --gain-soft: #ecfdf5;
+  --warn-soft: #fffbeb;
+  --warn: #b45309;
+  --shadow-card: 0 2px 12px rgba(0, 11, 80, 0.06);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-nest: var(--nest);
+  --color-nest-solid: var(--nest-solid);
   --color-nest-blue: var(--nest-blue);
   --color-nest-light: var(--nest-light);
   --color-sage: var(--sage);
@@ -52,6 +61,12 @@
   --color-gain: var(--gain);
   --color-beige: var(--beige);
   --color-gold: var(--gold);
+  --color-border: var(--border);
+  --color-sidebar: var(--sidebar);
+  --color-danger-soft: var(--danger-soft);
+  --color-gain-soft: var(--gain-soft);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn: var(--warn);
   --font-sans: var(--font-dm-sans);
   --font-serif: var(--font-libre);
 }
@@ -67,18 +82,33 @@ body {
   font-family: var(--font-dm-sans), system-ui, sans-serif;
 }
 
+html.dark,
 .dark body,
 body.dark {
   background: #070b24;
+  color: var(--foreground);
   --background: #0a1040;
-  --foreground: #f5f5f5;
+  --foreground: #f0f4ff;
   --card: #12183a;
-  --muted: #a0a0a0;
+  --sidebar: #0e1435;
+  --muted: #9aa3c2;
   --cream: #0a1040;
+  --beige: #1a2458;
   --sage-muted: #1a2458;
   --sage-soft: #2a3a7a;
+  --sage: #87b8f5;
   --nest: #9ec9ff;
+  --nest-solid: #1d6ae5;
   --nest-blue: #5696ee;
+  --nest-light: #5ec8b0;
+  --border: rgba(255, 255, 255, 0.1);
+  --danger: #f07167;
+  --gain: #3dba7e;
+  --danger-soft: rgba(240, 113, 103, 0.18);
+  --gain-soft: rgba(61, 186, 126, 0.18);
+  --warn-soft: rgba(245, 158, 11, 0.18);
+  --warn: #fbbf24;
+  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.35);
 }
 
 /* Mobile-first phone shell (< 768px) */
@@ -107,6 +137,10 @@ body.dark {
     box-shadow: 0 20px 60px rgba(0, 11, 80, 0.18), 0 0 0 1px rgba(0, 11, 80, 0.06);
     overflow: hidden;
   }
+  html.dark .phone-shell:not(.trade-tv),
+  body.dark .phone-shell:not(.trade-tv) {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
 }
 
 /* Desktop app shell (≥ 768px) — full width, no fake phone frame */
@@ -115,6 +149,7 @@ body.dark {
     padding: 0;
     background: linear-gradient(160deg, #f3ebe0 0%, #e8eef8 55%, #dde6f5 100%);
   }
+  html.dark body:not(:has(.phone-shell.trade-tv)),
   body.dark:not(:has(.phone-shell.trade-tv)) {
     background: #070b24;
   }
@@ -141,14 +176,18 @@ body.dark {
     width: 240px;
     flex-shrink: 0;
     flex-direction: column;
-    background: var(--card);
-    border-right: 1px solid rgba(0, 11, 80, 0.08);
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
     box-shadow: 4px 0 24px rgba(0, 11, 80, 0.04);
   }
 
+  html.dark .desktop-sidebar,
   body.dark .desktop-sidebar {
-    border-right-color: rgba(255, 255, 255, 0.08);
     box-shadow: none;
+  }
+
+  .tab-bar {
+    border-top-color: var(--border) !important;
   }
 
   .app-main {
@@ -234,7 +273,19 @@ body.dark {
 .card {
   background: var(--card);
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0, 11, 80, 0.06);
+  box-shadow: var(--shadow-card);
+  border: 1px solid transparent;
+}
+html.dark .card,
+body.dark .card {
+  border-color: var(--border);
+}
+
+.hairline {
+  border-color: var(--border);
+}
+.divide-theme > :not(:last-child) {
+  border-color: var(--border);
 }
 
 .btn-primary {

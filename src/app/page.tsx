@@ -23,9 +23,9 @@ const RANGES = ["1H", "1A", "3A", "1Y", "Tümü"] as const;
 
 const SIDE_BADGE: Record<TxSide, string> = {
   buy: "bg-sage-muted text-nest-blue",
-  sell: "bg-red-50 text-danger",
-  deposit: "bg-emerald-50 text-gain",
-  withdraw: "bg-amber-50 text-amber-700",
+  sell: "bg-danger-soft text-danger",
+  deposit: "bg-gain-soft text-gain",
+  withdraw: "bg-warn-soft text-warn",
 };
 
 export default function DashboardPage() {
@@ -57,7 +57,7 @@ export default function DashboardPage() {
         <h1 className="mt-1 text-4xl font-bold tracking-tight text-nest md:text-5xl">
           {formatTRY(TOTAL_BALANCE)}
         </h1>
-        <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-sm font-medium text-gain">
+        <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-gain-soft px-2.5 py-1 text-sm font-medium text-gain">
           <IconArrowUp size={14} />
           +{formatTRY(MONTHLY_GAIN)} bu ay
         </p>
@@ -72,7 +72,7 @@ export default function DashboardPage() {
               onClick={() => setRange(r)}
               className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-colors active:scale-95 md:min-h-0 md:px-3 md:py-1.5 md:text-xs ${
                 range === r
-                  ? "bg-nest text-white"
+                  ? "bg-nest-solid text-white"
                   : "bg-beige text-muted hover:text-nest"
               }`}
             >
@@ -97,7 +97,7 @@ export default function DashboardPage() {
             Tümü <IconChevron size={16} />
           </Link>
         </div>
-        <ul className="card overflow-hidden divide-y divide-black/5">
+        <ul className="card overflow-hidden divide-y divide-border">
           {recent.map((tx) => (
             <li key={tx.id}>
               <Link
