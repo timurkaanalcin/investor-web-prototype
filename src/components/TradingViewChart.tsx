@@ -184,7 +184,7 @@ export function TradingViewChart({
       <div
         className={`relative overflow-hidden rounded-none border-y ${
           isDark
-            ? "border-[#2a2e39] bg-[#131722]"
+            ? "border-[#1a1a1a] bg-[#000000]"
             : "border-[#e0e3eb] bg-[#ffffff]"
         }`}
         style={{ height }}
@@ -192,7 +192,7 @@ export function TradingViewChart({
         {(status === "loading" || status === "error") && (
           <div
             className={`absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 px-6 text-center ${
-              isDark ? "bg-[#131722]" : "bg-[#ffffff]"
+              isDark ? "bg-[#000000]" : "bg-[#ffffff]"
             }`}
             aria-live="polite"
           >

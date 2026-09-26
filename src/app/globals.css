@@ -85,17 +85,17 @@ body {
 html.dark,
 .dark body,
 body.dark {
-  background: #070b24;
+  background: #000000;
   color: var(--foreground);
-  --background: #0a1040;
+  --background: #000000;
   --foreground: #f0f4ff;
-  --card: #12183a;
-  --sidebar: #0e1435;
+  --card: #121212;
+  --sidebar: #000000;
   --muted: #9aa3c2;
-  --cream: #0a1040;
-  --beige: #1a2458;
-  --sage-muted: #1a2458;
-  --sage-soft: #2a3a7a;
+  --cream: #000000;
+  --beige: #1a1a1a;
+  --sage-muted: #1a1a1a;
+  --sage-soft: #2a2a2a;
   --sage: #87b8f5;
   --nest: #9ec9ff;
   --nest-solid: #1d6ae5;
@@ -151,7 +151,7 @@ body.dark {
   }
   html.dark body:not(:has(.phone-shell.trade-tv)),
   body.dark:not(:has(.phone-shell.trade-tv)) {
-    background: #070b24;
+    background: #000000;
   }
 
   .phone-shell.app-shell:not(.trade-tv) {
@@ -402,7 +402,7 @@ body:has(.phone-shell.trade-tv) {
   overflow: hidden;
 }
 body:has(.phone-shell.trade-tv.trade-tv-dark) {
-  background: #131722;
+  background: #000000;
 }
 body:has(.phone-shell.trade-tv.trade-tv-light) {
   background: #ffffff;
@@ -420,30 +420,30 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
 
 /* Dark theme (TradingView dark) */
 .phone-shell.trade-tv.trade-tv-dark {
-  background: #131722;
+  background: #000000;
   color: #d1d4dc;
-  --tv-bg: #131722;
-  --tv-panel: #1e222d;
-  --tv-panel-2: #2a2e39;
-  --tv-hover: #363a45;
-  --tv-border: #2a2e39;
+  --tv-bg: #000000;
+  --tv-panel: #0d0d0d;
+  --tv-panel-2: #1a1a1a;
+  --tv-hover: #2a2a2a;
+  --tv-border: #1a1a1a;
   --tv-text: #d1d4dc;
   --tv-muted: #787b86;
   --tv-blue: #2962ff;
   --tv-green: #26a69a;
   --tv-red: #ef5350;
   --tv-yellow: #f0b90b;
-  --background: #131722;
+  --background: #000000;
   --foreground: #d1d4dc;
-  --card: #1e222d;
+  --card: #0d0d0d;
   --muted: #787b86;
   --nest: #d1d4dc;
   --nest-blue: #2962ff;
   --gain: #26a69a;
   --danger: #ef5350;
-  --beige: #2a2e39;
-  --sage-muted: #2a2e39;
-  --cream: #131722;
+  --beige: #1a1a1a;
+  --sage-muted: #1a1a1a;
+  --cream: #000000;
 }
 
 /* Light theme (TradingView light) */
