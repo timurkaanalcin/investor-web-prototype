@@ -2,6 +2,9 @@ const ONBOARDING_KEY = "investor_onboarding_complete";
 const DARK_KEY = "investor_dark_mode";
 const GOAL_KEY = "investor_goal";
 const RISK_KEY = "investor_risk";
+const AUTO_CONTRIB_KEY = "investor_auto_contribution";
+const NOTIF_KEY = "investor_notifications";
+const TX_EXTRA_KEY = "investor_tx_extra";
 
 export function isOnboardingComplete(): boolean {
   if (typeof window === "undefined") return true;
@@ -53,4 +56,63 @@ export function getTradeTheme(): TradeTheme {
 
 export function setTradeTheme(theme: TradeTheme): void {
   localStorage.setItem(TRADE_THEME_KEY, theme);
+}
+
+export function getAutoContribution(): boolean {
+  if (typeof window === "undefined") return true;
+  const v = localStorage.getItem(AUTO_CONTRIB_KEY);
+  if (v === null) return true;
+  return v === "1";
+}
+
+export function setAutoContribution(on: boolean): void {
+  localStorage.setItem(AUTO_CONTRIB_KEY, on ? "1" : "0");
+}
+
+export function getNotifications(): boolean {
+  if (typeof window === "undefined") return true;
+  const v = localStorage.getItem(NOTIF_KEY);
+  if (v === null) return true;
+  return v === "1";
+}
+
+export function setNotifications(on: boolean): void {
+  localStorage.setItem(NOTIF_KEY, on ? "1" : "0");
+}
+
+export type StoredTx = {
+  id: string;
+  side: "buy" | "sell" | "deposit" | "withdraw";
+  title: string;
+  subtitle?: string;
+  symbol?: string;
+  amount: number;
+  currency: "TRY" | "USD";
+  date: string;
+  status: "completed" | "pending" | "failed";
+  qty?: number;
+  price?: number;
+};
+
+export function getExtraTransactions(): StoredTx[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(TX_EXTRA_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function appendTransaction(tx: StoredTx): void {
+  const list = getExtraTransactions();
+  list.unshift(tx);
+  localStorage.setItem(TX_EXTRA_KEY, JSON.stringify(list.slice(0, 50)));
+}
+
+export function clearSession(): void {
+  resetOnboarding();
+  localStorage.removeItem(TX_EXTRA_KEY);
 }

@@ -347,3 +347,196 @@ export function estimateTaxImpact(
     washSaleRisk,
   };
 }
+
+/* ─── Transaction history (mock) ─── */
+
+export type TxSide = "buy" | "sell" | "deposit" | "withdraw";
+export type TxStatus = "completed" | "pending" | "failed";
+
+export type Transaction = {
+  id: string;
+  side: TxSide;
+  /** Display title e.g. THYAO, Otomatik katkı */
+  title: string;
+  subtitle?: string;
+  symbol?: string;
+  amount: number;
+  currency: "TRY" | "USD";
+  /** ISO date YYYY-MM-DD */
+  date: string;
+  status: TxStatus;
+  qty?: number;
+  price?: number;
+};
+
+export const TRANSACTIONS: Transaction[] = [
+  {
+    id: "tx-1",
+    side: "buy",
+    title: "THYAO",
+    subtitle: "Türk Hava Yolları · BIST",
+    symbol: "THYAO",
+    amount: 3125,
+    currency: "TRY",
+    date: "2026-09-25",
+    status: "completed",
+    qty: 10,
+    price: 312.5,
+  },
+  {
+    id: "tx-2",
+    side: "deposit",
+    title: "Otomatik katkı",
+    subtitle: "Aylık yatırım",
+    amount: 2500,
+    currency: "TRY",
+    date: "2026-09-25",
+    status: "completed",
+  },
+  {
+    id: "tx-3",
+    side: "buy",
+    title: "AAPL",
+    subtitle: "Apple Inc. · NASDAQ",
+    symbol: "AAPL",
+    amount: 454.2,
+    currency: "USD",
+    date: "2026-09-24",
+    status: "completed",
+    qty: 2,
+    price: 227.1,
+  },
+  {
+    id: "tx-4",
+    side: "sell",
+    title: "NVDA",
+    subtitle: "NVIDIA · NASDAQ",
+    symbol: "NVDA",
+    amount: 239.34,
+    currency: "USD",
+    date: "2026-09-22",
+    status: "completed",
+    qty: 2,
+    price: 119.67,
+  },
+  {
+    id: "tx-5",
+    side: "buy",
+    title: "GARAN",
+    subtitle: "Garanti BBVA · BIST",
+    symbol: "GARAN",
+    amount: 2368,
+    currency: "TRY",
+    date: "2026-09-20",
+    status: "completed",
+    qty: 20,
+    price: 118.4,
+  },
+  {
+    id: "tx-6",
+    side: "deposit",
+    title: "Banka yatırma",
+    subtitle: "Garanti BBVA · *4521",
+    amount: 10000,
+    currency: "TRY",
+    date: "2026-09-18",
+    status: "completed",
+  },
+  {
+    id: "tx-7",
+    side: "sell",
+    title: "VOO",
+    subtitle: "Vanguard S&P 500 · ETF",
+    symbol: "VOO",
+    amount: 518.22,
+    currency: "USD",
+    date: "2026-09-15",
+    status: "completed",
+    qty: 1,
+    price: 518.22,
+  },
+  {
+    id: "tx-8",
+    side: "withdraw",
+    title: "Nakit çekme",
+    subtitle: "Garanti BBVA · *4521",
+    amount: 1500,
+    currency: "TRY",
+    date: "2026-09-12",
+    status: "completed",
+  },
+  {
+    id: "tx-9",
+    side: "deposit",
+    title: "Otomatik katkı",
+    subtitle: "Aylık yatırım",
+    amount: 2500,
+    currency: "TRY",
+    date: "2026-08-25",
+    status: "completed",
+  },
+  {
+    id: "tx-10",
+    side: "buy",
+    title: "TSLA",
+    subtitle: "Tesla Inc. · NASDAQ",
+    symbol: "TSLA",
+    amount: 248.5,
+    currency: "USD",
+    date: "2026-08-20",
+    status: "pending",
+    qty: 1,
+    price: 248.5,
+  },
+];
+
+export const TX_SIDE_LABEL: Record<TxSide, string> = {
+  buy: "Alış",
+  sell: "Satış",
+  deposit: "Yatırma",
+  withdraw: "Çekme",
+};
+
+export const TX_STATUS_LABEL: Record<TxStatus, string> = {
+  completed: "Tamamlandı",
+  pending: "Bekliyor",
+  failed: "Başarısız",
+};
+
+export function formatTxAmount(tx: Transaction): string {
+  const sign =
+    tx.side === "buy" || tx.side === "withdraw"
+      ? "−"
+      : tx.side === "sell" || tx.side === "deposit"
+        ? "+"
+        : "";
+  if (tx.currency === "USD") {
+    return sign + formatUSD(tx.amount);
+  }
+  return (
+    sign +
+    "₺" +
+    tx.amount.toLocaleString("tr-TR", {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: tx.amount % 1 === 0 ? 0 : 2,
+    })
+  );
+}
+
+export function formatTxDateGroup(iso: string): string {
+  const d = new Date(iso + "T12:00:00");
+  const today = new Date();
+  const yday = new Date();
+  yday.setDate(today.getDate() - 1);
+  const same = (a: Date, b: Date) =>
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
+  if (same(d, today)) return "Bugün";
+  if (same(d, yday)) return "Dün";
+  return d.toLocaleDateString("tr-TR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}

@@ -651,6 +651,13 @@ export default function OrderTicketPage() {
               >
                 Basit
               </button>
+              <Link
+                href="/profil"
+                className="block w-full border-t border-[var(--tv-border)] px-3 py-2.5 text-left text-[13px] text-[var(--tv-text)] hover:bg-[var(--tv-hover)]"
+                onClick={() => setMenuOpen(false)}
+              >
+                Profil
+              </Link>
             </div>
           )}
         </div>

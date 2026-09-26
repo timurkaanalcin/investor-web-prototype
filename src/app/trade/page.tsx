@@ -6,8 +6,8 @@ import {
   IconClose,
   IconMoon,
   IconSearch,
-  IconSettings,
   IconSun,
+  IconUser,
 } from "@/components/Icons";
 import { Sparkline } from "@/components/TradeCharts";
 import { TickerLogo } from "@/components/TickerLogos";
@@ -140,10 +140,10 @@ export default function TradeHomePage() {
           <Link
             href="/profil"
             className="tv-icon-btn"
-            aria-label="Ayarlar"
-            title="Ayarlar"
+            aria-label="Profil"
+            title="Profil"
           >
-            <IconSettings size={16} />
+            <IconUser size={16} />
           </Link>
         </div>
 
