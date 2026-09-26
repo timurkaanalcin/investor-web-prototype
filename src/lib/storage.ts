@@ -5,6 +5,9 @@ const RISK_KEY = "investor_risk";
 const AUTO_CONTRIB_KEY = "investor_auto_contribution";
 const NOTIF_KEY = "investor_notifications";
 const TX_EXTRA_KEY = "investor_tx_extra";
+const TRADE_THEME_KEY = "investor_trade_theme";
+
+export type TradeTheme = "dark" | "light";
 
 export function isOnboardingComplete(): boolean {
   if (typeof window === "undefined") return true;
@@ -19,23 +22,52 @@ export function resetOnboarding(): void {
   localStorage.removeItem(ONBOARDING_KEY);
 }
 
+/**
+ * Single source of truth for app chrome + Trade theme.
+ * Prefer investor_dark_mode; if unset, migrate from investor_trade_theme.
+ */
 export function getDarkMode(): boolean {
   if (typeof window === "undefined") return false;
-  return localStorage.getItem(DARK_KEY) === "1";
+  const dark = localStorage.getItem(DARK_KEY);
+  if (dark === "1") return true;
+  if (dark === "0") return false;
+  const trade = localStorage.getItem(TRADE_THEME_KEY);
+  if (trade === "dark") return true;
+  if (trade === "light") return false;
+  return false;
 }
 
-export function setDarkMode(on: boolean): void {
+function persistUnifiedTheme(on: boolean): void {
   localStorage.setItem(DARK_KEY, on ? "1" : "0");
+  localStorage.setItem(TRADE_THEME_KEY, on ? "dark" : "light");
+}
+
+function applyDomDark(on: boolean): void {
   document.documentElement.classList.toggle("dark", on);
   document.body.classList.toggle("dark", on);
 }
 
-/** Apply persisted chrome theme (non-trade). Safe to call on mount. */
+/** Persist + apply chrome dark mode; always keeps Trade theme key in sync. */
+export function setDarkMode(on: boolean): void {
+  persistUnifiedTheme(on);
+  applyDomDark(on);
+}
+
+/** Apply persisted unified theme (chrome + Trade keys). Safe to call on mount. */
 export function applyDarkMode(): boolean {
   const on = getDarkMode();
-  document.documentElement.classList.toggle("dark", on);
-  document.body.classList.toggle("dark", on);
+  persistUnifiedTheme(on);
+  applyDomDark(on);
   return on;
+}
+
+export function getTradeTheme(): TradeTheme {
+  return getDarkMode() ? "dark" : "light";
+}
+
+/** Persist Trade theme and mirror to app dark mode so chrome stays in sync. */
+export function setTradeTheme(theme: TradeTheme): void {
+  setDarkMode(theme === "dark");
 }
 
 export function saveOnboardingChoices(goal: string, risk: string): void {
@@ -51,20 +83,6 @@ export function getOnboardingChoices(): { goal: string; risk: string } {
     goal: localStorage.getItem(GOAL_KEY) || "emeklilik",
     risk: localStorage.getItem(RISK_KEY) || "dengeli",
   };
-}
-
-const TRADE_THEME_KEY = "investor_trade_theme";
-
-export type TradeTheme = "dark" | "light";
-
-export function getTradeTheme(): TradeTheme {
-  if (typeof window === "undefined") return "dark";
-  const v = localStorage.getItem(TRADE_THEME_KEY);
-  return v === "light" ? "light" : "dark";
-}
-
-export function setTradeTheme(theme: TradeTheme): void {
-  localStorage.setItem(TRADE_THEME_KEY, theme);
 }
 
 export function getAutoContribution(): boolean {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { PhoneShell } from "./PhoneShell";
 import { TabBar } from "./TabBar";
@@ -13,15 +13,12 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isOnboarding = pathname.startsWith("/onboarding");
   const isTrade = pathname === "/trade" || pathname.startsWith("/trade/");
-  const [tradeTheme, setTradeTheme] = useState<TradeTheme>("dark");
+  const [tradeTheme, setTradeTheme] = useState<TradeTheme>("light");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyDarkMode();
-  }, []);
-
-  useEffect(() => {
-    if (isTrade) setTradeTheme(getTradeTheme());
-  }, [isTrade]);
+    setTradeTheme(getTradeTheme());
+  }, [pathname]);
 
   const onThemeChange = useCallback((t: TradeTheme) => {
     setTradeTheme(t);

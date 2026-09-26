@@ -4,7 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from "react";
@@ -21,7 +21,7 @@ type Ctx = {
 };
 
 const TradeThemeContext = createContext<Ctx>({
-  theme: "dark",
+  theme: "light",
   setTheme: () => {},
   toggle: () => {},
 });
@@ -33,9 +33,9 @@ export function TradeThemeProvider({
   children: React.ReactNode;
   onThemeChange?: (theme: TradeTheme) => void;
 }) {
-  const [theme, setThemeState] = useState<TradeTheme>("dark");
+  const [theme, setThemeState] = useState<TradeTheme>("light");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const t = getTradeTheme();
     setThemeState(t);
     onThemeChange?.(t);

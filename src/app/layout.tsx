@@ -57,7 +57,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){try{var on=localStorage.getItem('investor_dark_mode')==='1';document.documentElement.classList.toggle('dark',on);document.body.classList.toggle('dark',on);}catch(e){}})();",
+              "(function(){try{var d=localStorage.getItem('investor_dark_mode');var t=localStorage.getItem('investor_trade_theme');var on=d==='1'||(d!=='0'&&t==='dark');localStorage.setItem('investor_dark_mode',on?'1':'0');localStorage.setItem('investor_trade_theme',on?'dark':'light');document.documentElement.classList.toggle('dark',on);document.body.classList.toggle('dark',on);}catch(e){}})();",
           }}
         />
         <AppChrome>{children}</AppChrome>
