@@ -737,3 +737,147 @@ body:has(.phone-shell.trade-tv.trade-tv-light) {
 .tv-market-closed {
   color: var(--tv-muted);
 }
+
+/* ── Profile page (modern fintech, dark-first) ── */
+.profile-page .profile-text {
+  color: var(--bt-navy);
+}
+.profile-page .profile-text-secondary {
+  color: var(--bt-text-muted);
+}
+.profile-page .profile-menu {
+  background: var(--card);
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.profile-page .profile-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem 1.125rem;
+  min-height: 56px;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+.profile-page .profile-row:not(:first-child) {
+  border-top: 1px solid var(--border);
+}
+.profile-page .profile-row:active {
+  background: color-mix(in srgb, var(--sage-muted) 50%, transparent);
+}
+.profile-page .profile-icon-chip {
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--sage-muted);
+  color: var(--bt-navy);
+}
+.profile-page .profile-icon-chip-danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.profile-page .profile-avatar-ring {
+  box-shadow:
+    0 0 0 3px var(--background),
+    0 0 0 5px color-mix(in srgb, var(--nest-blue) 55%, transparent),
+    0 8px 24px rgba(29, 106, 229, 0.28);
+}
+.profile-page .profile-sheet {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+}
+.profile-page .profile-sheet-close {
+  background: var(--beige);
+  color: var(--foreground);
+}
+.profile-page .toggle {
+  width: 51px;
+  height: 31px;
+  background: #d1d5db;
+}
+.profile-page .toggle.on {
+  background: #1d6ae5;
+}
+.profile-page .toggle::after {
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.profile-page .toggle.on::after {
+  transform: translateX(20px);
+}
+
+html.dark .profile-page .profile-text,
+body.dark .profile-page .profile-text {
+  color: #ffffff;
+}
+html.dark .profile-page .profile-text-secondary,
+body.dark .profile-page .profile-text-secondary {
+  color: #a3a3a3;
+}
+html.dark .profile-page .profile-menu,
+body.dark .profile-page .profile-menu {
+  background: #121212;
+  border-color: #222222;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+html.dark .profile-page .profile-row:not(:first-child),
+body.dark .profile-page .profile-row:not(:first-child) {
+  border-top-color: #222222;
+}
+html.dark .profile-page .profile-row:hover,
+body.dark .profile-page .profile-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+html.dark .profile-page .profile-row:active,
+body.dark .profile-page .profile-row:active {
+  background: rgba(255, 255, 255, 0.07);
+}
+html.dark .profile-page .profile-icon-chip,
+body.dark .profile-page .profile-icon-chip {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #2a2a2a;
+}
+html.dark .profile-page .profile-avatar-ring,
+body.dark .profile-page .profile-avatar-ring {
+  box-shadow:
+    0 0 0 3px #000000,
+    0 0 0 5px rgba(29, 106, 229, 0.65),
+    0 0 28px rgba(29, 106, 229, 0.35);
+}
+html.dark .profile-page .profile-sheet,
+body.dark .profile-page .profile-sheet {
+  background: #121212;
+  border-color: #222222;
+}
+html.dark .profile-page .profile-sheet-close,
+body.dark .profile-page .profile-sheet-close {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+html.dark .profile-page .toggle,
+body.dark .profile-page .toggle {
+  background: #333333;
+}
+html.dark .profile-page .toggle.on,
+body.dark .profile-page .toggle.on {
+  background: #1d6ae5;
+}
+
+@media (min-width: 768px) {
+  .profile-page .desk-grid-profile {
+    gap: 2.25rem;
+    max-width: 920px;
+  }
+}
