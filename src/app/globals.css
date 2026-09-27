@@ -1073,3 +1073,22 @@ body.dark .notif-drawer {
 .step-indicator li {
   line-height: 1.1;
 }
+
+/* Compact collapsible TP/SL ticket (right rail + mobile form) */
+.trade-tpsl {
+  background: var(--tv-panel);
+}
+.trade-tpsl__header {
+  min-height: 34px;
+}
+.trade-tpsl__input.tv-input {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 12px;
+  line-height: 1.25;
+  height: 1.875rem;
+  min-height: 1.875rem;
+}
+.phone-shell.trade-tv .trade-tpsl__input.tv-input:focus {
+  border-color: var(--tv-text);
+}

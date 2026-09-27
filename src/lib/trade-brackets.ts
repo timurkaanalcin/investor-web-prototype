@@ -156,3 +156,26 @@ export function saveTpSlMode(mode: BracketMode): void {
     /* ignore */
   }
 }
+
+export const TP_SL_OPEN_KEY = "investor_tp_sl_open";
+
+export function loadTpSlOpen(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const v = localStorage.getItem(TP_SL_OPEN_KEY);
+    if (v === "1" || v === "true") return true;
+    if (v === "0" || v === "false") return false;
+  } catch {
+    /* ignore */
+  }
+  return false;
+}
+
+export function saveTpSlOpen(open: boolean): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(TP_SL_OPEN_KEY, open ? "1" : "0");
+  } catch {
+    /* ignore */
+  }
+}

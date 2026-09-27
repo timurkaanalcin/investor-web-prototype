@@ -9,7 +9,9 @@ import {
 import {
   computeTpSl,
   loadTpSlMode,
+  loadTpSlOpen,
   saveTpSlMode,
+  saveTpSlOpen,
   type BracketMode,
   type BracketSide,
 } from "@/lib/trade-brackets";
@@ -82,7 +84,30 @@ export function useTpSlComputed(
   }, [state, side, price, shares]);
 }
 
-/** Compact TP/SL controls for order tickets (Turkish labels). */
+function formatSummaryChip(state: TpSlState): string | null {
+  const bits: string[] = [];
+  if (state.tpEnabled && state.tpValue) {
+    bits.push(
+      state.mode === "percent"
+        ? `TP ${state.tpValue}%`
+        : `TP ${state.tpValue}`
+    );
+  }
+  if (state.slEnabled && state.slValue) {
+    bits.push(
+      state.mode === "percent"
+        ? `SL ${state.slValue}%`
+        : `SL ${state.slValue}`
+    );
+  }
+  if (!bits.length && (state.tpEnabled || state.slEnabled)) {
+    if (state.tpEnabled) bits.push("TP");
+    if (state.slEnabled) bits.push("SL");
+  }
+  return bits.length ? bits.join(" · ") : null;
+}
+
+/** Compact collapsible TP/SL controls for order tickets (Turkish labels). */
 export function TradeTpSlSection({
   state,
   onChange,
@@ -102,102 +127,142 @@ export function TradeTpSlSection({
 }) {
   const computed = useTpSlComputed(state, side, price, shares);
   const prefix = moneySymbol(currency);
-  const pad = compact ? "px-2 py-1.5 text-[12px]" : "px-3 py-2 text-[13px]";
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(loadTpSlOpen());
+  }, []);
+
+  function toggleOpen() {
+    setOpen((prev) => {
+      const next = !prev;
+      saveTpSlOpen(next);
+      return next;
+    });
+  }
+
+  const summary = formatSummaryChip(state);
+  void compact; // API compat (rail + mobile form share compact ticket layout)
 
   return (
-    <div
-      className={`mt-3 rounded border border-[var(--tv-border)] bg-[var(--tv-bg)] ${
-        compact ? "p-2.5" : "p-3.5"
+    <div className="trade-tpsl mt-3 w-full max-w-full overflow-hidden rounded border border-[var(--tv-border)] bg-[var(--tv-panel)]">
+      <button
+        type="button"
+        onClick={toggleOpen}
+        aria-expanded={open}
+        className="trade-tpsl__header flex w-full items-center gap-2 px-2.5 py-2 text-left transition-colors hover:bg-[color-mix(in_srgb,var(--tv-hover)_55%,transparent)]"
+      >
+        <span className="min-w-0 flex-1 truncate text-[12px] font-bold tracking-tight text-[var(--tv-text)]">
+          TP / SL
+        </span>
+        {summary && (
+          <span className="tv-mono shrink-0 rounded border border-[var(--tv-border)] bg-[var(--tv-bg)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--tv-text)]">
+            {summary}
+          </span>
+        )}
+        <Chevron open={open} />
+      </button>
+
+      {open && (
+        <div className="trade-tpsl__body border-t border-[var(--tv-border)] px-2.5 pb-2.5 pt-2">
+          <div className="mx-auto flex w-full max-w-[300px] flex-col items-stretch gap-2">
+            <div className="flex justify-center">
+              <div className="inline-flex w-full max-w-[220px] gap-1 rounded border border-[var(--tv-border)] bg-[var(--tv-bg)] p-0.5">
+                <ModeBtn
+                  active={state.mode === "percent"}
+                  onClick={() => onChange({ mode: "percent" })}
+                >
+                  Oran (%)
+                </ModeBtn>
+                <ModeBtn
+                  active={state.mode === "money"}
+                  onClick={() => onChange({ mode: "money" })}
+                >
+                  Tutar
+                </ModeBtn>
+              </div>
+            </div>
+
+            <BracketRow
+              label="TP"
+              sub="Kâr al"
+              enabled={state.tpEnabled}
+              onToggle={() => onChange({ tpEnabled: !state.tpEnabled })}
+              value={state.tpValue}
+              onValue={(v) => onChange({ tpValue: v })}
+              mode={state.mode}
+              prefix={prefix}
+              placeholder={state.mode === "percent" ? "2" : "50"}
+              accent="#26a69a"
+            />
+            {state.tpEnabled && (
+              <PreviewLine
+                kind="tp"
+                price={computed.tpPrice}
+                amount={computed.tpProfit}
+                currency={currency}
+                ok={computed.tpOk}
+                needsShares={computed.needsShares}
+                mode={state.mode}
+                shares={shares}
+              />
+            )}
+
+            <BracketRow
+              label="SL"
+              sub="Zarar durdur"
+              enabled={state.slEnabled}
+              onToggle={() => onChange({ slEnabled: !state.slEnabled })}
+              value={state.slValue}
+              onValue={(v) => onChange({ slValue: v })}
+              mode={state.mode}
+              prefix={prefix}
+              placeholder={state.mode === "percent" ? "1" : "20"}
+              accent="#ef5350"
+            />
+            {state.slEnabled && (
+              <PreviewLine
+                kind="sl"
+                price={computed.slPrice}
+                amount={computed.slLoss}
+                currency={currency}
+                ok={computed.slOk}
+                needsShares={computed.needsShares}
+                mode={state.mode}
+                shares={shares}
+              />
+            )}
+
+            <p className="text-center text-[9px] text-[var(--tv-muted)]">
+              {currency} · {side === "buy" ? "Al" : "Sat"} · simülasyon
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden
+      className={`shrink-0 text-[var(--tv-muted)] transition-transform duration-150 ${
+        open ? "rotate-180" : ""
       }`}
     >
-      <div className="flex items-center justify-between gap-2">
-        <p
-          className={`font-bold text-[var(--tv-text)] ${
-            compact ? "text-[12px]" : "text-[13px]"
-          }`}
-        >
-          Kâr al / Zarar durdur
-        </p>
-        <span className="tv-ex-badge text-[10px]">
-          {currency} · {side === "buy" ? "Al" : "Sat"}
-        </span>
-      </div>
-
-      <div className="mt-2 flex gap-1">
-        <ModeBtn
-          active={state.mode === "percent"}
-          onClick={() => onChange({ mode: "percent" })}
-          compact={!!compact}
-        >
-          Oran (%)
-        </ModeBtn>
-        <ModeBtn
-          active={state.mode === "money"}
-          onClick={() => onChange({ mode: "money" })}
-          compact={!!compact}
-        >
-          Tutar
-        </ModeBtn>
-      </div>
-
-      <div className={`mt-2.5 space-y-2 ${compact ? "" : "space-y-2.5"}`}>
-        <BracketRow
-          label="TP"
-          sub="Kâr al"
-          enabled={state.tpEnabled}
-          onToggle={() => onChange({ tpEnabled: !state.tpEnabled })}
-          value={state.tpValue}
-          onValue={(v) => onChange({ tpValue: v })}
-          mode={state.mode}
-          prefix={prefix}
-          placeholder={state.mode === "percent" ? "örn. 2" : "örn. 50"}
-          accent="#26a69a"
-          compact={!!compact}
-          pad={pad}
-        />
-        {state.tpEnabled && (
-          <PreviewLine
-            kind="tp"
-            price={computed.tpPrice}
-            amount={computed.tpProfit}
-            currency={currency}
-            ok={computed.tpOk}
-            needsShares={computed.needsShares}
-            mode={state.mode}
-            shares={shares}
-            compact={!!compact}
-          />
-        )}
-
-        <BracketRow
-          label="SL"
-          sub="Zarar durdur"
-          enabled={state.slEnabled}
-          onToggle={() => onChange({ slEnabled: !state.slEnabled })}
-          value={state.slValue}
-          onValue={(v) => onChange({ slValue: v })}
-          mode={state.mode}
-          prefix={prefix}
-          placeholder={state.mode === "percent" ? "örn. 1" : "örn. 20"}
-          accent="#ef5350"
-          compact={!!compact}
-          pad={pad}
-        />
-        {state.slEnabled && (
-          <PreviewLine
-            kind="sl"
-            price={computed.slPrice}
-            amount={computed.slLoss}
-            currency={currency}
-            ok={computed.slOk}
-            needsShares={computed.needsShares}
-            mode={state.mode}
-            shares={shares}
-            compact={!!compact}
-          />
-        )}
-      </div>
-    </div>
+      <path
+        d="M4 6l4 4 4-4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
@@ -205,23 +270,19 @@ function ModeBtn({
   active,
   onClick,
   children,
-  compact,
 }: {
   active: boolean;
   onClick: () => void;
   children: ReactNode;
-  compact: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`flex-1 rounded border font-semibold transition-colors ${
-        compact ? "px-2 py-1 text-[11px]" : "px-2 py-1.5 text-[12px]"
-      } ${
+      className={`flex-1 rounded px-2 py-1 text-[11px] font-semibold transition-colors ${
         active
-          ? "border-[var(--tv-text)] bg-[color-mix(in_srgb,var(--tv-text)_12%,transparent)] text-[var(--tv-text)]"
-          : "border-[var(--tv-border)] text-[var(--tv-muted)] hover:text-[var(--tv-text)]"
+          ? "bg-[color-mix(in_srgb,var(--tv-text)_12%,transparent)] text-[var(--tv-text)] shadow-sm"
+          : "text-[var(--tv-muted)] hover:text-[var(--tv-text)]"
       }`}
     >
       {children}
@@ -240,8 +301,6 @@ function BracketRow({
   prefix,
   placeholder,
   accent,
-  compact,
-  pad,
 }: {
   label: string;
   sub: string;
@@ -253,53 +312,50 @@ function BracketRow({
   prefix: string;
   placeholder: string;
   accent: string;
-  compact: boolean;
-  pad: string;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5">
       <button
         type="button"
         onClick={onToggle}
         aria-pressed={enabled}
-        className={`shrink-0 rounded border font-bold transition-colors ${
-          compact ? "h-7 w-10 text-[11px]" : "h-8 w-11 text-[12px]"
-        } ${
+        aria-label={`${sub} ${enabled ? "açık" : "kapalı"}`}
+        className={`inline-flex h-7 w-9 shrink-0 items-center justify-center rounded border text-[11px] font-bold transition-colors ${
           enabled
             ? "border-transparent text-white"
-            : "border-[var(--tv-border)] bg-[var(--tv-panel)] text-[var(--tv-muted)]"
+            : "border-[var(--tv-border)] bg-[var(--tv-bg)] text-[var(--tv-muted)]"
         }`}
         style={enabled ? { backgroundColor: accent } : undefined}
       >
         {label}
       </button>
-      <div className="min-w-0 flex-1">
-        <p className="mb-0.5 text-[10px] text-[var(--tv-muted)]">{sub}</p>
-        <div className="relative">
-          {enabled && mode === "money" && (
-            <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[11px] text-[var(--tv-muted)]">
-              {prefix}
-            </span>
-          )}
-          {enabled && mode === "percent" && (
-            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-[var(--tv-muted)]">
-              %
-            </span>
-          )}
-          <input
-            type="text"
-            inputMode="decimal"
-            disabled={!enabled}
-            value={value}
-            onChange={(e) =>
-              onValue(e.target.value.replace(/[^0-9.,]/g, ""))
-            }
-            placeholder={enabled ? placeholder : "—"}
-            className={`tv-input tv-mono w-full disabled:opacity-40 ${pad} ${
-              mode === "money" && enabled ? "pl-7" : "pl-2"
-            } ${mode === "percent" && enabled ? "pr-7" : "pr-2"}`}
-          />
-        </div>
+      <span className="w-[4.5rem] shrink-0 truncate text-[11px] text-[var(--tv-muted)]">
+        {sub}
+      </span>
+      <div className="relative min-w-0 flex-1">
+        {enabled && mode === "money" && (
+          <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[11px] text-[var(--tv-muted)]">
+            {prefix}
+          </span>
+        )}
+        {enabled && mode === "percent" && (
+          <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-[var(--tv-muted)]">
+            %
+          </span>
+        )}
+        <input
+          type="text"
+          inputMode="decimal"
+          disabled={!enabled}
+          value={value}
+          onChange={(e) =>
+            onValue(e.target.value.replace(/[^0-9.,]/g, ""))
+          }
+          placeholder={enabled ? placeholder : "—"}
+          className={`tv-input trade-tpsl__input tv-mono w-full py-1.5 text-[12px] disabled:opacity-40 ${
+            mode === "money" && enabled ? "pl-6 pr-2" : "pl-2"
+          } ${mode === "percent" && enabled ? "pr-6" : "pr-2"}`}
+        />
       </div>
     </div>
   );
@@ -314,7 +370,6 @@ function PreviewLine({
   needsShares,
   mode,
   shares,
-  compact,
 }: {
   kind: "tp" | "sl";
   price: number | null;
@@ -324,23 +379,22 @@ function PreviewLine({
   needsShares: boolean;
   mode: BracketMode;
   shares: number;
-  compact: boolean;
 }) {
-  const labelPrice = kind === "tp" ? "TP fiyat" : "SL fiyat";
-  const labelAmt = kind === "tp" ? "tahmini kâr" : "tahmini zarar";
+  const labelPrice = kind === "tp" ? "TP" : "SL";
+  const labelAmt = kind === "tp" ? "kâr" : "zarar";
   const color = kind === "tp" ? "text-[#26a69a]" : "text-[#ef5350]";
 
   if (needsShares || (mode === "money" && shares <= 0)) {
     return (
-      <p className={`text-[10px] text-[var(--tv-muted)] ${compact ? "pl-12" : "pl-14"}`}>
-        Tutar modu için önce emir tutarı / hisse girin
+      <p className="-mt-1 text-center text-[10px] leading-tight text-[var(--tv-muted)]">
+        Tutar için önce emir / hisse girin
       </p>
     );
   }
 
   if (price == null) {
     return (
-      <p className={`text-[10px] text-[var(--tv-muted)] ${compact ? "pl-12" : "pl-14"}`}>
+      <p className="-mt-1 text-center text-[10px] leading-tight text-[var(--tv-muted)]">
         Değer girin
       </p>
     );
@@ -348,30 +402,28 @@ function PreviewLine({
 
   if (!ok) {
     return (
-      <p className={`text-[10px] text-[#ef5350] ${compact ? "pl-12" : "pl-14"}`}>
+      <p className="-mt-1 text-center text-[10px] leading-tight text-[#ef5350]">
         {kind === "tp"
-          ? "TP fiyatı girişin üzerinde olmalı"
-          : "SL fiyatı girişin altında ve pozitif olmalı"}
+          ? "TP girişin üzerinde olmalı"
+          : "SL girişin altında ve pozitif olmalı"}
       </p>
     );
   }
 
   return (
     <p
-      className={`tv-mono ${color} ${
-        compact ? "pl-12 text-[10px]" : "pl-14 text-[11px]"
-      }`}
+      className={`tv-mono -mt-1 text-center text-[10px] leading-tight ${color}`}
     >
-      {labelPrice}: {formatMoney(price, currency)}
+      {labelPrice} {formatMoney(price, currency)}
       {amount != null && shares > 0 ? (
         <>
           {" "}
-          · {labelAmt}: {formatMoney(amount, currency)}
+          · {labelAmt} {formatMoney(amount, currency)}
         </>
       ) : mode === "percent" && amount != null ? (
         <>
           {" "}
-          · {labelAmt}/hisse: {formatMoney(amount, currency)}
+          · {labelAmt}/h {formatMoney(amount, currency)}
         </>
       ) : null}
     </p>
