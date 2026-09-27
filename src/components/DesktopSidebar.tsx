@@ -16,12 +16,8 @@ import {
   IconTrade,
   IconUser,
 } from "./Icons";
-import {
-  getDarkMode,
-  getNotifications,
-  setDarkMode,
-  setNotifications,
-} from "@/lib/storage";
+import { NotificationsPanel, useUnreadCount } from "./NotificationsPanel";
+import { getDarkMode, setDarkMode } from "@/lib/storage";
 
 const NAV = [
   { href: "/", label: "Ana sayfa", icon: IconHome },
@@ -35,6 +31,8 @@ export function DesktopSidebar() {
   const pathname = usePathname();
   const [dark, setDark] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const unread = useUnreadCount();
 
   useEffect(() => {
     setDark(getDarkMode());
@@ -50,12 +48,6 @@ export function DesktopSidebar() {
     setDark(next);
     setDarkMode(next);
     flash(next ? "Koyu tema" : "Aydınlık tema");
-  }
-
-  function toggleNotif() {
-    const next = !getNotifications();
-    setNotifications(next);
-    flash(next ? "Bildirimler açıldı" : "Bildirimler kapalı");
   }
 
   return (
@@ -103,11 +95,16 @@ export function DesktopSidebar() {
           <button
             type="button"
             className="sidebar-util"
-            onClick={toggleNotif}
+            onClick={() => setNotifOpen(true)}
             aria-label="Bildirimler"
           >
             <IconBell size={16} />
             <span>Bildirimler</span>
+            {unread > 0 && (
+              <span className="sidebar-util-hint rounded-full bg-danger px-1.5 py-0.5 text-[10px] font-bold text-white opacity-100">
+                {unread > 9 ? "9+" : unread}
+              </span>
+            )}
           </button>
 
           <Link
@@ -120,12 +117,13 @@ export function DesktopSidebar() {
           </Link>
 
           <Link
-            href="/profil"
+            href="/admin"
             className="sidebar-util"
-            aria-label="Ayarlar"
+            aria-label="Admin"
           >
             <IconSettings size={16} />
-            <span>Ayarlar</span>
+            <span>Admin</span>
+            <span className="sidebar-util-hint">PIN</span>
           </Link>
         </div>
       </nav>
@@ -139,6 +137,8 @@ export function DesktopSidebar() {
           {toast}
         </div>
       )}
+
+      <NotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} />
     </aside>
   );
 }

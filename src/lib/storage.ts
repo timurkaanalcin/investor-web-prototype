@@ -142,4 +142,13 @@ export function appendTransaction(tx: StoredTx): void {
 export function clearSession(): void {
   resetOnboarding();
   localStorage.removeItem(TX_EXTRA_KEY);
+  try {
+    // lazy import avoided — clear money keys directly
+    localStorage.removeItem("investor_money_requests");
+    localStorage.removeItem("investor_notifications_feed");
+    localStorage.removeItem("investor_balance_delta");
+    sessionStorage.removeItem("investor_admin_unlocked");
+  } catch {
+    /* ignore */
+  }
 }

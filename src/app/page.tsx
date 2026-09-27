@@ -18,6 +18,10 @@ import {
   type TxSide,
 } from "@/lib/mock-data";
 import { getExtraTransactions } from "@/lib/storage";
+import {
+  getDisplayBalance,
+  subscribeMoneyUpdates,
+} from "@/lib/money-requests";
 
 const RANGES = ["1H", "1A", "3A", "1Y", "Tümü"] as const;
 
@@ -31,6 +35,7 @@ const SIDE_BADGE: Record<TxSide, string> = {
 export default function DashboardPage() {
   const [range, setRange] = useState<(typeof RANGES)[number]>("1A");
   const [recent, setRecent] = useState<Transaction[]>(TRANSACTIONS.slice(0, 4));
+  const [balance, setBalance] = useState(TOTAL_BALANCE);
 
   useEffect(() => {
     const extra = getExtraTransactions() as Transaction[];
@@ -42,6 +47,19 @@ export default function DashboardPage() {
       return true;
     });
     setRecent(unique.slice(0, 4));
+    setBalance(getDisplayBalance());
+    return subscribeMoneyUpdates(() => {
+      setBalance(getDisplayBalance());
+      const extra2 = getExtraTransactions() as Transaction[];
+      const merged2 = [...extra2, ...TRANSACTIONS];
+      const seen2 = new Set<string>();
+      const unique2 = merged2.filter((tx) => {
+        if (seen2.has(tx.id)) return false;
+        seen2.add(tx.id);
+        return true;
+      });
+      setRecent(unique2.slice(0, 4));
+    });
   }, []);
 
   const points = useMemo(() => {
@@ -55,7 +73,7 @@ export default function DashboardPage() {
       <section className="mt-2 md:mt-0">
         <p className="text-sm font-medium text-nest/70">Toplam bakiye</p>
         <h1 className="mt-1 text-4xl font-bold tracking-tight text-nest md:text-5xl">
-          {formatTRY(TOTAL_BALANCE)}
+          {formatTRY(balance)}
         </h1>
         <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-gain-soft px-2.5 py-1 text-sm font-medium text-gain">
           <IconArrowUp size={14} />

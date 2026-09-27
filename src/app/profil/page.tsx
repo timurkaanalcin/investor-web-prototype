@@ -12,10 +12,12 @@ import {
   IconHelp,
   IconLogout,
   IconMenu,
+  IconSettings,
   IconShield,
   IconSun,
 } from "@/components/Icons";
 import { USER } from "@/lib/mock-data";
+import Link from "next/link";
 import {
   clearSession,
   getDarkMode,
@@ -23,6 +25,10 @@ import {
   setDarkMode,
   setNotifications,
 } from "@/lib/storage";
+import {
+  NotificationsPanel,
+  useUnreadCount,
+} from "@/components/NotificationsPanel";
 
 type SheetId =
   | "security"
@@ -60,6 +66,8 @@ export default function ProfilePage() {
   const [notif, setNotif] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
   const [sheet, setSheet] = useState<SheetId>(null);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const unread = useUnreadCount();
 
   useEffect(() => {
     setDark(getDarkMode());
@@ -129,11 +137,13 @@ export default function ProfilePage() {
           type="button"
           aria-label="Bildirimler"
           className="relative profile-text active:opacity-70 min-h-[44px] min-w-[44px]"
-          onClick={toggleNotif}
+          onClick={() => setNotifOpen(true)}
         >
           <IconBell />
-          {notif && (
-            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-nest-blue" />
+          {unread > 0 && (
+            <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[9px] font-bold text-white">
+              {unread > 9 ? "9+" : unread}
+            </span>
           )}
         </button>
       </header>
@@ -242,6 +252,26 @@ export default function ProfilePage() {
             />
           </div>
 
+          <Link href="/yatir" className="profile-row">
+            <span className="profile-icon-chip">
+              <IconBank size={18} />
+            </span>
+            <span className="profile-text flex-1 text-[15px] font-medium">
+              Para yatır / çek
+            </span>
+            <IconChevron className="profile-text-secondary opacity-70" />
+          </Link>
+
+          <Link href="/admin" className="profile-row">
+            <span className="profile-icon-chip">
+              <IconSettings size={18} />
+            </span>
+            <span className="profile-text flex-1 text-[15px] font-medium">
+              Admin (prototip)
+            </span>
+            <IconChevron className="profile-text-secondary opacity-70" />
+          </Link>
+
           <button
             type="button"
             onClick={() => setSheet("logout")}
@@ -334,6 +364,8 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
+
+      <NotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} />
 
       {toast && (
         <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-nest-solid px-4 py-2 text-xs font-medium text-white shadow-lg md:bottom-8">

@@ -1,5 +1,7 @@
+"use client";
+
 import { BrandLogo } from "./BrandLogo";
-import { IconBell } from "./Icons";
+import { NotificationsBell } from "./NotificationsBell";
 
 export function AppHeader({
   right,
@@ -23,16 +25,13 @@ export function AppHeader({
       {right !== undefined ? (
         right
       ) : (
-        <button
-          type="button"
-          aria-label="Bildirimler"
-          className={`relative text-nest min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${
+        <div
+          className={
             centerLogo ? "absolute right-5 md:static" : ""
-          }`}
+          }
         >
-          <IconBell />
-          <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-danger md:right-0 md:top-0" />
-        </button>
+          <NotificationsBell />
+        </div>
       )}
     </header>
   );
