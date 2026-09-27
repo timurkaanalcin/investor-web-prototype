@@ -145,18 +145,18 @@ export function TradeTpSlSection({
   void compact; // API compat (rail + mobile form share compact ticket layout)
 
   return (
-    <div className="trade-tpsl mt-3 w-full max-w-full overflow-hidden rounded border border-[var(--tv-border)] bg-[var(--tv-panel)]">
+    <div className="trade-tpsl mt-3 w-full max-w-full overflow-hidden rounded-md border">
       <button
         type="button"
         onClick={toggleOpen}
         aria-expanded={open}
-        className="trade-tpsl__header flex w-full items-center gap-2 px-2.5 py-2 text-left transition-colors hover:bg-[color-mix(in_srgb,var(--tv-hover)_55%,transparent)]"
+        className="trade-tpsl__header flex w-full items-center gap-2 px-3 py-2.5 text-left transition-colors"
       >
-        <span className="min-w-0 flex-1 truncate text-[12px] font-bold tracking-tight text-[var(--tv-text)]">
+        <span className="trade-tpsl__title min-w-0 flex-1 truncate text-[12px] font-bold tracking-tight text-[var(--tv-text)]">
           TP / SL
         </span>
         {summary && (
-          <span className="tv-mono shrink-0 rounded border border-[var(--tv-border)] bg-[var(--tv-bg)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--tv-text)]">
+          <span className="trade-tpsl__summary tv-mono shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-semibold text-[var(--tv-text)]">
             {summary}
           </span>
         )}
@@ -164,10 +164,13 @@ export function TradeTpSlSection({
       </button>
 
       {open && (
-        <div className="trade-tpsl__body border-t border-[var(--tv-border)] px-2.5 pb-2.5 pt-2">
+        <div className="trade-tpsl__body border-t px-3 pb-3 pt-2.5">
           <div className="mx-auto flex w-full max-w-[300px] flex-col items-stretch gap-2">
-            <div className="flex justify-center">
-              <div className="inline-flex w-full max-w-[220px] gap-1 rounded border border-[var(--tv-border)] bg-[var(--tv-bg)] p-0.5">
+            <div className="trade-tpsl__mode-row flex items-center justify-between gap-3">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--tv-muted)]">
+                Değer biçimi
+              </span>
+              <div className="trade-tpsl__mode inline-flex w-full max-w-[190px] gap-1 rounded border p-0.5">
                 <ModeBtn
                   active={state.mode === "percent"}
                   onClick={() => onChange({ mode: "percent" })}
@@ -233,9 +236,6 @@ export function TradeTpSlSection({
               />
             )}
 
-            <p className="text-center text-[9px] text-[var(--tv-muted)]">
-              {currency} · {side === "buy" ? "Al" : "Sat"} · simülasyon
-            </p>
           </div>
         </div>
       )}
@@ -314,7 +314,7 @@ function BracketRow({
   accent: string;
 }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="trade-tpsl__row flex items-center gap-2 rounded border p-1.5">
       <button
         type="button"
         onClick={onToggle}

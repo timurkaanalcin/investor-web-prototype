@@ -412,9 +412,6 @@ export default function OrderTicketPage() {
               >
                 Devam
               </button>
-              <p className="mt-3 text-center text-[11px] text-[var(--tv-muted)]">
-                Kesirli hisse desteklenir · Komisyon {formatMoney(0, currency)}
-              </p>
             </div>
           </>
         )}

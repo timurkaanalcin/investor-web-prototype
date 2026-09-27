@@ -344,9 +344,6 @@ export function TradeOrderSidePanel({
             >
               Devam
             </button>
-            <p className="mt-2 text-center text-[10px] text-[var(--tv-muted)]">
-              Komisyon {formatMoney(0, currency)} · simülasyon
-            </p>
           </div>
         )}
       </div>

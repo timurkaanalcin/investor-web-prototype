@@ -1092,3 +1092,65 @@ body.dark .notif-drawer {
 .phone-shell.trade-tv .trade-tpsl__input.tv-input:focus {
   border-color: var(--tv-text);
 }
+
+/* TP/SL ticket — keep the control surface crisp in both terminal themes. */
+.phone-shell.trade-tv.trade-tv-light .trade-tpsl {
+  background: #ffffff;
+  border-color: #dfe3ea;
+  color: #131722;
+}
+.phone-shell.trade-tv.trade-tv-light .trade-tpsl__body {
+  border-color: #dfe3ea;
+}
+.phone-shell.trade-tv.trade-tv-light .trade-tpsl__header:hover {
+  background: #f7f8fa;
+}
+.phone-shell.trade-tv.trade-tv-light .trade-tpsl__summary,
+.phone-shell.trade-tv.trade-tv-light .trade-tpsl__mode,
+.phone-shell.trade-tv.trade-tv-light .trade-tpsl__row {
+  background: #ffffff;
+  border-color: #dfe3ea;
+}
+.phone-shell.trade-tv.trade-tv-light .trade-tpsl__summary {
+  background: #f5f7fa;
+}
+.phone-shell.trade-tv.trade-tv-light .trade-tpsl__input.tv-input {
+  background: #ffffff;
+  border-color: #dfe3ea;
+}
+
+.phone-shell.trade-tv.trade-tv-dark .trade-tpsl {
+  background: #000000;
+  border-color: #222222;
+  color: #d1d4dc;
+}
+.phone-shell.trade-tv.trade-tv-dark .trade-tpsl__body {
+  border-color: #222222;
+}
+.phone-shell.trade-tv.trade-tv-dark .trade-tpsl__header:hover {
+  background: #111111;
+}
+.phone-shell.trade-tv.trade-tv-dark .trade-tpsl__summary,
+.phone-shell.trade-tv.trade-tv-dark .trade-tpsl__mode,
+.phone-shell.trade-tv.trade-tv-dark .trade-tpsl__row {
+  background: #000000;
+  border-color: #222222;
+}
+.phone-shell.trade-tv.trade-tv-dark .trade-tpsl__summary {
+  background: #111111;
+}
+.phone-shell.trade-tv.trade-tv-dark .trade-tpsl__input.tv-input {
+  background: #000000;
+  border-color: #222222;
+}
+
+.trade-tpsl__row {
+  min-height: 44px;
+}
+.trade-tpsl__mode {
+  min-height: 29px;
+}
+.trade-tpsl__input.tv-input {
+  border-radius: 3px;
+  box-shadow: none;
+}
