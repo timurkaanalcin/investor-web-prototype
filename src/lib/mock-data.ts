@@ -130,7 +130,11 @@ export type {
   TradeExchange,
   TradeInstrument,
 } from "./trade-instruments";
-export { TRADE_INSTRUMENTS, TRADE_INSTRUMENT_COUNT } from "./trade-instruments";
+export {
+  TRADE_CURRENCIES,
+  TRADE_INSTRUMENTS,
+  TRADE_INSTRUMENT_COUNT,
+} from "./trade-instruments";
 
 export type TradePosition = {
   symbol: string;
@@ -143,11 +147,25 @@ export type TradePosition = {
   plUsd: number;
 };
 
-/** Mock FX: 1 USD = X quote currency */
+/** Mock FX: 1 USD = X quote currency (approx mid rates for sim) */
 export const USD_TRY = 34.2;
 export const USD_RUB = 92.5;
 export const USD_EUR = 0.92;
 export const USD_GBP = 0.78;
+export const USD_JPY = 149.5;
+export const USD_CHF = 0.88;
+export const USD_CAD = 1.36;
+export const USD_AUD = 1.52;
+export const USD_CNY = 7.24;
+export const USD_HKD = 7.81;
+export const USD_SGD = 1.34;
+export const USD_SEK = 10.45;
+export const USD_NOK = 10.72;
+export const USD_PLN = 3.95;
+export const USD_INR = 83.5;
+export const USD_BRL = 5.15;
+export const USD_ZAR = 18.2;
+export const USD_MXN = 17.1;
 
 export const FX_USD: Record<TradeCurrency, number> = {
   USD: 1,
@@ -155,6 +173,20 @@ export const FX_USD: Record<TradeCurrency, number> = {
   RUB: USD_RUB,
   EUR: USD_EUR,
   GBP: USD_GBP,
+  JPY: USD_JPY,
+  CHF: USD_CHF,
+  CAD: USD_CAD,
+  AUD: USD_AUD,
+  CNY: USD_CNY,
+  HKD: USD_HKD,
+  SGD: USD_SGD,
+  SEK: USD_SEK,
+  NOK: USD_NOK,
+  PLN: USD_PLN,
+  INR: USD_INR,
+  BRL: USD_BRL,
+  ZAR: USD_ZAR,
+  MXN: USD_MXN,
 };
 
 export const TRADE_WATCHLIST = [
@@ -227,6 +259,20 @@ const MONEY_LOCALE: Record<TradeCurrency, string> = {
   RUB: "ru-RU",
   EUR: "de-DE",
   GBP: "en-GB",
+  JPY: "ja-JP",
+  CHF: "de-CH",
+  CAD: "en-CA",
+  AUD: "en-AU",
+  CNY: "zh-CN",
+  HKD: "zh-HK",
+  SGD: "en-SG",
+  SEK: "sv-SE",
+  NOK: "nb-NO",
+  PLN: "pl-PL",
+  INR: "en-IN",
+  BRL: "pt-BR",
+  ZAR: "en-ZA",
+  MXN: "es-MX",
 };
 
 const MONEY_SYMBOL: Record<TradeCurrency, string> = {
@@ -235,7 +281,42 @@ const MONEY_SYMBOL: Record<TradeCurrency, string> = {
   RUB: "₽",
   EUR: "€",
   GBP: "£",
+  JPY: "¥",
+  CHF: "CHF",
+  CAD: "C$",
+  AUD: "A$",
+  CNY: "¥",
+  HKD: "HK$",
+  SGD: "S$",
+  SEK: "kr",
+  NOK: "kr",
+  PLN: "zł",
+  INR: "₹",
+  BRL: "R$",
+  ZAR: "R",
+  MXN: "Mex$",
 };
+
+/** Currency symbol / prefix for inputs */
+export function moneySymbol(currency: TradeCurrency): string {
+  return MONEY_SYMBOL[currency] ?? currency;
+}
+
+/** Short unit label for ticket dropdowns (e.g. USD, TRY) */
+export function moneyUnitLabel(currency: TradeCurrency): string {
+  return currency;
+}
+
+/** Convert amount between currencies via USD peg (mock FX) */
+export function convertMoney(
+  amount: number,
+  from: TradeCurrency,
+  to: TradeCurrency
+): number {
+  if (from === to) return amount;
+  const usd = amount / (FX_USD[from] || 1);
+  return usd * (FX_USD[to] || 1);
+}
 
 export function formatUSD(n: number, digits = 2): string {
   return formatMoney(n, "USD", digits);
@@ -248,13 +329,12 @@ export function formatMoney(
 ): string {
   const sym = MONEY_SYMBOL[currency] ?? "$";
   const loc = MONEY_LOCALE[currency] ?? "en-US";
-  return (
-    sym +
-    n.toLocaleString(loc, {
-      minimumFractionDigits: digits,
-      maximumFractionDigits: digits,
-    })
-  );
+  const body = n.toLocaleString(loc, {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+  // Multi-char codes (CHF, C$, …) get a thin space for readability
+  return sym.length > 1 ? `${sym} ${body}` : sym + body;
 }
 
 /** Convert amount in `from` currency to USD */

@@ -10,7 +10,49 @@ export type TradeExchange =
   | "EPA"
   | "OTHER";
 
-export type TradeCurrency = "USD" | "TRY" | "RUB" | "EUR" | "GBP";
+export type TradeCurrency =
+  | "USD"
+  | "TRY"
+  | "RUB"
+  | "EUR"
+  | "GBP"
+  | "JPY"
+  | "CHF"
+  | "CAD"
+  | "AUD"
+  | "CNY"
+  | "HKD"
+  | "SGD"
+  | "SEK"
+  | "NOK"
+  | "PLN"
+  | "INR"
+  | "BRL"
+  | "ZAR"
+  | "MXN";
+
+/** All supported mock trade / display currencies */
+export const TRADE_CURRENCIES: TradeCurrency[] = [
+  "USD",
+  "TRY",
+  "RUB",
+  "EUR",
+  "GBP",
+  "JPY",
+  "CHF",
+  "CAD",
+  "AUD",
+  "CNY",
+  "HKD",
+  "SGD",
+  "SEK",
+  "NOK",
+  "PLN",
+  "INR",
+  "BRL",
+  "ZAR",
+  "MXN",
+];
 
 export type TradeInstrument = {
   symbol: string;

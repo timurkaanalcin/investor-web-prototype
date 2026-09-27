@@ -30,11 +30,20 @@ import {
   formatUSD,
   getInstrument,
   getPosition,
+  moneySymbol,
+  moneyUnitLabel,
   type TradeCurrency,
 } from "@/lib/mock-data";
 import { getMarketStatus } from "@/lib/market-series";
 import { useIsDesktop } from "@/hooks/useMediaQuery";
 import { TradeOrderSidePanel } from "@/components/trade/TradeOrderSidePanel";
+import {
+  TradeTpSlSection,
+  TpSlReviewRows,
+  tpSlAllowsContinue,
+  useTpSlComputed,
+  useTpSlState,
+} from "@/components/trade/TradeTpSlSection";
 
 type Side = "buy" | "sell";
 type SellMode = "shares" | "dollars";
@@ -57,6 +66,7 @@ export default function OrderTicketPage() {
   const [sellMode, setSellMode] = useState<SellMode>("dollars");
   const [unitOpen, setUnitOpen] = useState(false);
   const [taxOpen, setTaxOpen] = useState(true);
+  const [tpSl, patchTpSl, resetTpSl] = useTpSlState();
 
   const { theme, toggle } = useTradeTheme();
   const [chartHeight, setChartHeight] = useState(360);
@@ -78,26 +88,8 @@ export default function OrderTicketPage() {
   const price = instrument?.price ?? 0;
   const currency: TradeCurrency = instrument?.currency ?? "USD";
   const cashAvail = cashInCurrency(currency);
-  const moneyUnit =
-    currency === "TRY"
-      ? "TRY"
-      : currency === "RUB"
-        ? "RUB"
-        : currency === "EUR"
-          ? "EUR"
-          : currency === "GBP"
-            ? "GBP"
-            : "Dolar";
-  const moneyPrefix =
-    currency === "TRY"
-      ? "₺"
-      : currency === "RUB"
-        ? "₽"
-        : currency === "EUR"
-          ? "€"
-          : currency === "GBP"
-            ? "£"
-            : "$";
+  const moneyUnit = moneyUnitLabel(currency);
+  const moneyPrefix = moneySymbol(currency);
   const num = parseFloat(amount.replace(",", ".")) || 0;
 
   const estimatedShares = useMemo(() => {
@@ -122,19 +114,23 @@ export default function OrderTicketPage() {
     return estimateTaxImpact(symbol, estimatedShares);
   }, [side, symbol, estimatedShares]);
 
+  const tpSlComputed = useTpSlComputed(tpSl, side, price, estimatedShares);
+
   const canContinue =
     !!instrument &&
     num > 0 &&
     (side === "buy"
       ? estimatedTotal <= cashAvail
       : estimatedShares > 0 &&
-        estimatedShares <= (position?.shares ?? 0) + 0.0001);
+        estimatedShares <= (position?.shares ?? 0) + 0.0001) &&
+    tpSlAllowsContinue(tpSl, tpSlComputed);
 
   function openTicket(s: Side) {
     setSide(s);
     setAmount("");
     setSellMode("dollars");
     setUnitOpen(false);
+    resetTpSl();
     setStep("ticket");
     setTimeout(() => ticketRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   }
@@ -165,13 +161,24 @@ export default function OrderTicketPage() {
           Emir iletildi
         </h1>
         <p className="mt-2 text-[14px] text-[var(--tv-muted)]">
-          {side === "buy" ? "Alış" : "Satış"} · {instrument.symbol}
+          {side === "buy" ? "Alış" : "Satış"} · {currency} · {instrument.symbol}
         </p>
         <div className="tv-panel mt-6 w-full divide-y divide-[var(--tv-border)] px-4 text-left text-[14px]">
           <TvRow label="Tahmini hisse" value={formatShares(estimatedShares)} />
           <TvRow label="Tahmini tutar" value={formatMoney(estimatedTotal, currency)} />
           <TvRow label="Fiyat" value={formatMoney(price, currency)} />
           <TvRow label="Komisyon" value={formatMoney(0, currency)} accent />
+          {(tpSl.tpEnabled || tpSl.slEnabled) && (
+            <dl className="divide-y divide-[var(--tv-border)]">
+              <TpSlReviewRows
+                state={tpSl}
+                side={side}
+                price={price}
+                shares={estimatedShares}
+                currency={currency}
+              />
+            </dl>
+          )}
         </div>
         <p className="mt-4 text-[11px] text-[var(--tv-muted)]">
           Simülasyon — gerçek işlem yapılmadı.
@@ -187,6 +194,7 @@ export default function OrderTicketPage() {
           onClick={() => {
             setStep("detail");
             setAmount("");
+            resetTpSl();
           }}
           className="trade-press mt-3 w-full rounded border border-[var(--tv-border)] bg-[var(--tv-panel)] py-3 text-sm font-semibold text-[var(--tv-text)]"
         >
@@ -242,6 +250,9 @@ export default function OrderTicketPage() {
             {side === "buy" ? "Al" : "Sat"}
           </span>{" "}
           {instrument.symbol}
+          <span className="ml-2 align-middle tv-ex-badge text-[12px] font-semibold">
+            {currency}
+          </span>
         </h1>
 
         <div className="mt-5 divide-y divide-[var(--tv-border)] border-y border-[var(--tv-border)]">
@@ -378,6 +389,15 @@ export default function OrderTicketPage() {
               </p>
             )}
 
+            <TradeTpSlSection
+              state={tpSl}
+              onChange={patchTpSl}
+              side={side}
+              price={price}
+              shares={estimatedShares}
+              currency={currency}
+            />
+
             <div className="mt-auto pt-8">
               <button
                 type="button"
@@ -442,6 +462,13 @@ export default function OrderTicketPage() {
                     </span>
                   </div>
                 )}
+                <TpSlReviewRows
+                  state={tpSl}
+                  side={side}
+                  price={price}
+                  shares={estimatedShares}
+                  currency={currency}
+                />
               </div>
 
               {side === "sell" && tax && (
@@ -591,6 +618,7 @@ export default function OrderTicketPage() {
               {instrument.symbol}
             </h1>
             <span className="tv-ex-badge">{instrument.exchange}</span>
+            <span className="tv-ex-badge">{instrument.currency}</span>
           </div>
           <p className="truncate text-[11px] text-[var(--tv-muted)]">
             {instrument.name}

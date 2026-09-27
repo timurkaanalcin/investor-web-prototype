@@ -27,6 +27,20 @@ function mockPrice(symbol, currency) {
     RUB: [40, 18000],
     EUR: [5, 420],
     GBP: [40, 2800],
+    JPY: [80, 8000],
+    CHF: [5, 420],
+    CAD: [8, 520],
+    AUD: [8, 520],
+    CNY: [5, 400],
+    HKD: [10, 800],
+    SGD: [5, 400],
+    SEK: [20, 1200],
+    NOK: [20, 1200],
+    PLN: [10, 600],
+    INR: [50, 5000],
+    BRL: [5, 400],
+    ZAR: [20, 1500],
+    MXN: [20, 1500],
   };
   const [lo, hi] = ranges[currency] || ranges.USD;
   let p = lo + u * (hi - lo);

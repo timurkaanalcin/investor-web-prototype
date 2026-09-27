@@ -9,9 +9,18 @@ import {
   formatShares,
   formatUSD,
   getPosition,
+  moneySymbol,
+  moneyUnitLabel,
   type TradeCurrency,
   type TradeInstrument,
 } from "@/lib/mock-data";
+import {
+  TradeTpSlSection,
+  TpSlReviewRows,
+  tpSlAllowsContinue,
+  useTpSlComputed,
+  useTpSlState,
+} from "@/components/trade/TradeTpSlSection";
 
 type Side = "buy" | "sell";
 type SellMode = "shares" | "dollars";
@@ -28,20 +37,12 @@ export function TradeOrderSidePanel({
   const [amount, setAmount] = useState("");
   const [sellMode, setSellMode] = useState<SellMode>("dollars");
   const [step, setStep] = useState<Step>("form");
+  const [tpSl, patchTpSl, resetTpSl] = useTpSlState();
 
   const price = instrument.price;
   const currency: TradeCurrency = instrument.currency;
   const cashAvail = cashInCurrency(currency);
-  const moneyPrefix =
-    currency === "TRY"
-      ? "₺"
-      : currency === "RUB"
-        ? "₽"
-        : currency === "EUR"
-          ? "€"
-          : currency === "GBP"
-            ? "£"
-            : "$";
+  const moneyPrefix = moneySymbol(currency);
   const num = parseFloat(amount.replace(",", ".")) || 0;
 
   const estimatedShares = useMemo(() => {
@@ -66,17 +67,21 @@ export function TradeOrderSidePanel({
     return estimateTaxImpact(instrument.symbol, estimatedShares);
   }, [side, instrument.symbol, estimatedShares]);
 
+  const tpSlComputed = useTpSlComputed(tpSl, side, price, estimatedShares);
+
   const canContinue =
     num > 0 &&
     (side === "buy"
       ? estimatedTotal <= cashAvail
       : estimatedShares > 0 &&
-        estimatedShares <= (position?.shares ?? 0) + 0.0001);
+        estimatedShares <= (position?.shares ?? 0) + 0.0001) &&
+    tpSlAllowsContinue(tpSl, tpSlComputed);
 
   function reset() {
     setAmount("");
     setStep("form");
     setSellMode("dollars");
+    resetTpSl();
   }
 
   return (
@@ -119,7 +124,8 @@ export function TradeOrderSidePanel({
               Emir iletildi
             </p>
             <p className="mt-1 text-[12px] text-[var(--tv-muted)]">
-              {side === "buy" ? "Alış" : "Satış"} · {instrument.symbol}
+              {side === "buy" ? "Alış" : "Satış"} · {currency} ·{" "}
+              {instrument.symbol}
             </p>
             <dl className="mt-4 space-y-2 text-left text-[13px]">
               <div className="flex justify-between">
@@ -134,6 +140,13 @@ export function TradeOrderSidePanel({
                   {formatMoney(estimatedTotal, currency)}
                 </dd>
               </div>
+              <TpSlReviewRows
+                state={tpSl}
+                side={side}
+                price={price}
+                shares={estimatedShares}
+                currency={currency}
+              />
             </dl>
             <p className="mt-3 text-[10px] text-[var(--tv-muted)]">
               Simülasyon — gerçek işlem yok
@@ -155,7 +168,7 @@ export function TradeOrderSidePanel({
               <div className="flex justify-between py-2">
                 <dt className="text-[var(--tv-muted)]">Sembol</dt>
                 <dd className="font-semibold text-[var(--tv-text)]">
-                  {instrument.symbol}
+                  {currency} · {instrument.symbol}
                 </dd>
               </div>
               <div className="flex justify-between py-2">
@@ -176,6 +189,13 @@ export function TradeOrderSidePanel({
                   {formatMoney(0, currency)}
                 </dd>
               </div>
+              <TpSlReviewRows
+                state={tpSl}
+                side={side}
+                price={price}
+                shares={estimatedShares}
+                currency={currency}
+              />
               {side === "sell" && tax && (
                 <div className="flex justify-between py-2">
                   <dt className="text-[var(--tv-muted)]">Tahmini vergi</dt>
@@ -207,6 +227,13 @@ export function TradeOrderSidePanel({
           </div>
         ) : (
           <div>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <span className="tv-ex-badge">{currency}</span>
+              <span className="truncate text-[11px] text-[var(--tv-muted)]">
+                {moneyUnitLabel(currency)} · {instrument.symbol}
+              </span>
+            </div>
+
             <div className="mb-3 text-[12px] text-[var(--tv-muted)]">
               {side === "buy" ? (
                 <>
@@ -267,7 +294,7 @@ export function TradeOrderSidePanel({
                   }}
                   className={`flex-1 rounded border px-2 py-1.5 text-[11px] font-semibold ${
                     sellMode === "dollars"
-                      ? "border-[var(--tv-blue)] text-[var(--tv-text)]"
+                      ? "border-[var(--tv-text)] text-[var(--tv-text)]"
                       : "border-[var(--tv-border)] text-[var(--tv-muted)]"
                   }`}
                 >
@@ -281,7 +308,7 @@ export function TradeOrderSidePanel({
                   }}
                   className={`flex-1 rounded border px-2 py-1.5 text-[11px] font-semibold ${
                     sellMode === "shares"
-                      ? "border-[var(--tv-blue)] text-[var(--tv-text)]"
+                      ? "border-[var(--tv-text)] text-[var(--tv-text)]"
                       : "border-[var(--tv-border)] text-[var(--tv-muted)]"
                   }`}
                 >
@@ -296,6 +323,16 @@ export function TradeOrderSidePanel({
                 {formatMoney(estimatedTotal, currency)}
               </p>
             )}
+
+            <TradeTpSlSection
+              state={tpSl}
+              onChange={patchTpSl}
+              side={side}
+              price={price}
+              shares={estimatedShares}
+              currency={currency}
+              compact
+            />
 
             <button
               type="button"
@@ -316,3 +353,4 @@ export function TradeOrderSidePanel({
     </aside>
   );
 }
+
