@@ -1,22 +1,31 @@
-import { IconLeaf } from "./Icons";
+/** Official investor Swiss wordmark — black ground, gold type */
+const SIZES = {
+  sm: { h: 28, className: "h-7 w-auto" },
+  md: { h: 36, className: "h-9 w-auto" },
+  lg: { h: 56, className: "h-14 w-auto" },
+} as const;
 
-/** Investor wordmark — follows chrome theme (white in dark, black in light) */
 export function BrandLogo({
   size = "md",
   showIcon = true,
 }: {
   size?: "sm" | "md" | "lg";
+  /** Kept for API compat; image includes the mark */
   showIcon?: boolean;
 }) {
-  const text =
-    size === "lg" ? "text-3xl" : size === "sm" ? "text-xl" : "text-2xl";
-  const icon = size === "lg" ? 26 : size === "sm" ? 18 : 22;
+  const { className } = SIZES[size];
+  void showIcon;
   return (
-    <div className="brand-logo flex items-center gap-1.5">
-      {showIcon && <IconLeaf size={icon} className="brand-logo-icon" />}
-      <span className={`font-serif font-semibold tracking-tight ${text}`}>
-        Investor
-      </span>
+    <div className="brand-logo flex items-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/brand/investor-logo.png"
+        alt="investor"
+        className={`${className} rounded-md object-contain`}
+        height={SIZES[size].h}
+        width={SIZES[size].h}
+        decoding="async"
+      />
     </div>
   );
 }
