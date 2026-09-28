@@ -1,0 +1,57 @@
+# HRAM static Next.js export (trailingSlash) — hram.tr docroot
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Explicit public routes
+    RewriteRule ^gizlilik/?$ gizlilik/index.html [L]
+    RewriteRule ^destek/?$ destek/index.html [L]
+    RewriteRule ^panel/?$ panel/index.html [L]
+    RewriteRule ^giris/?$ giris/index.html [L]
+    RewriteRule ^kayit/?$ kayit/index.html [L]
+    RewriteRule ^agent/?$ agent/index.html [L]
+    RewriteRule ^log/?$ log/index.html [L]
+    RewriteRule ^admin/?$ admin/index.html [L]
+    RewriteRule ^admin/dashboard/?$ admin/dashboard/index.html [L]
+    RewriteRule ^admin/customers/?$ admin/customers/index.html [L]
+    RewriteRule ^admin/chat/?$ admin/chat/index.html [L]
+    RewriteRule ^admin/tickets/?$ admin/tickets/index.html [L]
+    RewriteRule ^admin/transactions/?$ admin/transactions/index.html [L]
+    RewriteRule ^admin/desks/?$ admin/desks/index.html [L]
+    RewriteRule ^admin/employees/?$ admin/employees/index.html [L]
+    RewriteRule ^admin/money/?$ admin/money/index.html [L]
+    RewriteRule ^admin/referrals/?$ admin/referrals/index.html [L]
+    RewriteRule ^admin/analytics/?$ admin/analytics/index.html [L]
+    RewriteRule ^admin/settings/?$ admin/settings/index.html [L]
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    RewriteCond %{REQUEST_FILENAME}/index.html -f
+    RewriteRule ^(.*)$ $1/index.html [L]
+
+    RewriteRule ^ /index.html [L]
+</IfModule>
+
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    <FilesMatch "\.(css|js|svg|woff2?|png|jpg|jpeg|gif|ico|webp)$">
+        Header set Cache-Control "public, max-age=604800"
+    </FilesMatch>
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
