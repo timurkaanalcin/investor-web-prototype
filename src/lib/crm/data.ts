@@ -1,4 +1,6 @@
-/** Client-side CRM mock layer (localStorage). No Prisma — static-export safe. */
+/** Client-side CRM mock layer (localStorage). No Prisma — static-export safe.
+ * PROTOTYPE ONLY — not a production CRM. Do not treat leads/balances as real.
+ */
 
 const DESKS_KEY = "hram_crm_desks";
 const EMPLOYEES_KEY = "hram_crm_employees";
@@ -19,6 +21,8 @@ export type CrmPermission =
   | "settings"
   | "analytics"
   | "transactions"
+  | "terminal"
+  | "risk"
   | "admin";
 
 export type CrmDesk = {
@@ -109,7 +113,7 @@ const SEED_DESKS: CrmDesk[] = [
   { id: "desk_aff", name: "Affiliate", type: "Affiliate", leadCount: 27, depositSum: 92000 },
 ];
 
-const SHIFT_PERMS = ["shift", "chat", "customers", "tickets", "desks"] as const;
+const SHIFT_PERMS = ["shift", "chat", "customers", "tickets", "desks", "terminal"] as const;
 
 const SEED_EMPLOYEES: CrmEmployee[] = [
   {
@@ -120,7 +124,7 @@ const SEED_EMPLOYEES: CrmEmployee[] = [
     role: "Admin",
     deskId: "desk_sup",
     active: true,
-    permissions: ["admin", "shift", "chat", "customers", "tickets", "desks", "employees", "money", "referrals", "settings", "analytics", "transactions"],
+    permissions: ["admin", "shift", "chat", "customers", "tickets", "desks", "employees", "money", "referrals", "settings", "analytics", "transactions", "terminal", "risk"],
   },
   {
     id: "emp_2",
@@ -441,4 +445,132 @@ export function hasCrmPermission(
 export function isFullCrmAdmin(session: CrmSession | null): boolean {
   if (!session) return false;
   return session.via === "admin_pin" || session.permissions.includes("admin");
+}
+
+
+/** All grantable CRM permissions (Turkish labels in UI). */
+export const CRM_ALL_PERMISSIONS: { id: CrmPermission; label: string }[] = [
+  { id: "admin", label: "Tam yetki (admin)" },
+  { id: "shift", label: "Shift / vardiya" },
+  { id: "chat", label: "Sohbet" },
+  { id: "customers", label: "Müşteriler" },
+  { id: "tickets", label: "Biletler" },
+  { id: "desks", label: "Masalar" },
+  { id: "employees", label: "Çalışanlar" },
+  { id: "money", label: "Para talepleri" },
+  { id: "referrals", label: "Referans" },
+  { id: "settings", label: "Ayarlar" },
+  { id: "analytics", label: "Analitik" },
+  { id: "transactions", label: "İşlemler" },
+  { id: "terminal", label: "İşlem terminali" },
+  { id: "risk", label: "Risk" },
+];
+
+export const CRM_PERMISSION_PACKS: Record<string, { label: string; perms: string[] }> = {
+  full_admin: {
+    label: "Tam Admin",
+    perms: CRM_ALL_PERMISSIONS.map((p) => p.id),
+  },
+  shift: {
+    label: "Shift paket",
+    perms: ["shift", "chat", "customers", "tickets", "desks", "terminal"],
+  },
+  broker: {
+    label: "Broker",
+    perms: ["chat", "customers", "tickets", "terminal"],
+  },
+  support: {
+    label: "Destek",
+    perms: ["chat", "customers", "tickets", "desks"],
+  },
+  risk_ops: {
+    label: "Risk operasyon",
+    perms: ["terminal", "risk", "transactions", "analytics", "customers"],
+  },
+};
+
+function persistEmployees(list: CrmEmployee[]): void {
+  localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(list));
+  emit();
+}
+
+export function upsertCrmEmployee(
+  input: Omit<CrmEmployee, "id"> & { id?: string },
+): CrmEmployee {
+  ensureCrmSeeded();
+  const list = getCrmEmployees();
+  if (input.id) {
+    const idx = list.findIndex((e) => e.id === input.id);
+    if (idx >= 0) {
+      const next: CrmEmployee = {
+        ...list[idx],
+        ...input,
+        id: list[idx].id,
+        permissions: Array.isArray(input.permissions)
+          ? input.permissions
+          : list[idx].permissions,
+      };
+      // Protect Magda/Alisa from accidental permission wipe if empty
+      if (
+        (next.id === "emp_magda" || next.id === "emp_alisa") &&
+        (!next.permissions || next.permissions.length === 0)
+      ) {
+        next.permissions = [...SHIFT_PERMS];
+      }
+      list[idx] = next;
+      persistEmployees(list);
+      return next;
+    }
+  }
+  const emailKey = input.email.trim().toLowerCase();
+  if (list.some((e) => e.email.toLowerCase() === emailKey)) {
+    throw new Error("Bu e-posta zaten kayıtlı");
+  }
+  const emp: CrmEmployee = {
+    id: input.id || `emp_${Date.now().toString(36)}`,
+    name: input.name.trim(),
+    email: emailKey,
+    password: input.password || `Agent${Math.random().toString(36).slice(2, 8)}!`,
+    role: input.role || "Broker",
+    deskId: input.deskId || "desk_sup",
+    active: input.active !== false,
+    permissions: Array.isArray(input.permissions) ? input.permissions : [],
+  };
+  list.push(emp);
+  persistEmployees(list);
+  return emp;
+}
+
+export function setCrmEmployeeActive(id: string, active: boolean): void {
+  const list = getCrmEmployees().map((e) =>
+    e.id === id ? { ...e, active } : e,
+  );
+  persistEmployees(list);
+}
+
+export function removeCrmEmployee(id: string): { ok: boolean; error?: string } {
+  if (id === "emp_1" || id === "emp_magda" || id === "emp_alisa") {
+    return {
+      ok: false,
+      error: "Bu hesap korumalı (Admin / Magda / Alisa). Pasife alınabilir.",
+    };
+  }
+  const list = getCrmEmployees().filter((e) => e.id !== id);
+  persistEmployees(list);
+  return { ok: true };
+}
+
+export function resetCrmEmployeePassword(
+  id: string,
+  password: string,
+): { ok: boolean; error?: string } {
+  if (!password || password.length < 4) {
+    return { ok: false, error: "Şifre en az 4 karakter" };
+  }
+  const list = getCrmEmployees();
+  const idx = list.findIndex((e) => e.id === id);
+  if (idx < 0) return { ok: false, error: "Çalışan bulunamadı" };
+  list[idx] = { ...list[idx], password };
+  persistEmployees(list);
+  return { ok: true };
 }

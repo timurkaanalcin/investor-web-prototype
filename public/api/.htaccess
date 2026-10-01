@@ -1,0 +1,4 @@
+<FilesMatch "^(hram-secret\.php|hram-pin\.local\.php|referral-codes\.json)$">
+  Require all denied
+</FilesMatch>
+# Allow referrals.php / quote.php / ohlc.php / admin-pin.php

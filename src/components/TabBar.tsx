@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { IconHistory, IconHome, IconInvest, IconTrade, IconUser } from "./Icons";
 
 const TABS = [
-  { href: "/", label: "Ana sayfa", icon: IconHome },
+  { href: "/panel", label: "Ana sayfa", icon: IconHome },
   { href: "/yatir", label: "Yatır", icon: IconInvest },
   { href: "/trade", label: "Trade", icon: IconTrade },
   { href: "/islemler", label: "İşlemler", icon: IconHistory },
@@ -20,8 +20,8 @@ export function TabBar() {
       <ul className="flex items-stretch justify-around">
         {TABS.map(({ href, label, icon: Icon }) => {
           const active =
-            href === "/"
-              ? pathname === "/"
+            href === "/panel"
+              ? pathname === "/panel" || pathname === "/"
               : pathname.startsWith(href);
           return (
             <li key={href} className="flex-1">

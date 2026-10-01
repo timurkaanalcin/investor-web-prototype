@@ -1,0 +1,2458 @@
+[
+[
+"ISATR",
+"Türkiye İş Bankası (A)"
+],
+[
+"ISBTR",
+"Türkiye İş Bankası (B)"
+],
+[
+"ASELS",
+"Aselsan"
+],
+[
+"QNBTR",
+"QNB Bank"
+],
+[
+"TUPRS",
+"Tüpraş"
+],
+[
+"KCHOL",
+"Koç Holding"
+],
+[
+"GARAN",
+"Garanti BBVA"
+],
+[
+"ENPRA",
+"Enpara Bank"
+],
+[
+"ENKAI",
+"Enka İnşaat"
+],
+[
+"BIMAS",
+"BİM"
+],
+[
+"THYAO",
+"Türk Hava Yolları"
+],
+[
+"DSTKF",
+"Destek Finans Faktoring"
+],
+[
+"AKBNK",
+"Akbank"
+],
+[
+"VAKBN",
+"VakıfBank"
+],
+[
+"ISCTR",
+"İş Bankası (C)"
+],
+[
+"HALKB",
+"Halkbank"
+],
+[
+"YKBNK",
+"Yapı Kredi"
+],
+[
+"FROTO",
+"Ford Otosan"
+],
+[
+"ASTOR",
+"Astor Enerji"
+],
+[
+"EREGL",
+"Ereğli Demir Çelik"
+],
+[
+"CCOLA",
+"Coca-Cola İçecek"
+],
+[
+"TCELL",
+"Turkcell"
+],
+[
+"TTKOM",
+"Türk Telekom"
+],
+[
+"ISDMR",
+"İskenderun Demir Çelik"
+],
+[
+"SAHOL",
+"Sabancı Holding"
+],
+[
+"TRALT",
+"Türk Altın İşletmeleri"
+],
+[
+"OZATD",
+"Özata Denizcilik"
+],
+[
+"GUBRF",
+"Gübre Fabrikaları"
+],
+[
+"TOASO",
+"Tofaş"
+],
+[
+"INVES",
+"Investco Holding"
+],
+[
+"ENJSA",
+"Enerjisa Enerji"
+],
+[
+"ENERY",
+"Enerya Enerji"
+],
+[
+"TURSG",
+"Türkiye Sigorta"
+],
+[
+"SISE",
+"Şişecam"
+],
+[
+"AHGAZ",
+"Ahlatcı Doğalgaz"
+],
+[
+"AEFES",
+"Anadolu Efes"
+],
+[
+"SASA",
+"Sasa Polyester"
+],
+[
+"OYAKC",
+"Oyak Çimento"
+],
+[
+"TKFEN",
+"Tekfen Holding"
+],
+[
+"RYGYO",
+"Reysaş GYO"
+],
+[
+"TAVHL",
+"TAV Havalimanları"
+],
+[
+"KRDMB",
+"Kardemir (B)"
+],
+[
+"KENT",
+"Kent Gıda"
+],
+[
+"BRSAN",
+"Borusan Boru"
+],
+[
+"MGROS",
+"Migros"
+],
+[
+"KTLEV",
+"Katılımevim"
+],
+[
+"TRGYO",
+"Torunlar GYO"
+],
+[
+"ZRGYO",
+"Ziraat GYO"
+],
+[
+"AKSEN",
+"Aksa Enerji"
+],
+[
+"KLNMA",
+"Kalkınma Yatırım Bankası"
+],
+[
+"AGHOL",
+"Anadolu Grubu Holding"
+],
+[
+"PKENT",
+"Petrokent Turizm"
+],
+[
+"MPARK",
+"MLP Sağlık"
+],
+[
+"SELEC",
+"Selçuk Ecza"
+],
+[
+"PGSUS",
+"Pegasus"
+],
+[
+"QNBFK",
+"QNB Finansal Kiralama"
+],
+[
+"EKGYO",
+"Emlak Konut GYO"
+],
+[
+"TERA",
+"Tera Yatırım"
+],
+[
+"AYGAZ",
+"Aygaz"
+],
+[
+"RGYAS",
+"Rönesans Gayrimenkul"
+],
+[
+"AKFIS",
+"Akfen İnşaat"
+],
+[
+"TRHOL",
+"Tera Finansal Yatırımlar"
+],
+[
+"ARCLK",
+"Arçelik"
+],
+[
+"TABGD",
+"Tab Gıda"
+],
+[
+"TRMET",
+"TR Anadolu Metal"
+],
+[
+"IEYHO",
+"Işıklar Enerji"
+],
+[
+"CVKMD",
+"CVK Maden"
+],
+[
+"KRDMD",
+"Kardemir (D)"
+],
+[
+"PETKM",
+"Petkim"
+],
+[
+"RYSAS",
+"Reysaş Taşımacılık"
+],
+[
+"KRDMA",
+"Kardemir (A)"
+],
+[
+"DOHOL",
+"Doğan Holding"
+],
+[
+"ANSGR",
+"Anadolu Sigorta"
+],
+[
+"YGGYO",
+"Yeni Gimat GYO"
+],
+[
+"ISMEN",
+"İş Yatırım"
+],
+[
+"MAGEN",
+"Margün Enerji"
+],
+[
+"GLRMK",
+"Gülermak"
+],
+[
+"ECILC",
+"Eczacıbaşı İlaç"
+],
+[
+"ALARK",
+"Alarko Holding"
+],
+[
+"ANHYT",
+"Anadolu Hayat Emeklilik"
+],
+[
+"AKSA",
+"Aksa Akrilik"
+],
+[
+"BRYAT",
+"Borusan Yatırım"
+],
+[
+"AGESA",
+"AgeSA Hayat Emeklilik"
+],
+[
+"TEHOL",
+"Tera Teknoloji Holding"
+],
+[
+"TBORG",
+"Türk Tuborg"
+],
+[
+"TTRAK",
+"Türk Traktör"
+],
+[
+"KLRHO",
+"Kiler Holding"
+],
+[
+"AKCNS",
+"Akçansa"
+],
+[
+"EUPWR",
+"Europower Enerji"
+],
+[
+"CIMSA",
+"Çimsa"
+],
+[
+"BIGEN",
+"Birleşim Grup Enerji"
+],
+[
+"ARMGD",
+"Armada Gıda"
+],
+[
+"RALYH",
+"Ral Yatırım Holding"
+],
+[
+"OTKAR",
+"Otokar"
+],
+[
+"HEDEF",
+"Hedef Holding"
+],
+[
+"CLEBI",
+"Çelebi Hava Servisi"
+],
+[
+"DOAS",
+"Doğuş Otomotiv"
+],
+[
+"SOKM",
+"Şok Marketler"
+],
+[
+"GENIL",
+"Gen İlaç"
+],
+[
+"ULKER",
+"Ülker"
+],
+[
+"NUHCM",
+"Nuh Çimento"
+],
+[
+"GLYHO",
+"Global Yatırım Holding"
+],
+[
+"EFOR",
+"Efor Yatırım"
+],
+[
+"ODINE",
+"Odine Solutions"
+],
+[
+"CRFSA",
+"CarrefourSA"
+],
+[
+"MAVI",
+"Mavi Giyim"
+],
+[
+"VERUS",
+"Verusa Holding"
+],
+[
+"ADGYO",
+"Adra GYO"
+],
+[
+"TSKB",
+"TSKB"
+],
+[
+"BASGZ",
+"Başkent Doğalgaz"
+],
+[
+"GRSEL",
+"Gür-Sel Turizm"
+],
+[
+"TRENJ",
+"TR Doğal Enerji"
+],
+[
+"CWENE",
+"CW Enerji"
+],
+[
+"YEOTK",
+"Yeo Teknoloji"
+],
+[
+"AKFYE",
+"Akfen Yenilenebilir"
+],
+[
+"ECZYT",
+"Eczacıbaşı Yatırım"
+],
+[
+"PEKGY",
+"Peker GYO"
+],
+[
+"ALKLC",
+"Altınkılıç Gıda"
+],
+[
+"ARASE",
+"Doğu Aras Enerji"
+],
+[
+"UFUK",
+"Ufuk Yatırım"
+],
+[
+"ISGYO",
+"İş GYO"
+],
+[
+"AKSGY",
+"Akiş GYO"
+],
+[
+"MOGAN",
+"Mogan Enerji"
+],
+[
+"TCKRC",
+"Kıraç Galvaniz"
+],
+[
+"BRISA",
+"Brisa"
+],
+[
+"PASEU",
+"Pasifik Eurasia"
+],
+[
+"KLYPV",
+"Kalyon Güneş"
+],
+[
+"KCAER",
+"Kocaer Çelik"
+],
+[
+"GESAN",
+"Girişim Elektrik"
+],
+[
+"AVPGY",
+"Avrupakent GYO"
+],
+[
+"RAYSG",
+"Ray Sigorta"
+],
+[
+"SARKY",
+"Sarkuysan"
+],
+[
+"ALBRK",
+"Albaraka Türk"
+],
+[
+"ARDYZ",
+"ARD Grup Bilişim"
+],
+[
+"LYDHO",
+"Lydia Holding"
+],
+[
+"DEVA",
+"Deva Holding"
+],
+[
+"CMENT",
+"Çimentaş"
+],
+[
+"PAHOL",
+"Pasifik Holding"
+],
+[
+"KONYA",
+"Konya Çimento"
+],
+[
+"EGPRO",
+"Ege Profil"
+],
+[
+"HEKTS",
+"Hektaş"
+],
+[
+"EGEEN",
+"Ege Endüstri"
+],
+[
+"CEMZY",
+"Cem Zeytin"
+],
+[
+"OZKGY",
+"Özak GYO"
+],
+[
+"AYDEM",
+"Aydem Yenilenebilir"
+],
+[
+"NTHOL",
+"Net Holding"
+],
+[
+"ENTRA",
+"IC Enterra Enerji"
+],
+[
+"ECOGR",
+"Ecogreen Enerji"
+],
+[
+"ANELE",
+"Anel Elektrik"
+],
+[
+"MRSHL",
+"Marshall Boya"
+],
+[
+"HLGYO",
+"Halk GYO"
+],
+[
+"FENER",
+"Fenerbahçe Futbol"
+],
+[
+"DMRGD",
+"DMR Unlu Mamuller"
+],
+[
+"POLHO",
+"Polisan Holding"
+],
+[
+"GMTAS",
+"Gimat Mağazacılık"
+],
+[
+"LILAK",
+"Lila Kağıt"
+],
+[
+"KUYAS",
+"Kuyaş Yatırım"
+],
+[
+"GRTHO",
+"Grainturk Holding"
+],
+[
+"BSOKE",
+"Batısöke Çimento"
+],
+[
+"ICBCT",
+"ICBC Turkey"
+],
+[
+"SKBNK",
+"Şekerbank"
+],
+[
+"BFREN",
+"Bosch Fren"
+],
+[
+"PSGYO",
+"Pasifik GYO"
+],
+[
+"MIATK",
+"Mia Teknoloji"
+],
+[
+"ULUSE",
+"Ulusoy Elektrik"
+],
+[
+"LOGO",
+"Logo Yazılım"
+],
+[
+"BANVT",
+"Banvit"
+],
+[
+"HRKET",
+"Hareket Proje"
+],
+[
+"DOFRB",
+"DOF Robotik"
+],
+[
+"ALTNY",
+"Altınay Savunma"
+],
+[
+"BMSTL",
+"BMS Birleşik Metal"
+],
+[
+"EBEBK",
+"Ebebek"
+],
+[
+"OBAMS",
+"Oba Makarnacılık"
+],
+[
+"BTCIM",
+"Batıçim"
+],
+[
+"SUNTK",
+"Sun Tekstil"
+],
+[
+"NETCD",
+"Netcad Yazılım"
+],
+[
+"ISFIN",
+"İş Finansal Kiralama"
+],
+[
+"GUNDG",
+"Gündoğdu Gıda"
+],
+[
+"LMKDC",
+"Limak Doğu Anadolu Çimento"
+],
+[
+"ALFAS",
+"Alfa Solar"
+],
+[
+"POLTK",
+"Politeknik Metal"
+],
+[
+"GSRAY",
+"Galatasaray Sportif"
+],
+[
+"TNZTP",
+"Tapdi Oksijen"
+],
+[
+"CANTE",
+"Çan2 Termik"
+],
+[
+"GWIND",
+"Galata Wind"
+],
+[
+"KORDS",
+"Kordsa"
+],
+[
+"TRCAS",
+"Turcas Holding"
+],
+[
+"ASUZU",
+"Anadolu Isuzu"
+],
+[
+"MOBTL",
+"Mobiltel"
+],
+[
+"SNGYO",
+"Sinpaş GYO"
+],
+[
+"GEREL",
+"Gersan Elektrik"
+],
+[
+"PATEK",
+"Pasifik Teknoloji"
+],
+[
+"PAGYO",
+"Panora GYO"
+],
+[
+"DAPGM",
+"DAP Gayrimenkul"
+],
+[
+"CELHA",
+"Çelik Halat"
+],
+[
+"SDTTR",
+"SDT Uzay Savunma"
+],
+[
+"KLKIM",
+"Kalekim"
+],
+[
+"IZMDC",
+"İzmir Demir Çelik"
+],
+[
+"LYDYE",
+"Lydia Yeşil Enerji"
+],
+[
+"TUKAS",
+"Tukaş"
+],
+[
+"ZOREN",
+"Zorlu Enerji"
+],
+[
+"IZENR",
+"İzdemir Enerji"
+],
+[
+"GEDIK",
+"Gedik Yatırım"
+],
+[
+"KLSER",
+"Kaleseramik"
+],
+[
+"EGGUB",
+"Ege Gübre"
+],
+[
+"JANTS",
+"Jantsa"
+],
+[
+"BAHKM",
+"Bahadır Kimya"
+],
+[
+"KAYSE",
+"Kayseri Şeker"
+],
+[
+"VAKKO",
+"Vakko"
+],
+[
+"AYCES",
+"Altın Yunus"
+],
+[
+"ESCAR",
+"Escar Filo"
+],
+[
+"ODAS",
+"Odaş Elektrik"
+],
+[
+"SMRTG",
+"Smart Güneş"
+],
+[
+"DGGYO",
+"Doğuş GYO"
+],
+[
+"AKFGY",
+"Akfen GYO"
+],
+[
+"YYLGD",
+"Yayla Agro"
+],
+[
+"GARFA",
+"Garanti Faktoring"
+],
+[
+"HTTBT",
+"Hitit Bilgisayar"
+],
+[
+"MEGMT",
+"Mega Metal"
+],
+[
+"SONME",
+"Sönmez Filament"
+],
+[
+"ORGE",
+"Orge Enerji"
+],
+[
+"BINBN",
+"Bin Ulaşım"
+],
+[
+"KOTON",
+"Koton"
+],
+[
+"BINHO",
+"1000 Yatırımlar Holding"
+],
+[
+"OFSYM",
+"Ofis Yem"
+],
+[
+"OYYAT",
+"Oyak Yatırım"
+],
+[
+"TARKM",
+"Tarkim Bitki Koruma"
+],
+[
+"VAKFA",
+"Vakıf Faktoring"
+],
+[
+"AKGRT",
+"Aksigorta"
+],
+[
+"KGYO",
+"Koray GYO"
+],
+[
+"EMPAE",
+"Empa Elektronik"
+],
+[
+"MCARD",
+"Metropal"
+],
+[
+"KSTUR",
+"Kuştur Turizm"
+],
+[
+"AKMGY",
+"Akmerkez GYO"
+],
+[
+"KARSN",
+"Karsan"
+],
+[
+"BALSU",
+"Balsu Gıda"
+],
+[
+"HATSN",
+"Hat-San Gemi"
+],
+[
+"BOSSA",
+"Bossa"
+],
+[
+"KBORU",
+"Kuzey Boru"
+],
+[
+"INDES",
+"İndeks Bilgisayar"
+],
+[
+"MAALT",
+"Marmaris Altınyunus"
+],
+[
+"AHSGY",
+"Ahes GYO"
+],
+[
+"BESLR",
+"Besler Gıda"
+],
+[
+"AYEN",
+"Ayen Enerji"
+],
+[
+"KARTN",
+"Kartonsan"
+],
+[
+"GOZDE",
+"Gözde Girişim"
+],
+[
+"LIDER",
+"LDR Turizm"
+],
+[
+"BUCIM",
+"Bursa Çimento"
+],
+[
+"INGRM",
+"Ingram Micro"
+],
+[
+"AKHAN",
+"Akhan Un"
+],
+[
+"BJKAS",
+"Beşiktaş Futbol"
+],
+[
+"VKGYO",
+"Vakıf GYO"
+],
+[
+"SNPAM",
+"Sönmez Pamuklu"
+],
+[
+"MEYSU",
+"Meysu Gıda"
+],
+[
+"KMPUR",
+"Kimteks Poliüretan"
+],
+[
+"VESBE",
+"Vestel Beyaz Eşya"
+],
+[
+"TMSN",
+"Tümosan"
+],
+[
+"SVGYO",
+"Savur GYO"
+],
+[
+"BASCM",
+"Baştaş Çimento"
+],
+[
+"FZLGY",
+"Fuzul GYO"
+],
+[
+"KOCMT",
+"Koç Metalurji"
+],
+[
+"NTGAZ",
+"Naturelgaz"
+],
+[
+"SRVGY",
+"Servet GYO"
+],
+[
+"ALCAR",
+"Alarko Carrier"
+],
+[
+"ADEL",
+"Adel Kalemcilik"
+],
+[
+"VESTL",
+"Vestel"
+],
+[
+"ASGYO",
+"Asce GYO"
+],
+[
+"TSPOR",
+"Trabzonspor"
+],
+[
+"EUREN",
+"Europen Endüstri"
+],
+[
+"ARSAN",
+"Arsan Holding"
+],
+[
+"TUREX",
+"Tureks Turizm"
+],
+[
+"FORTE",
+"Forte Bilişim"
+],
+[
+"AKENR",
+"Akenerji"
+],
+[
+"BLUME",
+"Blume Metal Kimya"
+],
+[
+"BOBET",
+"Boğaziçi Beton"
+],
+[
+"KLSYN",
+"Koleksiyon Mobilya"
+],
+[
+"ALGYO",
+"Alarko GYO"
+],
+[
+"INVEO",
+"Inveo Yatırım"
+],
+[
+"ENDAE",
+"Enda Enerji"
+],
+[
+"GLCVY",
+"Gelecek Varlık"
+],
+[
+"VAKFN",
+"Vakıf Finansal Kiralama"
+],
+[
+"BARMA",
+"Barem Ambalaj"
+],
+[
+"AAGYO",
+"Ağaoğlu Avrasya GYO"
+],
+[
+"BIENY",
+"Bien Yapı"
+],
+[
+"QUAGR",
+"Qua Granite"
+],
+[
+"KZBGY",
+"Kızılbük GYO"
+],
+[
+"PRKAB",
+"Türk Prysmian Kablo"
+],
+[
+"TATEN",
+"Tatlıpınar Enerji"
+],
+[
+"VSNMD",
+"Vişne Madencilik"
+],
+[
+"CATES",
+"Çates Elektrik"
+],
+[
+"DOKTA",
+"Döktaş"
+],
+[
+"YIGIT",
+"Yiğit Akü"
+],
+[
+"GOKNR",
+"Göknur Gıda"
+],
+[
+"BORSK",
+"Bor Şeker"
+],
+[
+"MOPAS",
+"Mopaş Marketçilik"
+],
+[
+"ULUUN",
+"Ulusoy Un"
+],
+[
+"PARSN",
+"Parsan Makina"
+],
+[
+"KLGYO",
+"Kiler GYO"
+],
+[
+"ISKPL",
+"Işık Plastik"
+],
+[
+"NETAS",
+"Netaş"
+],
+[
+"ATATP",
+"ATP Yazılım"
+],
+[
+"BIOEN",
+"Biotrend Enerji"
+],
+[
+"ATAKP",
+"Atakey Patates"
+],
+[
+"KAREL",
+"Karel Elektronik"
+],
+[
+"GENKM",
+"Gentaş Kimya"
+],
+[
+"ESEN",
+"Esenboğa Elektrik"
+],
+[
+"ATATR",
+"Ata Turizm"
+],
+[
+"SEGMN",
+"Seğmen Kardeşler"
+],
+[
+"MANAS",
+"Manas Enerji"
+],
+[
+"ALKA",
+"Alkim Kağıt"
+],
+[
+"MERIT",
+"Merit Turizm"
+],
+[
+"OZSUB",
+"Özsu Balık"
+],
+[
+"OZYSR",
+"Özyaşar Tel"
+],
+[
+"MARMR",
+"Marmara Holding"
+],
+[
+"GOLTS",
+"Göltaş Çimento"
+],
+[
+"KERVN",
+"Kervansaray Yatırım"
+],
+[
+"ZERGY",
+"Zeray GYO"
+],
+[
+"KRVGD",
+"Kervan Gıda"
+],
+[
+"BIGTK",
+"Big Medya"
+],
+[
+"AFYON",
+"Afyon Çimento"
+],
+[
+"SMRVA",
+"Sümer Varlık"
+],
+[
+"KOPOL",
+"Koza Polyester"
+],
+[
+"MNDTR",
+"Mondi Turkey"
+],
+[
+"HOROZ",
+"Horoz Lojistik"
+],
+[
+"DESA",
+"Desa Deri"
+],
+[
+"BESTE",
+"Best Brands Enerji"
+],
+[
+"EKOS",
+"Ekos Teknoloji"
+],
+[
+"IHAAS",
+"İhlas Haber Ajansı"
+],
+[
+"GIPTA",
+"Gıpta Ofis"
+],
+[
+"INFO",
+"İnfo Yatırım"
+],
+[
+"TATGD",
+"Tat Gıda"
+],
+[
+"FONET",
+"Fonet Bilgi"
+],
+[
+"INTEM",
+"İntema"
+],
+[
+"PENTA",
+"Penta Teknoloji"
+],
+[
+"ORMA",
+"Orma Orman"
+],
+[
+"PLTUR",
+"Platform Turizm"
+],
+[
+"CEMTS",
+"Çemtaş"
+],
+[
+"FMIZP",
+"Federal Mogul İzmit"
+],
+[
+"IZFAS",
+"İzmir Fırça"
+],
+[
+"CGCAM",
+"Çağdaş Cam"
+],
+[
+"FRMPL",
+"Formül Plastik"
+],
+[
+"AYES",
+"Ayes Çelik Hasır"
+],
+[
+"YATAS",
+"Yataş"
+],
+[
+"UCAYM",
+"Üçay Mühendislik"
+],
+[
+"ALKIM",
+"Alkim Alkali Kimya"
+],
+[
+"REEDR",
+"Reeder Teknoloji"
+],
+[
+"ZGYO",
+"Z GYO"
+],
+[
+"EGEPO",
+"Nasmed Sağlık"
+],
+[
+"TEZOL",
+"Europap Tezol"
+],
+[
+"GSDHO",
+"GSD Holding"
+],
+[
+"BULGS",
+"Bulls Girişim"
+],
+[
+"SURGY",
+"Sur Tatil Evleri GYO"
+],
+[
+"PCILT",
+"PC İletişim"
+],
+[
+"ALCTL",
+"Alcatel Lucent Teletas"
+],
+[
+"METRO",
+"Metro Ticari Yatırımlar"
+],
+[
+"HURGZ",
+"Hürriyet"
+],
+[
+"LINK",
+"Link Bilgisayar"
+],
+[
+"ADESE",
+"Adese Gayrimenkul"
+],
+[
+"KAPLM",
+"Kaplamin Ambalaj"
+],
+[
+"BURVA",
+"Burçelik Vana"
+],
+[
+"SAYAS",
+"Say Yenilenebilir"
+],
+[
+"AGROT",
+"Agrotech"
+],
+[
+"KUVVA",
+"Kuvva Gıda"
+],
+[
+"NATEN",
+"Naturel Yenilenebilir"
+],
+[
+"AZTEK",
+"Aztek Teknoloji"
+],
+[
+"KATMR",
+"Katmerciler"
+],
+[
+"PNSUT",
+"Pınar Süt"
+],
+[
+"GOODY",
+"Goodyear"
+],
+[
+"KRONT",
+"Kron Teknoloji"
+],
+[
+"TSGYO",
+"TSKB GYO"
+],
+[
+"GENTS",
+"Gentaş Dekoratif"
+],
+[
+"DYOBY",
+"Dyo Boya"
+],
+[
+"YUNSA",
+"Yünsa"
+],
+[
+"VBTYZ",
+"VBT Yazılım"
+],
+[
+"TURGG",
+"Türker Proje"
+],
+[
+"EGEGY",
+"Egeyapi Avrupa GYO"
+],
+[
+"ESCOM",
+"Escort Teknoloji"
+],
+[
+"PETUN",
+"Pınar Et ve Un"
+],
+[
+"EDATA",
+"E-Data Teknoloji"
+],
+[
+"BAGFS",
+"Bagfaş"
+],
+[
+"MHRGY",
+"MHR GYO"
+],
+[
+"BRKVY",
+"Birikim Varlık"
+],
+[
+"KRGYO",
+"Körfez GYO"
+],
+[
+"BVSAN",
+"Bülbüloğlu Vinç"
+],
+[
+"CRDFA",
+"Creditwest Faktoring"
+],
+[
+"A1CAP",
+"A1 Capital Yatırım"
+],
+[
+"SOKE",
+"Söke Değirmen"
+],
+[
+"KONTR",
+"Kontrolmatik"
+],
+[
+"ERCB",
+"Erciyas Çelik Boru"
+],
+[
+"BRLSM",
+"Birleşim Mühendislik"
+],
+[
+"YBTAS",
+"Yibitaş"
+],
+[
+"KONKA",
+"Konya Kağıt"
+],
+[
+"KTSKR",
+"Kütahya Şeker"
+],
+[
+"KNFRT",
+"Konfrut Tarım"
+],
+[
+"DARDL",
+"Dardanel"
+],
+[
+"TKNSA",
+"Teknosa"
+],
+[
+"SANKO",
+"Sanko Pazarlama"
+],
+[
+"IHLAS",
+"İhlas Holding"
+],
+[
+"EKSUN",
+"Eksun Gıda"
+],
+[
+"MERCN",
+"Mercan Kimya"
+],
+[
+"KUTPO",
+"Kütahya Porselen"
+],
+[
+"KIMMR",
+"Ersan Alışveriş"
+],
+[
+"YAPRK",
+"Yaprak Süt"
+],
+[
+"ELITE",
+"Elite Naturel"
+],
+[
+"DZGYO",
+"Deniz GYO"
+],
+[
+"MACKO",
+"Mackolik"
+],
+[
+"MNDRS",
+"Menderes Tekstil"
+],
+[
+"LKMNH",
+"Lokman Hekim"
+],
+[
+"ONRYT",
+"Onur Yüksek Teknoloji"
+],
+[
+"CEMAS",
+"Çemaş Döküm"
+],
+[
+"SKYMD",
+"Şeker Yatırım"
+],
+[
+"ARFYE",
+"Arf Bio Enerji"
+],
+[
+"PINSU",
+"Pınar Su"
+],
+[
+"LIDFA",
+"Lider Faktoring"
+],
+[
+"NUGYO",
+"Nurol GYO"
+],
+[
+"MRGYO",
+"Martı GYO"
+],
+[
+"PNLSN",
+"Panelsan"
+],
+[
+"BAKAB",
+"Bak Ambalaj"
+],
+[
+"UNLU",
+"Ünlü Yatırım Holding"
+],
+[
+"ARTMS",
+"Artemis Halı"
+],
+[
+"ERBOS",
+"Erbosan"
+],
+[
+"DURDO",
+"Duran Doğan"
+],
+[
+"PRZMA",
+"Prizma Pres"
+],
+[
+"SEGYO",
+"Şeker GYO"
+],
+[
+"SERNT",
+"Seranit"
+],
+[
+"LXGYO",
+"Luxera GYO"
+],
+[
+"CMBTN",
+"Çimbeton"
+],
+[
+"ATEKS",
+"Akın Tekstil"
+],
+[
+"ISSEN",
+"İşbir Sentetik"
+],
+[
+"BEGYO",
+"Batı Ege GYO"
+],
+[
+"BURCE",
+"Burçelik"
+],
+[
+"PRKME",
+"Park Elektrik"
+],
+[
+"SAFKR",
+"Safkar Ege Soğutma"
+],
+[
+"DAGI",
+"Dagi Giyim"
+],
+[
+"GATEG",
+"Gate Group"
+],
+[
+"BERA",
+"Bera Holding"
+],
+[
+"MARBL",
+"Turunç Madencilik"
+],
+[
+"MTRKS",
+"Matriks Finansal"
+],
+[
+"OSMEN",
+"Osmanlı Yatırım"
+],
+[
+"DNISI",
+"Dinamik Isı"
+],
+[
+"ONCSM",
+"Oncosem"
+],
+[
+"GZNMI",
+"Gezinomi"
+],
+[
+"EDIP",
+"Edip Gayrimenkul"
+],
+[
+"KRPLS",
+"Koroplast"
+],
+[
+"DGATE",
+"Datagate"
+],
+[
+"PKART",
+"Plastikkart"
+],
+[
+"BIGCH",
+"Büyük Şefler"
+],
+[
+"SUWEN",
+"Suwen Tekstil"
+],
+[
+"MARTI",
+"Martı Otel"
+],
+[
+"ISBIR",
+"İşbir Holding"
+],
+[
+"MSGYO",
+"Mistral GYO"
+],
+[
+"LUKSK",
+"Lüks Kadife"
+],
+[
+"EGSER",
+"Ege Seramik"
+],
+[
+"GSDDE",
+"GSD Denizcilik"
+],
+[
+"BEYAZ",
+"Beyaz Filo"
+],
+[
+"BLCYT",
+"Bilici Yatırım"
+],
+[
+"MEDTR",
+"Meditera"
+],
+[
+"BYDNR",
+"Baydöner"
+],
+[
+"KLMSN",
+"Klimasan"
+],
+[
+"SANFM",
+"Sanifoam"
+],
+[
+"AVGYO",
+"Avrasya GYO"
+],
+[
+"ENSRI",
+"Ensari Sınai"
+],
+[
+"MEKAG",
+"Meka Global"
+],
+[
+"DITAS",
+"Ditaş Doğan"
+],
+[
+"TMPOL",
+"Temapol"
+],
+[
+"MARKA",
+"Marka Yatırım"
+],
+[
+"PAPIL",
+"Papilon Savunma"
+],
+[
+"ETILR",
+"Etiler Gıda"
+],
+[
+"OZGYO",
+"Özderici GYO"
+],
+[
+"RUBNS",
+"Rubenis Tekstil"
+],
+[
+"MEPET",
+"Mepet Metro Petrol"
+],
+[
+"BIZIM",
+"Bizim Toptan"
+],
+[
+"DUNYH",
+"Dünya Holding"
+],
+[
+"USAK",
+"Uşak Seramik"
+],
+[
+"TGSAS",
+"TGS Dış Ticaret"
+],
+[
+"DGNMO",
+"Doğanlar Mobilya"
+],
+[
+"INTEK",
+"İnnosa Teknoloji"
+],
+[
+"TUCLK",
+"Tuğçelik"
+],
+[
+"DERHL",
+"Derlüks Yatırım"
+],
+[
+"ARENA",
+"Arena Bilgisayar"
+],
+[
+"MAKIM",
+"Makim Makina"
+],
+[
+"ANGEN",
+"Anatolia Tanı"
+],
+[
+"PAMEL",
+"Pamel Yenilenebilir"
+],
+[
+"DURKN",
+"Durukan Şekerleme"
+],
+[
+"OZRDN",
+"Özerden Ambalaj"
+],
+[
+"LRSHO",
+"Loras Holding"
+],
+[
+"VANGD",
+"Vanet Gıda"
+],
+[
+"DERIM",
+"Derimod"
+],
+[
+"KRSTL",
+"Kristal Kola"
+],
+[
+"IMASM",
+"İmaş Makina"
+],
+[
+"TEKTU",
+"Tek-Art İnşaat"
+],
+[
+"SNICA",
+"Sanica Isı"
+],
+[
+"EYGYO",
+"EYG GYO"
+],
+[
+"RUZYE",
+"Ruzy Madencilik"
+],
+[
+"DCTTR",
+"DCT Trading"
+],
+[
+"BALAT",
+"Balatacılar"
+],
+[
+"MAKTK",
+"Makina Takım"
+],
+[
+"CUSAN",
+"Çuhadaroğlu Metal"
+],
+[
+"TLMAN",
+"Trabzon Liman"
+],
+[
+"VERTU",
+"Verusaturk Girişim"
+],
+[
+"FRIGO",
+"Frigo-Pak"
+],
+[
+"CONSE",
+"Consus Enerji"
+],
+[
+"PENGD",
+"Penguen Gıda"
+],
+[
+"BORLS",
+"Borlease Otomotiv"
+],
+[
+"HUNER",
+"Hun Yenilenebilir"
+],
+[
+"BNTAS",
+"Bantaş Ambalaj"
+],
+[
+"SUMAS",
+"Sumaş"
+],
+[
+"IHLGM",
+"İhlas Gayrimenkul"
+],
+[
+"SELVA",
+"Selva Gıda"
+],
+[
+"EMKEL",
+"Emek Elektrik"
+],
+[
+"SKTAS",
+"Söktaş Tekstil"
+],
+[
+"RNPOL",
+"Rainbow Polikarbonat"
+],
+[
+"GLBMD",
+"Global Menkul"
+],
+[
+"OBASE",
+"Obase Bilgisayar"
+],
+[
+"YKSLN",
+"Yükselen Çelik"
+],
+[
+"KFEIN",
+"Kafein Yazılım"
+],
+[
+"EUHOL",
+"Euro Yatırım Holding"
+],
+[
+"DOFER",
+"Dofer Yapı"
+],
+[
+"DMSAS",
+"Demisaş"
+],
+[
+"AKSUE",
+"Aksu Enerji"
+],
+[
+"FORMT",
+"Formet Metal"
+],
+[
+"ISYAT",
+"İş Yatırım Ortaklığı"
+],
+[
+"HDFGS",
+"Hedef Girişim"
+],
+[
+"DENGE",
+"Denge Yatırım"
+],
+[
+"GLRYH",
+"Güler Yatırım"
+],
+[
+"EPLAS",
+"Egeplast"
+],
+[
+"HKTM",
+"Hidropar"
+],
+[
+"OSTIM",
+"Ostim Endüstriyel"
+],
+[
+"NIBAS",
+"Niğbaş"
+],
+[
+"VRGYO",
+"Vera Konsept GYO"
+],
+[
+"ZEDUR",
+"Zedur Enerji"
+],
+[
+"YYAPI",
+"Yeşil Yapı"
+],
+[
+"RTALB",
+"RTA Laboratuvarları"
+],
+[
+"DOGUB",
+"Doğusan Boru"
+],
+[
+"FADE",
+"Fade Gıda"
+],
+[
+"BRKO",
+"Birko"
+],
+[
+"ACSEL",
+"Acıselsan"
+],
+[
+"AVHOL",
+"Avrupa Yatırım Holding"
+],
+[
+"GEDZA",
+"Gediz Ambalaj"
+],
+[
+"A1YEN",
+"A1 Yenilenebilir"
+],
+[
+"ALVES",
+"Alves Kablo"
+],
+[
+"TRILC",
+"Turk İlaç"
+],
+[
+"BMSCH",
+"BMS Çelik Hasır"
+],
+[
+"CEOEM",
+"CEO Event Medya"
+],
+[
+"KRTEK",
+"Karsu Tekstil"
+],
+[
+"EMNIS",
+"Eminiş Ambalaj"
+],
+[
+"AVOD",
+"AVOD Kurutulmuş Gıda"
+],
+[
+"MERKO",
+"Merko Gıda"
+],
+[
+"SEKFK",
+"Şeker Finansal Kiralama"
+],
+[
+"IHGZT",
+"İhlas Gazetecilik"
+],
+[
+"YAYLA",
+"Yayla Enerji"
+],
+[
+"PRDGS",
+"Pardus Girişim"
+],
+[
+"BAYRK",
+"Bayrak EBT"
+],
+[
+"ARZUM",
+"Arzum"
+],
+[
+"DESPC",
+"Despec Bilgisayar"
+],
+[
+"SEKUR",
+"Sekuro Plastik"
+],
+[
+"VKING",
+"Viking Kağıt"
+],
+[
+"SANEL",
+"San-El Mühendislik"
+],
+[
+"SODSN",
+"Sodaş Sodyum"
+],
+[
+"OYAYO",
+"Oyak Yatırım Ortaklığı"
+],
+[
+"OTTO",
+"Otto Holding"
+],
+[
+"PSDTC",
+"Pergamon Status"
+],
+[
+"ATSYH",
+"Atlantis Yatırım"
+],
+[
+"TDGYO",
+"Trend GYO"
+],
+[
+"BRMEN",
+"Birlik Mensucat"
+],
+[
+"SKYLP",
+"Skyalp Finansal"
+],
+[
+"ICUGS",
+"ICU Girişim"
+],
+[
+"SILVR",
+"Silverline"
+],
+[
+"COSMO",
+"Cosmos Yatırım"
+],
+[
+"ETYAT",
+"Euro Trend YO"
+],
+[
+"BRKSN",
+"Berkosan Yalıtım"
+],
+[
+"ORCAY",
+"Orçay Çay"
+],
+[
+"IHEVA",
+"İhlas Ev Aletleri"
+],
+[
+"IZINV",
+"İz Yatırım Holding"
+],
+[
+"YONGA",
+"Yonga Mobilya"
+],
+[
+"EUKYO",
+"Euro Kapital YO"
+],
+[
+"YESIL",
+"Yeşil Yatırım Holding"
+],
+[
+"SEYKM",
+"Seyitler Kimya"
+],
+[
+"VKFYO",
+"Vakıf Menkul YO"
+],
+[
+"SMART",
+"Smartiks Yazılım"
+],
+[
+"HATEK",
+"Hateks Hatay Tekstil"
+],
+[
+"OYLUM",
+"Oylum Sınai"
+],
+[
+"MZHLD",
+"Mazhar Zorlu Holding"
+],
+[
+"RODRG",
+"Rodrigo Tekstil"
+],
+[
+"ERSU",
+"Ersu Meyve"
+],
+[
+"SAMAT",
+"Saray Matbaacılık"
+],
+[
+"IHYAY",
+"İhlas Yayın Holding"
+],
+[
+"AVTUR",
+"Avrasya Petrol"
+],
+[
+"HUBVC",
+"Hub Girişim"
+],
+[
+"EKIZ",
+"Ekiz Kimya"
+],
+[
+"AKYHO",
+"Akdeniz Yatırım"
+],
+[
+"ATAGY",
+"Ata GYO"
+],
+[
+"ULAS",
+"Ulaşlar Turizm"
+],
+[
+"MEGAP",
+"Mega Polietilen"
+],
+[
+"IDGYO",
+"İdealist GYO"
+],
+[
+"MTRYO",
+"Metro Yatırım Ortaklığı"
+],
+[
+"ATLAS",
+"Atlas Menkul YO"
+],
+[
+"GRNYO",
+"Garanti Yatırım Ortaklığı"
+],
+[
+"CASA",
+"Casa Emtia"
+],
+[
+"DIRIT",
+"Diriteks"
+],
+[
+"MMCAS",
+"MMC Sanayi"
+],
+[
+"EUYO",
+"Euro Menkul YO"
+],
+[
+"UMPAS",
+"Umpaş Holding"
+],
+[
+"FLAP",
+"Flap Kongre"
+],
+[
+"AGYO",
+"Atakule GYO"
+],
+[
+"ISGSY",
+"İş Girişim Sermayesi"
+],
+[
+"ISKUR",
+"İş Bankası (Kur.)"
+],
+[
+"KZGYO",
+"Kuzugrup GYO"
+],
+[
+"ULUFA",
+"Ulusal Faktoring"
+],
+[
+"DOCO",
+"DO & CO"
+],
+[
+"IPEKE",
+"İpek Enerji"
+],
+[
+"KERVT",
+"Kerevitaş"
+],
+[
+"KOZAA",
+"Koza Anadolu"
+],
+[
+"KOZAL",
+"Koza Altın"
+]
+]

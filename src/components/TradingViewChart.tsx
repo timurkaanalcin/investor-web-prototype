@@ -52,6 +52,16 @@ type Props = {
   instrument: Pick<TradeInstrument, "symbol" | "exchange" | "type" | "name">;
   height?: number;
   theme?: "dark" | "light";
+  /** TradingView resolution: 1, 5, 15, 60, 240, D, W, … */
+  interval?: string;
+  /** Fill parent flex area (mobile symbol screen) instead of fixed height */
+  mobile?: boolean;
+  /** Fill parent like mobile but keep desktop widget chrome/features */
+  fill?: boolean;
+  /** TV style: 1=candles, 2=line, 3=area, 8=hollow candles, 9=heikin ashi */
+  chartStyle?: string;
+  /** Show left drawing toolbar (desktop denser terminal) */
+  showDrawings?: boolean;
 };
 
 /**
@@ -61,6 +71,11 @@ export function TradingViewChart({
   instrument,
   height = HEIGHT,
   theme = "dark",
+  interval = "W",
+  mobile = false,
+  fill = false,
+  chartStyle = "1",
+  showDrawings = false,
 }: Props) {
   const rawId = useId().replace(/:/g, "");
   const containerId = `tv_${instrument.symbol}_${rawId}`;
@@ -93,17 +108,17 @@ export function TradingViewChart({
         const widget = new window.TradingView.widget({
           autosize: true,
           symbol: tvSymbol,
-          interval: "D",
+          interval,
           timezone: "Europe/Istanbul",
           theme: isDark ? "dark" : "light",
-          style: "1",
+          style: chartStyle || "1",
           locale: "tr",
           toolbar_bg: isDark ? "#1e222d" : "#f0f3fa",
           enable_publishing: false,
           allow_symbol_change: false,
-          hide_side_toolbar: true,
+          hide_side_toolbar: mobile || !showDrawings,
           hide_top_toolbar: true,
-          hide_legend: false,
+          hide_legend: mobile,
           save_image: false,
           withdateranges: false,
           details: false,
@@ -155,8 +170,11 @@ export function TradingViewChart({
             "edit_buttons_in_legend",
             "border_around_the_chart",
             "display_market_status",
+            ...(showDrawings && !mobile ? [] : ["left_toolbar"]),
           ],
-          enabled_features: ["hide_left_toolbar_by_default"],
+          enabled_features: showDrawings && !mobile
+            ? ["side_toolbar_in_fullscreen_mode"]
+            : ["hide_left_toolbar_by_default"],
         });
 
         widgetRef.current = widget;
@@ -177,53 +195,72 @@ export function TradingViewChart({
       }
       widgetRef.current = null;
     };
-  }, [tvSymbol, containerId, isDark]);
+  }, [tvSymbol, containerId, isDark, interval, mobile, fill, chartStyle, showDrawings]);
+
+  const loadingOverlay = (status === "loading" || status === "error") && (
+    <div
+      className={`absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 px-6 text-center ${
+        isDark ? "bg-[#131722]" : "bg-[#ffffff]"
+      }`}
+      aria-live="polite"
+    >
+      {status === "loading" ? (
+        <p
+          className={`text-[13px] ${
+            isDark ? "text-[#787b86]" : "text-[#6a6d78]"
+          }`}
+        >
+          TradingView yükleniyor…
+        </p>
+      ) : (
+        <>
+          <p
+            className={`text-[14px] font-semibold ${
+              isDark ? "text-[#d1d4dc]" : "text-[#131722]"
+            }`}
+          >
+            Grafik yüklenemedi
+          </p>
+          <p
+            className={`text-[12px] ${
+              isDark ? "text-[#787b86]" : "text-[#6a6d78]"
+            }`}
+          >
+            Basit moda geçerek HRAM grafiğini kullanabilirsiniz.
+          </p>
+        </>
+      )}
+    </div>
+  );
+
+  if (mobile || fill) {
+    return (
+      <div
+        className={`relative h-full min-h-0 w-full flex-1 overflow-hidden ${
+          isDark ? "bg-[#131722]" : "bg-[#ffffff]"
+        }`}
+      >
+        {loadingOverlay}
+        <div
+          id={containerId}
+          ref={containerRef}
+          className="h-full min-h-0 w-full"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
       <div
         className={`relative overflow-hidden rounded-none border-y ${
           isDark
-            ? "border-[#1a1a1a] bg-[#000000]"
+            ? "border-[#1a1a1a] bg-[#131722]"
             : "border-[#e0e3eb] bg-[#ffffff]"
         }`}
         style={{ height }}
       >
-        {(status === "loading" || status === "error") && (
-          <div
-            className={`absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 px-6 text-center ${
-              isDark ? "bg-[#000000]" : "bg-[#ffffff]"
-            }`}
-            aria-live="polite"
-          >
-            {status === "loading" ? (
-              <p
-                className={`text-[13px] ${
-                  isDark ? "text-[#787b86]" : "text-[#6a6d78]"
-                }`}
-              >
-                TradingView yükleniyor…
-              </p>
-            ) : (
-              <>
-                <p
-                  className={`text-[14px] font-semibold ${
-                    isDark ? "text-[#d1d4dc]" : "text-[#131722]"
-                  }`}
-                >
-                  Grafik yüklenemedi
-                </p>
-                <p
-                  className={`text-[12px] ${
-                    isDark ? "text-[#787b86]" : "text-[#6a6d78]"
-                  }`}
-                >
-                  Basit moda geçerek Investor grafiğini kullanabilirsiniz.
-                </p>
-              </>
-            )}
-          </div>
-        )}
+        {loadingOverlay}
         <div
           id={containerId}
           ref={containerRef}

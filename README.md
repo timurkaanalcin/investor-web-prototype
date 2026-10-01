@@ -1,12 +1,12 @@
-# Investor — Web Prototipi
+# llvadACC — Web Prototipi
 
 Betterment tarzı otomatik yatırım uygulamasının tıklanabilir Next.js prototipi.
 
-- **Ürün adı:** Investor  
-- **Canlı / hedef alan adı:** [https://investor.customer.org.tr](https://investor.customer.org.tr)  
+- **Ürün adı:** llvadACC  
+- **Canlı / hedef alan adı:** [https://llvadacc.customer.org.tr](https://llvadacc.customer.org.tr)  
 - Arayüz tamamen **Türkçe**; veriler mock’tur (gerçek banka / kimlik doğrulama yok).
 
-> GitHub depo adı `nest-web-prototype` olarak kalabilir; uygulamadaki marka **Investor**’dır.
+> GitHub depo adı `nest-web-prototype` olarak kalabilir; uygulamadaki marka **llvadACC**’dir.
 
 ## Özellikler
 
@@ -35,9 +35,16 @@ Tarayıcıda [http://localhost:3000](http://localhost:3000) adresini açın.
 
 ## Derleme
 
+Kök alan adı (Vercel / llvadacc.customer.org.tr) — varsayılan `basePath` boş:
+
 ```bash
 npm run build
-npm start
+```
+
+GitHub Pages alt yolu için:
+
+```bash
+INVESTOR_BASE_PATH=/investor-web-prototype npm run build
 ```
 
 ## Rotalar
@@ -50,12 +57,14 @@ npm start
 | `/yatir` | Yatırım ve portföy |
 | `/hedefler` | Hedefler |
 | `/profil` | Profil ve ayarlar |
+| `/trade` | Trade |
 
 ## Teknoloji
 
 - Next.js (App Router) + TypeScript
 - Tailwind CSS
 - SVG grafikler (ek chart kütüphanesi yok)
+- `output: "export"` — statik export
 
 ## Marka & renkler
 
@@ -68,7 +77,7 @@ Nötr marka paleti (mavi kaldırıldı):
 - Teal `#226d78` / `#26a69a` — pozitif getiri / Trade Al
 - Red `#c44536` / `#ef5350` — tehlike / Trade Sat
 
-Logo: serif **Investor**; arayüz: sans-serif.
+Logo: serif **llvadACC**; arayüz: sans-serif.
 
 ## Not
 

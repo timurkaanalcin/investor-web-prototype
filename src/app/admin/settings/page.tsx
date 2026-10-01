@@ -1,25 +1,199 @@
 "use client";
 
-import { ADMIN_PIN } from "@/lib/payment-config";
-import { setAdminUnlocked } from "@/lib/money-requests";
-import { clearCrmSession } from "@/lib/crm/data";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { setAdminUnlocked } from "@/lib/money-requests";
+import {
+  clearCrmSession,
+  getCrmSession,
+  isFullCrmAdmin,
+} from "@/lib/crm/data";
+import {
+  getPlatformSettings,
+  setPlatformSettings,
+  type PlatformSettings,
+} from "@/lib/crm/admin-ops";
 
 export default function CrmSettingsPage() {
   const router = useRouter();
+  const [settings, setSettings] = useState<PlatformSettings | null>(null);
+  const [msg, setMsg] = useState("");
+  const [canEdit, setCanEdit] = useState(false);
+
+  useEffect(() => {
+    setSettings(getPlatformSettings());
+    setCanEdit(isFullCrmAdmin(getCrmSession()));
+  }, []);
+
+  function patch(p: Partial<PlatformSettings>) {
+    if (!canEdit) return;
+    const next = setPlatformSettings(p);
+    setSettings(next);
+    setMsg("Kaydedildi");
+  }
+
+  if (!settings) {
+    return <p className="text-sm text-neutral-500">Yükleniyor…</p>;
+  }
+
+  const toggles: {
+    key: keyof PlatformSettings;
+    label: string;
+    hint: string;
+  }[] = [
+    {
+      key: "featureLiveChat",
+      label: "Canlı destek",
+      hint: "Müşteri sohbet widget",
+    },
+    {
+      key: "featureTrading",
+      label: "İşlem (trade)",
+      hint: "Trade UI erişimi",
+    },
+    {
+      key: "featureDeposits",
+      label: "Yatırma",
+      hint: "Yatırma talepleri",
+    },
+    {
+      key: "featureWithdrawals",
+      label: "Çekme",
+      hint: "Çekim talepleri",
+    },
+    {
+      key: "featureReferrals",
+      label: "Referans kodları",
+      hint: "Kayıtta referans zorunluluğu",
+    },
+    {
+      key: "tradingHalt",
+      label: "İşlem durdurma (halt)",
+      hint: "Mock — yeni emirleri engelle bayrağı",
+    },
+    {
+      key: "announcementEnabled",
+      label: "Duyuru bandı",
+      hint: "Müşteri arayüzünde banner",
+    },
+  ];
 
   return (
-    <div className="max-w-xl">
-      <h1 className="text-2xl font-bold text-black">Ayarlar</h1>
-      <p className="mt-1 text-sm text-neutral-500">HRAM CRM · Broker Desk prototipi</p>
+    <div className="max-w-2xl">
+      <div className="mb-3">
+        <h1 className="text-[15px] font-bold text-black">Ayarlar</h1>
+        <p className="text-[11px] text-neutral-500">
+          Platform kontrolleri · yalnızca Tam yetki düzenler
+        </p>
+      </div>
 
-      <div className="mt-5 space-y-3">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-          <p className="text-sm font-semibold text-black">Kimlik doğrulama</p>
-          <p className="mt-1 text-xs text-neutral-500">
-            PIN kapısı: <span className="font-mono font-semibold text-black">{ADMIN_PIN}</span>{" "}
-            veya personel girişi <span className="font-medium text-black">/log</span>.
-            Gerçek SSO / 2FA yok.
+      {msg && (
+        <p className="mb-2 rounded border border-neutral-200 bg-white px-3 py-1.5 text-[11px] font-semibold">
+          {msg}
+        </p>
+      )}
+
+      {!canEdit && (
+        <p className="mb-3 rounded border border-neutral-300 bg-neutral-50 px-3 py-2 text-[11px]">
+          Salt okunur — admin / PIN gerekli
+        </p>
+      )}
+
+      <div className="space-y-2">
+        <section className="crm-panel rounded p-3">
+          <p className="mb-2 text-[12px] font-bold">Özellik anahtarları</p>
+          <ul className="space-y-2">
+            {toggles.map((t) => (
+              <li
+                key={t.key}
+                className="flex items-center justify-between gap-3 border-b border-neutral-100 pb-2 last:border-0 last:pb-0"
+              >
+                <div>
+                  <p className="text-[12px] font-semibold text-black">
+                    {t.label}
+                  </p>
+                  <p className="text-[10px] text-neutral-500">{t.hint}</p>
+                </div>
+                <button
+                  type="button"
+                  disabled={!canEdit}
+                  onClick={() =>
+                    patch({ [t.key]: !settings[t.key] } as Partial<PlatformSettings>)
+                  }
+                  className={`h-7 min-w-[52px] rounded px-2 text-[10px] font-bold ${
+                    settings[t.key]
+                      ? "bg-black text-white"
+                      : "border border-neutral-300 bg-white text-neutral-500"
+                  } disabled:opacity-50`}
+                >
+                  {settings[t.key] ? "AÇIK" : "KAPALI"}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="crm-panel rounded p-3">
+          <p className="mb-2 text-[12px] font-bold">Varsayılan referans kodu</p>
+          <div className="flex gap-2">
+            <input
+              value={settings.defaultReferralCode}
+              disabled={!canEdit}
+              onChange={(e) =>
+                setSettings({
+                  ...settings,
+                  defaultReferralCode: e.target.value.toUpperCase(),
+                })
+              }
+              className="tv-mono h-8 flex-1 rounded border border-neutral-200 px-2 text-[12px] disabled:bg-neutral-50"
+            />
+            <button
+              type="button"
+              disabled={!canEdit}
+              onClick={() =>
+                patch({ defaultReferralCode: settings.defaultReferralCode })
+              }
+              className="h-8 rounded bg-black px-3 text-[11px] font-semibold text-white disabled:opacity-50"
+            >
+              Kaydet
+            </button>
+          </div>
+        </section>
+
+        <section className="crm-panel rounded p-3">
+          <p className="mb-2 text-[12px] font-bold">Müşteri duyuru bandı</p>
+          <textarea
+            value={settings.announcementBanner}
+            disabled={!canEdit}
+            onChange={(e) =>
+              setSettings({ ...settings, announcementBanner: e.target.value })
+            }
+            rows={3}
+            placeholder="Örn: Planlı bakım 22:00'de…"
+            className="w-full rounded border border-neutral-200 px-2 py-1.5 text-[12px] disabled:bg-neutral-50"
+          />
+          <button
+            type="button"
+            disabled={!canEdit}
+            onClick={() =>
+              patch({ announcementBanner: settings.announcementBanner })
+            }
+            className="mt-2 h-8 rounded bg-black px-3 text-[11px] font-semibold text-white disabled:opacity-50"
+          >
+            Duyuruyu kaydet
+          </button>
+          {settings.announcementEnabled && settings.announcementBanner && (
+            <div className="mt-2 rounded border border-black bg-neutral-900 px-3 py-2 text-[11px] text-white">
+              Önizleme: {settings.announcementBanner}
+            </div>
+          )}
+        </section>
+
+        <section className="crm-panel rounded p-3">
+          <p className="text-[12px] font-bold">Kimlik doğrulama</p>
+          <p className="mt-1 text-[11px] text-neutral-500">
+            PIN sunucu ortamında yapılandırılır (istemciye gömülmez). {" "}
+            · Personel: /log · Magda/Alisa shift korunur
           </p>
           <button
             type="button"
@@ -28,33 +202,21 @@ export default function CrmSettingsPage() {
               setAdminUnlocked(false);
               router.replace("/log/");
             }}
-            className="mt-3 rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-neutral-50"
+            className="mt-2 rounded border border-neutral-300 px-3 py-1.5 text-[11px] font-semibold"
           >
             Oturumu kilitle
           </button>
-        </div>
+        </section>
 
-        <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-          <p className="text-sm font-semibold text-black">Veri katmanı</p>
-          <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-neutral-500">
-            <li>Müşteriler → investor_auth_users</li>
-            <li>Sohbet → investor_live_support_threads</li>
-            <li>Para → investor_money_requests</li>
-            <li>Referans → hram_referral_codes</li>
-            <li>Masalar / çalışanlar / biletler → hram_crm_*</li>
+        <section className="crm-panel rounded p-3">
+          <p className="text-[12px] font-bold">Veri katmanı</p>
+          <ul className="mt-1 list-inside list-disc text-[10px] text-neutral-500">
+            <li>Müşteriler → hram_auth_users + hram_crm_customer_*</li>
+            <li>Platform ayarları → hram_platform_settings_v1</li>
+            <li>Çalışanlar → hram_crm_employees</li>
+            <li>Statik export · Prisma yok</li>
           </ul>
-          <p className="mt-2 text-xs text-neutral-500">
-            Natro&apos;da Prisma / sunucu yok — statik export.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-          <p className="text-sm font-semibold text-black">Shift personeli</p>
-          <p className="mt-1 text-xs text-neutral-500">
-            Magda (magda@hram.tr) ve Alisa (alisa@hram.tr) shift yetkisiyle
-            /log üzerinden giriş yapar; tam Admin menüsü yoktur.
-          </p>
-        </div>
+        </section>
       </div>
     </div>
   );

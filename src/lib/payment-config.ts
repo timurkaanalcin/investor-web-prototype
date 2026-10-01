@@ -10,14 +10,15 @@ export const MOCK_CRYPTO = {
 export const MOCK_IBAN = {
   bank: "Garanti BBVA",
   iban: "TR33 0006 2000 1230 0006 9876 54",
-  holderName: "Investor Ödeme A.Ş.",
+  holderName: "HRAM Ödeme A.Ş.",
   descriptionHint: "Açıklamaya adınızı yazın",
 } as const;
 
 export const MOCK_CARD_NOTE =
   "Kart ile ödeme simülasyonu — gerçek tahsilat yapılmaz. Talep yine admin onayı bekler.";
 
-export const ADMIN_PIN = "1234";
+/** @deprecated PIN is server-only — use /api/admin-pin.php */
+export const ADMIN_PIN_HINT = ""; // intentionally empty — never ship PIN in client bundle
 
 export const SCREENSHOT_MAX_BYTES = 1_500_000; // ~1.5 MB
 export const SCREENSHOT_WARN_BYTES = 1_000_000; // warn above ~1 MB

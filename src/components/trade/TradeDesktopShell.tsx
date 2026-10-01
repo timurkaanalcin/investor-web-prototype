@@ -1,10 +1,16 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconMoon, IconSun, IconUser } from "@/components/Icons";
+import { IconChevron, IconMoon, IconSun, IconUser } from "@/components/Icons";
 import { useTradeTheme } from "@/components/TradeTheme";
 import { useIsDesktop } from "@/hooks/useMediaQuery";
+import {
+  getMarketOpen,
+  setMarketOpen,
+  subscribeMarketOpen,
+} from "@/lib/trade-watchlist-prefs";
 import { TradeWatchlistPanel } from "./TradeWatchlistPanel";
 
 function activeSymbolFromPath(pathname: string): string | null {
@@ -14,8 +20,8 @@ function activeSymbolFromPath(pathname: string): string | null {
 }
 
 /**
- * Desktop (≥768): left watchlist + flex area for page (center ± right ticket).
- * Mobile: pass-through.
+ * Desktop (≥768): left watchlist + flex area for page (chart/history full width; order via modal).
+ * Market panel is collapsible (persisted). Mobile: pass-through.
  */
 export function TradeDesktopShell({ children }: { children: React.ReactNode }) {
   const isDesktop = useIsDesktop();
@@ -23,20 +29,72 @@ export function TradeDesktopShell({ children }: { children: React.ReactNode }) {
   const activeSymbol = activeSymbolFromPath(pathname);
   const { theme, toggle } = useTradeTheme();
   const onHome = pathname === "/trade" || pathname === "/trade/";
+  const [marketOpen, setMarketOpenState] = useState(false);
+
+  useEffect(() => {
+    setMarketOpenState(getMarketOpen());
+    return subscribeMarketOpen(() => setMarketOpenState(getMarketOpen()));
+  }, []);
+
+  function toggleMarket() {
+    const next = !marketOpen;
+    setMarketOpen(next);
+    setMarketOpenState(next);
+  }
 
   if (!isDesktop) {
     return <>{children}</>;
   }
 
   return (
-    <div className="trade-desk trade-tv-root h-full min-h-0">
-      <aside className="trade-desk-left">
-        <TradeWatchlistPanel
-          activeSymbol={activeSymbol}
-          showTopChrome={false}
-          compact
-        />
-      </aside>
+    <div
+      className={`trade-desk trade-tv-root h-full min-h-0${
+        marketOpen ? "" : " trade-desk--market-collapsed"
+      }`}
+    >
+      {marketOpen ? (
+        <aside className="trade-desk-left">
+          <div className="trade-market-bar">
+            <span className="trade-market-bar-title">Market</span>
+            <button
+              type="button"
+              className="trade-market-toggle trade-press"
+              aria-label="Listeyi gizle"
+              title="Listeyi gizle"
+              onClick={toggleMarket}
+            >
+              <IconChevron
+                size={14}
+                className="trade-market-chevron trade-market-chevron--open"
+              />
+              <span>Listeyi gizle</span>
+            </button>
+          </div>
+          <div className="min-h-0 flex-1">
+            <TradeWatchlistPanel
+              activeSymbol={activeSymbol}
+              showTopChrome={false}
+              compact
+            />
+          </div>
+        </aside>
+      ) : (
+        <aside className="trade-desk-left trade-desk-left--collapsed">
+          <button
+            type="button"
+            className="trade-market-rail trade-press"
+            aria-label="Listeyi göster"
+            title="Listeyi göster"
+            onClick={toggleMarket}
+          >
+            <IconChevron
+              size={14}
+              className="trade-market-chevron trade-market-chevron--closed"
+            />
+            <span className="trade-market-rail-label">Market</span>
+          </button>
+        </aside>
+      )}
       <div className="relative flex min-h-0 min-w-0 flex-1">
         {onHome && (
           <div className="absolute right-3 top-2.5 z-20 flex gap-1">

@@ -5,10 +5,10 @@ import {
 } from "./payment-config";
 import { appendTransaction } from "./storage";
 
-const REQUESTS_KEY = "investor_money_requests";
-const NOTIF_FEED_KEY = "investor_notifications_feed";
-const BALANCE_DELTA_KEY = "investor_balance_delta";
-const ADMIN_UNLOCK_KEY = "investor_admin_unlocked";
+const REQUESTS_KEY = "hram_money_requests";
+const NOTIF_FEED_KEY = "hram_notifications_feed";
+const BALANCE_DELTA_KEY = "hram_balance_delta";
+const ADMIN_UNLOCK_KEY = "hram_admin_unlocked";
 
 export type MoneyMethod = "crypto" | "card" | "iban";
 export type MoneyRequestStatus =
@@ -144,6 +144,31 @@ export function getDisplayBalance(): number {
 
 function setBalanceDelta(delta: number): void {
   localStorage.setItem(BALANCE_DELTA_KEY, String(delta));
+}
+
+/** Adjust TRY display balance delta (P&L, trade cash, etc.) and notify subscribers. */
+export function adjustBalanceDelta(amountTry: number): void {
+  if (typeof window === "undefined") return;
+  if (!Number.isFinite(amountTry)) return;
+  setBalanceDelta(getBalanceDelta() + amountTry);
+  dispatchMoneyEvent();
+}
+
+/** Known demo/test emails → absolute display balance (TRY). */
+export const SEEDED_TEST_BALANCES: Record<string, number> = {
+  "test@hram.tr": 100_000,
+};
+
+/**
+ * Force hram_balance_delta so TOTAL_BALANCE + delta equals target
+ * for seeded test accounts. No-op for other emails.
+ */
+export function ensureSeededBalanceForEmail(email: string): void {
+  if (typeof window === "undefined") return;
+  const normalized = email.trim().toLowerCase();
+  const target = SEEDED_TEST_BALANCES[normalized];
+  if (target == null) return;
+  setBalanceDelta(target - TOTAL_BALANCE);
 }
 
 export function isAdminUnlocked(): boolean {
@@ -562,7 +587,7 @@ export function ensureSeedNotifications(): void {
     {
       id: "n-seed-1",
       title: "Hoş geldiniz",
-      body: "Investor prototipine hoş geldiniz. Bildirimler burada listelenir.",
+      body: "HRAM prototipine hoş geldiniz. Bildirimler burada listelenir.",
       createdAt: new Date(now - 86400000).toISOString(),
       read: true,
     },
@@ -576,3 +601,4 @@ export function ensureSeedNotifications(): void {
   ];
   saveNotificationsFeed(seeds);
 }
+

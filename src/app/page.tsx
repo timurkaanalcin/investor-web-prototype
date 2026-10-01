@@ -1,204 +1,235 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AppHeader } from "@/components/AppHeader";
-import { LineChart } from "@/components/Charts";
-import { IconArrowUp, IconChevron } from "@/components/Icons";
-import { TickerLogo } from "@/components/TickerLogos";
-import {
-  CHART_POINTS,
-  MONTHLY_GAIN,
-  TOTAL_BALANCE,
-  TRANSACTIONS,
-  TX_SIDE_LABEL,
-  formatTRY,
-  formatTxAmount,
-  type Transaction,
-  type TxSide,
-} from "@/lib/mock-data";
-import { getExtraTransactions } from "@/lib/storage";
-import {
-  getDisplayBalance,
-  subscribeMoneyUpdates,
-} from "@/lib/money-requests";
+import { useEffect, useState } from "react";
 
-const RANGES = ["1H", "1A", "3A", "1Y", "Tümü"] as const;
+const MARKETS = [
+  { label: "Hisse", hint: "BIST · NYSE · NASDAQ" },
+  { label: "Forex", hint: "Majör & çapraz çiftler" },
+  { label: "Kripto", hint: "BTC · ETH · seçili altlar" },
+  { label: "Emtia", hint: "Altın · gümüş · enerji" },
+  { label: "Endeksler", hint: "Küresel endeksler" },
+];
 
-const SIDE_BADGE: Record<TxSide, string> = {
-  buy: "bg-sage-muted text-nest",
-  sell: "bg-danger-soft text-danger",
-  deposit: "bg-gain-soft text-gain",
-  withdraw: "bg-warn-soft text-warn",
-};
+const FEATURES = [
+  {
+    title: "Düşük gecikmeli emir iletimi",
+    body: "Kurumsal altyapı ile uluslararası piyasalara hızlı erişim.",
+  },
+  {
+    title: "Çoklu varlık tek hesapta",
+    body: "Hisse, döviz, kripto ve emtia — tek platform üzerinden.",
+  },
+  {
+    title: "Masaüstü terminal",
+    body: "Profesyonel izleme ve emir paneli; yüksek yoğunlukta çalışma için.",
+  },
+  {
+    title: "Mobil erişim",
+    body: "Hareket halindeyken pozisyon ve piyasa takibi.",
+  },
+  {
+    title: "Canlı destek",
+    body: "İşlem saatlerinde kurumsal destek hattı.",
+  },
+  {
+    title: "Güvenli hesap erişimi",
+    body: "Şifreli oturum ve kurumsal gizlilik standartlarıyla müşteri girişi.",
+  },
+];
 
-export default function DashboardPage() {
-  const [range, setRange] = useState<(typeof RANGES)[number]>("1A");
-  const [recent, setRecent] = useState<Transaction[]>(TRANSACTIONS.slice(0, 4));
-  const [balance, setBalance] = useState(TOTAL_BALANCE);
+const TICKERS = [
+  { sym: "THYAO", mkt: "BIST", px: "312,40", ch: "+1,2%" },
+  { sym: "AAPL", mkt: "US", px: "228,15", ch: "+0,4%" },
+  { sym: "BTC", mkt: "Crypto", px: "64.820", ch: "−0,8%" },
+  { sym: "XAU", mkt: "Gold", px: "2.418", ch: "+0,3%" },
+];
+
+
+export default function LandingPage() {
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const extra = getExtraTransactions() as Transaction[];
-    const merged = [...extra, ...TRANSACTIONS];
-    const seen = new Set<string>();
-    const unique = merged.filter((t) => {
-      if (seen.has(t.id)) return false;
-      seen.add(t.id);
-      return true;
-    });
-    setRecent(unique.slice(0, 4));
-    setBalance(getDisplayBalance());
-    return subscribeMoneyUpdates(() => {
-      setBalance(getDisplayBalance());
-      const extra2 = getExtraTransactions() as Transaction[];
-      const merged2 = [...extra2, ...TRANSACTIONS];
-      const seen2 = new Set<string>();
-      const unique2 = merged2.filter((tx) => {
-        if (seen2.has(tx.id)) return false;
-        seen2.add(tx.id);
-        return true;
-      });
-      setRecent(unique2.slice(0, 4));
-    });
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const points = useMemo(() => {
-    const n =
-      range === "1H" ? 2 : range === "1A" ? 5 : range === "3A" ? 5 : 5;
-    return CHART_POINTS.slice(-n);
-  }, [range]);
-
-  const balanceBlock = (
-    <>
-      <section className="mt-2 md:mt-0">
-        <p className="text-sm font-medium text-nest/70">Toplam bakiye</p>
-        <h1 className="mt-1 text-4xl font-bold tracking-tight text-nest md:text-5xl">
-          {formatTRY(balance)}
-        </h1>
-        <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-gain-soft px-2.5 py-1 text-sm font-medium text-gain">
-          <IconArrowUp size={14} />
-          +{formatTRY(MONTHLY_GAIN)} bu ay
-        </p>
-      </section>
-
-      <section className="card mt-5 overflow-hidden px-3 pb-3 pt-3 md:mt-6 md:px-4 md:pb-4 md:pt-4">
-        <div className="mb-2 flex gap-1.5 overflow-x-auto px-1">
-          {RANGES.map((r) => (
-            <button
-              key={r}
-              type="button"
-              onClick={() => setRange(r)}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-colors active:scale-95 md:min-h-0 md:px-3 md:py-1.5 md:text-xs ${
-                range === r
-                  ? "bg-nest-solid text-white"
-                  : "bg-beige text-muted hover:text-nest"
-              }`}
-            >
-              {r}
-            </button>
-          ))}
-        </div>
-        <LineChart points={points} />
-      </section>
-    </>
-  );
-
-  const sideBlock = (
-    <>
-      <section className="mt-5 md:mt-0">
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-nest">Son işlemler</h2>
-          <Link
-            href="/islemler"
-            className="inline-flex items-center text-sm font-medium text-nest active:opacity-70"
-          >
-            Tümü <IconChevron size={16} />
-          </Link>
-        </div>
-        <ul className="card overflow-hidden divide-y divide-border">
-          {recent.map((tx) => (
-            <li key={tx.id}>
-              <Link
-                href="/islemler"
-                className="flex items-center gap-3 px-3.5 py-3 transition-colors active:bg-sage-muted/50 md:py-3.5"
-              >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-sage-muted">
-                  {tx.symbol ? (
-                    <TickerLogo symbol={tx.symbol} size={36} />
-                  ) : (
-                    <span className="text-xs font-bold text-nest">
-                      {tx.side === "deposit" ? "↓" : "↑"}
-                    </span>
-                  )}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <p className="truncate text-sm font-semibold text-nest">
-                      {tx.title}
-                    </p>
-                    <span
-                      className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold ${SIDE_BADGE[tx.side]}`}
-                    >
-                      {TX_SIDE_LABEL[tx.side]}
-                    </span>
-                  </div>
-                  <p className="truncate text-[11px] text-muted">
-                    {tx.subtitle || tx.date}
-                  </p>
-                </div>
-                <p className="text-sm font-semibold text-nest">
-                  {formatTxAmount(tx)}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mt-5">
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-nest">Portföyün</h2>
-          <Link
-            href="/yatir"
-            className="inline-flex items-center text-sm font-medium text-nest active:opacity-70"
-          >
-            Detaylar <IconChevron size={16} />
-          </Link>
-        </div>
-        <Link
-          href="/yatir"
-          className="card flex items-center gap-3 p-4 transition-transform active:scale-[0.99]"
-        >
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-sage-muted text-nest">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 2.07A8 8 0 0 1 19.93 11H13zM4 12a8 8 0 0 1 7-7.93V19.93A8 8 0 0 1 4 12zm9 7.93V13h6.93A8 8 0 0 1 13 19.93z" />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-nest">Dağılım</p>
-            <p className="text-xs text-muted">ETF %80 · Nakit %20</p>
-          </div>
-          <div className="flex flex-col items-end gap-1">
-            <span className="rounded-full bg-sage-soft px-2.5 py-0.5 text-[11px] font-semibold text-nest">
-              ETF 80%
-            </span>
-            <span className="rounded-full bg-beige/80 px-2.5 py-0.5 text-[11px] font-semibold text-nest/80">
-              Nakit 20%
-            </span>
-          </div>
-        </Link>
-      </section>
-    </>
-  );
-
   return (
-    <div className="px-5 pb-6 md:px-0 md:pb-0">
-      <AppHeader />
-      {/* Mobile: stacked · Desktop: 2/3 + 1/3 */}
-      <div className="md:desk-grid-home md:mt-2">
-        <div>{balanceBlock}</div>
-        <div>{sideBlock}</div>
-      </div>
+    <div className="hram-landing">
+      <header className={`hram-nav${scrolled ? " is-scrolled" : ""}`}>
+        <div className="hram-nav__inner">
+          <a href="#top" className="hram-wordmark" aria-label="HRAM">
+            HRAM
+          </a>
+          <nav className="hram-nav__links" aria-label="Ana menü">
+            <a href="#urunler">Ürünler</a>
+            <a href="#markets">Piyasalar</a>
+            <a href="#guvenlik">Güvenlik</a>
+            <Link href="/destek">Destek</Link>
+          </nav>
+          <div className="hram-nav__actions">
+            <Link href="/giris" className="hram-btn hram-btn--ghost">
+              Giriş
+            </Link>
+            <Link href="/kayit" className="hram-btn hram-btn--solid">
+              Hesap aç
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <main id="top">
+        <section className="hram-hero">
+          <div className="hram-hero__grid" aria-hidden />
+          <div className="hram-hero__inner">
+            <p className="hram-eyebrow">Uluslararası piyasalar · Kurumsal altyapı</p>
+            <h1>
+              Küresel piyasalara
+              <br />
+              kurumsal erişim
+            </h1>
+            <p className="hram-hero__lead">
+              HRAM; hisse, kripto, emtia ve döviz piyasalarına tek platformdan
+              erişim sunan uluslararası bir aracılık deneyimidir. Zarif,
+              hızlı ve güven odaklı.
+            </p>
+            <div className="hram-hero__ctas">
+              <Link href="/kayit" className="hram-btn hram-btn--solid hram-btn--lg">
+                Hesap aç
+              </Link>
+              <a href="#markets" className="hram-btn hram-btn--outline hram-btn--lg">
+                Platformu keşfet
+              </a>
+            </div>
+            <div className="hram-hero__visual" aria-hidden>
+              <svg viewBox="0 0 640 220" fill="none" className="hram-chart">
+                <defs>
+                  <linearGradient id="hramFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#111" stopOpacity="0.14" />
+                    <stop offset="100%" stopColor="#111" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M0 160 C60 150 90 90 140 100 C190 110 210 170 270 140 C330 110 360 40 420 55 C480 70 500 130 560 95 C600 75 620 60 640 50 L640 220 L0 220 Z"
+                  fill="url(#hramFill)"
+                />
+                <path
+                  d="M0 160 C60 150 90 90 140 100 C190 110 210 170 270 140 C330 110 360 40 420 55 C480 70 500 130 560 95 C600 75 620 60 640 50"
+                  stroke="#111"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section className="hram-trust" aria-label="Kapsanan piyasalar">
+          <ul>
+            {MARKETS.map((m) => (
+              <li key={m.label}>
+                <strong>{m.label}</strong>
+                <span>{m.hint}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section id="urunler" className="hram-section">
+          <div className="hram-section__head">
+            <p className="hram-eyebrow">Ürünler</p>
+            <h2>Kurumsal aracılık deneyimi</h2>
+            <p>
+              Interactive Brokers / Saxo tarzı sade bir arayüz; spekülatif
+              fintech dilinden uzak, uluslararası standartlara yakın.
+            </p>
+          </div>
+          <div className="hram-features">
+            {FEATURES.map((f) => (
+              <article key={f.title} className="hram-feature">
+                <h3>{f.title}</h3>
+                <p>{f.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="markets" className="hram-section hram-section--muted">
+          <div className="hram-section__head">
+            <p className="hram-eyebrow">Piyasalar</p>
+            <h2>Örnek piyasa şeridi</h2>
+            <p>
+              Aşağıdaki fiyatlar yalnızca görsel amaçlıdır; gerçek zamanlı
+              kotasyon değildir.
+            </p>
+          </div>
+          <div className="hram-tickers">
+            {TICKERS.map((t) => (
+              <div key={t.sym} className="hram-ticker">
+                <div className="hram-ticker__top">
+                  <span className="hram-ticker__sym">{t.sym}</span>
+                  <span className="hram-ticker__mkt">{t.mkt}</span>
+                </div>
+                <div className="hram-ticker__px">{t.px}</div>
+                <div
+                  className={`hram-ticker__ch${
+                    t.ch.startsWith("−") || t.ch.startsWith("-")
+                      ? " is-down"
+                      : " is-up"
+                  }`}
+                >
+                  {t.ch}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+
+        <section id="guvenlik" className="hram-section hram-section--dark">
+          <div className="hram-section__head">
+            <p className="hram-eyebrow hram-eyebrow--light">Güvenlik</p>
+            <h2>Gizlilik ve kurumsal standartlar</h2>
+            <p>
+              Bağlantılar şifrelenir; verileriniz gizlilik politikamıza uygun
+              işlenir. Demo ortamında gerçek düzenleyici lisans numarası
+              iddiası yer almaz — uluslararası piyasalar erişimi sunan bir
+              platform deneyimi olarak tasarlanmıştır.
+            </p>
+            <div className="hram-hero__ctas" style={{ marginTop: "1.5rem" }}>
+              <Link href="/gizlilik" className="hram-btn hram-btn--outline-light">
+                Gizlilik politikası
+              </Link>
+              <Link href="/destek" className="hram-btn hram-btn--ghost-light">
+                Destek
+              </Link>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <footer className="hram-footer">
+        <div className="hram-footer__inner">
+          <span className="hram-wordmark">HRAM</span>
+          <nav aria-label="Alt bilgi">
+            <Link href="/gizlilik">Gizlilik</Link>
+            <Link href="/destek">Destek</Link>
+            <Link href="/giris">Giriş</Link>
+            <Link href="/kayit">Hesap aç</Link>
+          </nav>
+          <details className="hram-footer__org">
+            <summary>Kurumsal erişim</summary>
+            <nav aria-label="Kurumsal">
+              <Link href="/agent">Agent</Link>
+              <Link href="/admin">Yönetim</Link>
+            </nav>
+          </details>
+          <p>© 2026 HRAM. Tüm hakları saklıdır.</p>
+        </div>
+      </footer>
     </div>
   );
 }

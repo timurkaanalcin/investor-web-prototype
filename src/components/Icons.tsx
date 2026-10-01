@@ -289,3 +289,24 @@ export function IconArrowDown({ size = 14, ...p }: P) {
     </svg>
   );
 }
+
+export function IconStar({ size = 16, filled = false, ...p }: P & { filled?: boolean }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.8 6.7 19.6l1-5.8-4.2-4.1 5.9-.9L12 3.5z" />
+    </svg>
+  );
+}
+
+export function IconGrip({ size = 14, ...p }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" {...p}>
+      <circle cx="9" cy="7" r="1.5" />
+      <circle cx="15" cy="7" r="1.5" />
+      <circle cx="9" cy="12" r="1.5" />
+      <circle cx="15" cy="12" r="1.5" />
+      <circle cx="9" cy="17" r="1.5" />
+      <circle cx="15" cy="17" r="1.5" />
+    </svg>
+  );
+}

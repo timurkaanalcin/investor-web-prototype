@@ -135,7 +135,7 @@ function roundMoney(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
-export const TP_SL_MODE_KEY = "investor_tp_sl_mode";
+export const TP_SL_MODE_KEY = "hram_tp_sl_mode";
 
 export function loadTpSlMode(): BracketMode {
   if (typeof window === "undefined") return "percent";
@@ -157,7 +157,7 @@ export function saveTpSlMode(mode: BracketMode): void {
   }
 }
 
-export const TP_SL_OPEN_KEY = "investor_tp_sl_open";
+export const TP_SL_OPEN_KEY = "hram_tp_sl_open";
 
 export function loadTpSlOpen(): boolean {
   if (typeof window === "undefined") return false;

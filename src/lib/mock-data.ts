@@ -383,7 +383,8 @@ export function getPosition(symbol: string): TradePosition | undefined {
 /** Mock tax impact for a sell order (short/long-term + wash sale) */
 export function estimateTaxImpact(
   symbol: string,
-  sellShares: number
+  sellShares: number,
+  positionOverride?: TradePosition
 ): {
   costBasis: number;
   proceeds: number;
@@ -396,7 +397,7 @@ export function estimateTaxImpact(
   longTermTax: number;
   washSaleRisk: boolean;
 } {
-  const pos = getPosition(symbol);
+  const pos = positionOverride ?? getPosition(symbol);
   const inst = getInstrument(symbol);
   const price = inst?.price ?? 100;
   const avg = pos?.avgCost ?? price * 0.9;

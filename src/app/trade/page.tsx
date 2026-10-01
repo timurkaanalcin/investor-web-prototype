@@ -11,7 +11,7 @@ export default function TradeHomePage() {
       <div className="trade-tv-root flex h-full min-h-0 flex-col items-center justify-center px-8 text-center">
         <div className="max-w-sm">
           <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--tv-muted)]">
-            Investor Trade
+            HRAM Trade
           </p>
           <h1 className="mt-3 text-[22px] font-bold tracking-tight text-[var(--tv-text)]">
             Bir hisse seçin

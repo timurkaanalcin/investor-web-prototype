@@ -1,8 +1,8 @@
-/** Official investor Swiss wordmark — black ground, gold type */
+/** HRAM wordmark — black / white / gray only */
 const SIZES = {
-  sm: { h: 28, className: "h-7 w-auto" },
-  md: { h: 36, className: "h-9 w-auto" },
-  lg: { h: 56, className: "h-14 w-auto" },
+  sm: { className: "text-lg tracking-[0.2em]" },
+  md: { className: "text-xl tracking-[0.22em]" },
+  lg: { className: "text-3xl tracking-[0.25em]" },
 } as const;
 
 export function BrandLogo({
@@ -10,22 +10,19 @@ export function BrandLogo({
   showIcon = true,
 }: {
   size?: "sm" | "md" | "lg";
-  /** Kept for API compat; image includes the mark */
+  /** Kept for API compat */
   showIcon?: boolean;
 }) {
-  const { className } = SIZES[size];
   void showIcon;
+  const { className } = SIZES[size];
   return (
     <div className="brand-logo flex items-center">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/brand/investor-logo.png"
-        alt="investor"
-        className={`${className} rounded-md object-contain`}
-        height={SIZES[size].h}
-        width={SIZES[size].h}
-        decoding="async"
-      />
+      <span
+        className={`${className} font-semibold uppercase text-neutral-900 dark:text-neutral-100`}
+        aria-label="HRAM"
+      >
+        HRAM
+      </span>
     </div>
   );
 }

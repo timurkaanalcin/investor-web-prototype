@@ -22,6 +22,7 @@ import {
   clearSession,
   getDarkMode,
   getNotifications,
+  logoutUser,
   setDarkMode,
   setNotifications,
 } from "@/lib/storage";
@@ -56,7 +57,7 @@ const SHEET_COPY: Record<
   },
   help: {
     title: "Yardım",
-    body: "Destek: destek@investor.app · SSS ve sohbet yakında eklenecek.",
+    body: "Destek: destek@hram.tr · SSS ve sohbet yakında eklenecek.",
   },
 };
 
@@ -94,9 +95,10 @@ export default function ProfilePage() {
   }
 
   function confirmLogout() {
+    logoutUser();
     clearSession();
     setSheet(null);
-    router.push("/onboarding");
+    router.replace("/giris");
   }
 
   const avatar = (
@@ -342,7 +344,7 @@ export default function ProfilePage() {
               Çıkış yap
             </h3>
             <p className="profile-text-secondary mt-2 text-sm leading-relaxed">
-              Oturum kapatılacak ve onboarding&apos;e döneceksiniz. Yerel
+              Oturum kapatılacak ve giriş ekranına döneceksiniz. Yerel
               simülasyon verileri temizlenir.
             </p>
             <div className="mt-6 flex gap-2.5">

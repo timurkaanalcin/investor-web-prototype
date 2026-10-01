@@ -126,8 +126,8 @@ export function LogoQQQ({ size = 28, className }: LogoProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden>
       <rect width="32" height="32" rx="7" fill="#111111" />
-      <circle cx="14.5" cy="14.5" r="6.5" fill="none" stroke="#ffc729" strokeWidth="2.2" />
-      <path d="M19.2 19.2l5 5" stroke="#ffc729" strokeWidth="2.2" strokeLinecap="round" />
+      <circle cx="14.5" cy="14.5" r="6.5" fill="none" stroke="#a3a3a3" strokeWidth="2.2" />
+      <path d="M19.2 19.2l5 5" stroke="#a3a3a3" strokeWidth="2.2" strokeLinecap="round" />
     </svg>
   );
 }

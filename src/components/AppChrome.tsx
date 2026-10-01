@@ -6,13 +6,28 @@ import { PhoneShell } from "./PhoneShell";
 import { TabBar } from "./TabBar";
 import { DesktopSidebar } from "./DesktopSidebar";
 import { OnboardingGate } from "./OnboardingGate";
+import { LiveSupportWidget } from "./LiveSupportWidget";
 import { TradeThemeProvider } from "./TradeTheme";
+import { PlatformBanner } from "./PlatformBanner";
 import { applyDarkMode, getTradeTheme, type TradeTheme } from "@/lib/storage";
 
 export function AppChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isOnboarding = pathname.startsWith("/onboarding");
+  const isLanding = pathname === "/" || pathname === "";
+  const isAuth =
+    pathname === "/giris" ||
+    pathname.startsWith("/giris/") ||
+    pathname === "/kayit" ||
+    pathname.startsWith("/kayit/") ||
+    pathname.startsWith("/onboarding");
   const isTrade = pathname === "/trade" || pathname.startsWith("/trade/");
+  const isPublic =
+    pathname === "/gizlilik" ||
+    pathname === "/destek" ||
+    pathname === "/agent" ||
+    pathname.startsWith("/agent/");
+  const isAdmin =
+    pathname === "/admin" || pathname.startsWith("/admin/");
   const [tradeTheme, setTradeTheme] = useState<TradeTheme>("light");
 
   useLayoutEffect(() => {
@@ -26,7 +41,17 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
 
   const shellClass = isTrade
     ? `trade-tv trade-tv-${tradeTheme}`
-    : undefined;
+    : isLanding
+      ? "hram-marketing-shell"
+      : undefined;
+
+  const shellLayout = isTrade
+    ? "trade"
+    : isLanding || isAdmin
+      ? "marketing"
+      : isAuth || isPublic
+        ? "phone"
+        : "app";
 
   const inner = (
     <OnboardingGate>
@@ -36,14 +61,33 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
             {children}
           </main>
         </div>
+      ) : isLanding ? (
+        <main className="hram-landing-root flex min-h-0 flex-1 flex-col overflow-y-auto">
+          {children}
+        </main>
+      ) : isAdmin ? (
+        <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
+          {children}
+        </main>
       ) : (
         <div className="app-chrome-body flex min-h-0 flex-1 overflow-hidden">
-          {!isOnboarding && <DesktopSidebar />}
+          {!isAuth && !isPublic && <DesktopSidebar />}
           <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+            <PlatformBanner />
             <main className="app-main flex-1 overflow-y-auto">
-              <div className="app-content">{children}</div>
+              <div
+                className={
+                  isAuth
+                    ? "auth-content min-h-full"
+                    : isPublic
+                      ? "public-content"
+                      : "app-content"
+                }
+              >
+                {children}
+              </div>
             </main>
-            {!isOnboarding && <TabBar />}
+            {!isAuth && !isPublic && <TabBar />}
           </div>
         </div>
       )}
@@ -51,10 +95,7 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <PhoneShell
-      layout={isTrade ? "trade" : isOnboarding ? "phone" : "app"}
-      className={shellClass}
-    >
+    <PhoneShell layout={shellLayout} className={shellClass}>
       {isTrade ? (
         <TradeThemeProvider onThemeChange={onThemeChange}>
           {inner}
@@ -62,6 +103,8 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
       ) : (
         inner
       )}
+      {/* Unified live support chat (text + mic). VoiceCommand overlay removed. */}
+      {!isAdmin && <LiveSupportWidget />}
     </PhoneShell>
   );
 }

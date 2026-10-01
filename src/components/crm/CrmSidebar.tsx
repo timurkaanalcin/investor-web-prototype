@@ -23,6 +23,10 @@ import {
   IconChart,
   IconSettings,
   IconWorkflow,
+  IconTerminal,
+  IconPositions,
+  IconBlotter,
+  IconRisk,
 } from "./CrmIcons";
 
 const NAV: {
@@ -30,21 +34,25 @@ const NAV: {
   label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   badge?: "support" | "money";
-  /** Required permission; admin/pin always sees all. Dashboard always shown. */
   perm?: string;
   adminOnly?: boolean;
+  group?: string;
 }[] = [
-  { href: "/admin/dashboard/", label: "Gösterge Paneli", icon: IconDash },
-  { href: "/admin/customers/", label: "Müşteriler", icon: IconUsers, perm: "customers" },
-  { href: "/admin/chat/", label: "Sohbet", icon: IconChat, badge: "support", perm: "chat" },
-  { href: "/admin/tickets/", label: "Biletler", icon: IconTicket, perm: "tickets" },
-  { href: "/admin/transactions/", label: "İşlemler", icon: IconTx, perm: "transactions", adminOnly: true },
-  { href: "/admin/desks/", label: "Masalar", icon: IconBuilding, perm: "desks" },
-  { href: "/admin/employees/", label: "Çalışanlar", icon: IconEmployee, perm: "employees", adminOnly: true },
-  { href: "/admin/money/", label: "Para talepleri", icon: IconMoney, badge: "money", perm: "money", adminOnly: true },
-  { href: "/admin/referrals/", label: "Referans", icon: IconTag, perm: "referrals", adminOnly: true },
-  { href: "/admin/analytics/", label: "Analitik", icon: IconChart, perm: "analytics", adminOnly: true },
-  { href: "/admin/settings/", label: "Ayarlar", icon: IconSettings, perm: "settings", adminOnly: true },
+  { href: "/admin/dashboard/", label: "Gösterge", icon: IconDash, group: "desk" },
+  { href: "/admin/terminal/", label: "İşlem Terminali", icon: IconTerminal, perm: "terminal", group: "trade" },
+  { href: "/admin/positions/", label: "Pozisyonlar", icon: IconPositions, perm: "terminal", group: "trade" },
+  { href: "/admin/blotter/", label: "Emir Defteri", icon: IconBlotter, perm: "transactions", adminOnly: true, group: "trade" },
+  { href: "/admin/risk/", label: "Risk", icon: IconRisk, perm: "risk", adminOnly: true, group: "trade" },
+  { href: "/admin/customers/", label: "Müşteriler", icon: IconUsers, perm: "customers", group: "crm" },
+  { href: "/admin/chat/", label: "Sohbet", icon: IconChat, badge: "support", perm: "chat", group: "crm" },
+  { href: "/admin/tickets/", label: "Biletler", icon: IconTicket, perm: "tickets", group: "crm" },
+  { href: "/admin/transactions/", label: "İşlemler", icon: IconTx, perm: "transactions", adminOnly: true, group: "crm" },
+  { href: "/admin/desks/", label: "Masalar", icon: IconBuilding, perm: "desks", group: "crm" },
+  { href: "/admin/employees/", label: "Çalışanlar", icon: IconEmployee, perm: "employees", adminOnly: true, group: "ops" },
+  { href: "/admin/money/", label: "Para talepleri", icon: IconMoney, badge: "money", perm: "money", adminOnly: true, group: "ops" },
+  { href: "/admin/referrals/", label: "Referans", icon: IconTag, perm: "referrals", adminOnly: true, group: "ops" },
+  { href: "/admin/analytics/", label: "Analitik", icon: IconChart, perm: "analytics", adminOnly: true, group: "ops" },
+  { href: "/admin/settings/", label: "Ayarlar", icon: IconSettings, perm: "settings", adminOnly: true, group: "ops" },
 ];
 
 function normalize(path: string): string {
@@ -89,20 +97,22 @@ export function CrmSidebar({
     return () => window.clearInterval(iv);
   }, []);
 
+  let lastGroup = "";
+
   return (
-    <aside className="flex h-full w-60 shrink-0 flex-col border-r border-black/10 bg-white text-black">
-      <div className="flex items-center gap-2 border-b border-black/10 px-4 py-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-black text-white">
-          <IconWorkflow size={18} />
+    <aside className="flex h-full w-[200px] shrink-0 flex-col border-r border-black/10 bg-white text-black">
+      <div className="flex h-11 items-center gap-2 border-b border-black/10 px-3">
+        <div className="flex h-7 w-7 items-center justify-center rounded bg-black text-white">
+          <IconWorkflow size={14} />
         </div>
-        <div>
-          <p className="text-sm font-bold text-black">HRAM CRM</p>
-          <p className="text-[10px] uppercase tracking-wider text-neutral-500">
-            {session?.role || "Broker Desk"}
+        <div className="min-w-0 leading-tight">
+          <p className="truncate text-[12px] font-bold text-black">HRAM Desk</p>
+          <p className="truncate text-[9px] uppercase tracking-wider text-neutral-500">
+            {session?.role || "Broker"}
           </p>
         </div>
       </div>
-      <nav className="flex-1 space-y-0.5 overflow-y-auto p-2">
+      <nav className="flex-1 overflow-y-auto px-1.5 py-1.5">
         {visibleNav.map((item) => {
           const active =
             current === item.href ||
@@ -114,42 +124,56 @@ export function CrmSidebar({
               : item.badge === "money"
                 ? moneyBadge
                 : 0;
+          const showGroup =
+            item.group && item.group !== lastGroup
+              ? ((lastGroup = item.group), true)
+              : false;
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onNavigate}
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition ${
-                active
-                  ? "bg-black text-white"
-                  : "text-black hover:bg-neutral-100"
-              }`}
-            >
-              <Icon
-                size={16}
-                className={active ? "text-white/80" : "text-neutral-500"}
-              />
-              <span className="flex-1">{item.label}</span>
-              {badge > 0 && (
-                <span
-                  className={`inline-flex min-w-5 justify-center rounded-full px-1.5 text-[10px] font-bold ${
-                    active ? "bg-white text-black" : "bg-neutral-800 text-white"
-                  }`}
-                >
-                  {badge}
-                </span>
+            <div key={item.href}>
+              {showGroup && item.group !== "desk" && (
+                <p className="mb-0.5 mt-2 px-2 text-[9px] font-semibold uppercase tracking-wider text-neutral-400">
+                  {item.group === "trade"
+                    ? "İşlem"
+                    : item.group === "crm"
+                      ? "CRM"
+                      : "Operasyon"}
+                </p>
               )}
-            </Link>
+              <Link
+                href={item.href}
+                onClick={onNavigate}
+                className={`flex h-[30px] items-center gap-2 rounded px-2 text-[12px] transition ${
+                  active
+                    ? "bg-black text-white"
+                    : "text-black hover:bg-neutral-100"
+                }`}
+              >
+                <Icon
+                  size={14}
+                  className={active ? "text-white/80" : "text-neutral-500"}
+                />
+                <span className="flex-1 truncate">{item.label}</span>
+                {badge > 0 && (
+                  <span
+                    className={`inline-flex min-w-[16px] justify-center rounded-full px-1 text-[9px] font-bold ${
+                      active ? "bg-white text-black" : "bg-neutral-800 text-white"
+                    }`}
+                  >
+                    {badge}
+                  </span>
+                )}
+              </Link>
+            </div>
           );
         })}
       </nav>
-      <div className="border-t border-black/10 px-3 py-3 text-[10px] text-neutral-500">
+      <div className="border-t border-black/10 px-2.5 py-2 text-[9px] text-neutral-500">
         {session?.permissions?.includes("shift") && (
-          <p className="mb-1 font-semibold uppercase tracking-wide text-black">
-            Shift yetkisi
+          <p className="mb-0.5 font-semibold uppercase tracking-wide text-black">
+            Shift
           </p>
         )}
-        Prototip · localStorage · Prisma yok
+        Prototip · LS · TV Desk
       </div>
     </aside>
   );

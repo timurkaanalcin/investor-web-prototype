@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ADMIN_PIN } from "@/lib/payment-config";
+import { verifyAdminPin } from "@/lib/admin-auth";
 import { setAdminUnlocked } from "@/lib/money-requests";
 import {
   authenticateCrmEmployee,
@@ -29,45 +29,39 @@ export default function CrmLogPage() {
     }
   }, [router]);
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
     setBusy(true);
 
     const pinTry = password.trim();
-    if (
-      (email.trim().toLowerCase() === "admin@hram.tr" || email.trim() === "" || email.trim().toLowerCase() === "admin") &&
-      pinTry === ADMIN_PIN
-    ) {
-      setCrmSession({
-        employeeId: "emp_1",
-        name: "Admin HRAM",
-        email: "admin@hram.tr",
-        role: "Admin",
-        permissions: ["admin"],
-        deskId: "desk_sup",
-        via: "admin_pin",
-      });
-      setAdminUnlocked(true);
-      setBusy(false);
-      router.replace("/admin/dashboard/");
-      return;
-    }
+    const emailNorm = email.trim().toLowerCase();
+    const adminEmailAttempt =
+      emailNorm === "admin@hram.tr" || emailNorm === "" || emailNorm === "admin";
 
-    if (pinTry === ADMIN_PIN && email.trim() === "") {
-      setCrmSession({
-        employeeId: "emp_1",
-        name: "Admin HRAM",
-        email: "admin@hram.tr",
-        role: "Admin",
-        permissions: ["admin"],
-        deskId: "desk_sup",
-        via: "admin_pin",
-      });
-      setAdminUnlocked(true);
-      setBusy(false);
-      router.replace("/admin/dashboard/");
-      return;
+    if (adminEmailAttempt && pinTry) {
+      const pinOk = await verifyAdminPin(pinTry);
+      if (pinOk.ok) {
+        setCrmSession({
+          employeeId: "emp_1",
+          name: "Admin HRAM",
+          email: "admin@hram.tr",
+          role: "Admin",
+          permissions: ["admin"],
+          deskId: "desk_sup",
+          via: "admin_pin",
+        });
+        setAdminUnlocked(true);
+        setBusy(false);
+        router.replace("/admin/dashboard/");
+        return;
+      }
+      // fall through to employee auth if email looks like staff
+      if (emailNorm === "" || emailNorm === "admin" || emailNorm === "admin@hram.tr") {
+        setBusy(false);
+        setError(pinOk.error || "PIN veya şifre hatalı");
+        return;
+      }
     }
 
     const result = authenticateCrmEmployee(email, password);

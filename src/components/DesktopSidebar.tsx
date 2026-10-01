@@ -20,7 +20,7 @@ import { NotificationsPanel, useUnreadCount } from "./NotificationsPanel";
 import { getDarkMode, setDarkMode } from "@/lib/storage";
 
 const NAV = [
-  { href: "/", label: "Ana sayfa", icon: IconHome },
+  { href: "/panel", label: "Ana sayfa", icon: IconHome },
   { href: "/yatir", label: "Yatır", icon: IconInvest },
   { href: "/trade", label: "Trade", icon: IconTrade },
   { href: "/islemler", label: "İşlemler", icon: IconHistory },
@@ -62,8 +62,8 @@ export function DesktopSidebar() {
       <nav className="flex flex-1 flex-col gap-0.5 px-3 pb-2">
         {NAV.map(({ href, label, icon: Icon }) => {
           const active =
-            href === "/"
-              ? pathname === "/"
+            href === "/panel"
+              ? pathname === "/panel" || pathname.startsWith("/panel/")
               : pathname.startsWith(href);
           return (
             <Link
