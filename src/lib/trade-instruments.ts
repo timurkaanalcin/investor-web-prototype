@@ -71,6 +71,13 @@ export type TradeInstrument = {
 /** Additional liquid symbols for the terminal category catalogs. Quotes remain simulated. */
 const EXTENDED_MARKET_INSTRUMENTS: TradeInstrument[] = [
   // Crypto
+  { symbol: "TONUSD", name: "Toncoin", type: "crypto", price: 1.51, changePct: 0.8, exchange: "CRYPTO", currency: "USD" },
+  { symbol: "RENDERUSD", name: "Render", type: "crypto", price: 1.91, changePct: 1.1, exchange: "CRYPTO", currency: "USD" },
+  { symbol: "SEIUSD", name: "Sei", type: "crypto", price: 0.074, changePct: 0.5, exchange: "CRYPTO", currency: "USD" },
+  { symbol: "TIAUSD", name: "Celestia", type: "crypto", price: 0.447, changePct: -0.3, exchange: "CRYPTO", currency: "USD" },
+  { symbol: "HBARUSD", name: "Hedera", type: "crypto", price: 0.105, changePct: 0.4, exchange: "CRYPTO", currency: "USD" },
+  { symbol: "XPTUSD", name: "Platin (XPT/USD)", type: "commodity", price: 1730.0, changePct: 0.2, exchange: "COMEX", currency: "USD" },
+  { symbol: "XPDUSD", name: "Paladyum (XPD/USD)", type: "commodity", price: 1206.0, changePct: 0.15, exchange: "COMEX", currency: "USD" },
   { symbol: "BCHUSD", name: "Bitcoin Cash", type: "crypto", price: 362.4, changePct: 1.14, exchange: "CRYPTO", currency: "USD" },
   { symbol: "TRXUSD", name: "TRON", type: "crypto", price: 0.154, changePct: 0.86, exchange: "CRYPTO", currency: "USD" },
   { symbol: "XLMUSD", name: "Stellar", type: "crypto", price: 0.104, changePct: 1.36, exchange: "CRYPTO", currency: "USD" },
@@ -89,7 +96,6 @@ const EXTENDED_MARKET_INSTRUMENTS: TradeInstrument[] = [
   { symbol: "PEPEUSD", name: "Pepe", type: "crypto", price: 0.0000112, changePct: 3.12, exchange: "CRYPTO", currency: "USD" },
   { symbol: "SHIBUSD", name: "Shiba Inu", type: "crypto", price: 0.0000174, changePct: 1.88, exchange: "CRYPTO", currency: "USD" },
   { symbol: "INJUSD", name: "Injective", type: "crypto", price: 21.36, changePct: 1.17, exchange: "CRYPTO", currency: "USD" },
-  { symbol: "FTMUSD", name: "Fantom", type: "crypto", price: 0.684, changePct: -0.34, exchange: "CRYPTO", currency: "USD" },
   { symbol: "MKRUSD", name: "Maker", type: "crypto", price: 1482.0, changePct: 0.92, exchange: "CRYPTO", currency: "USD" },
   { symbol: "AAVEUSD", name: "Aave", type: "crypto", price: 156.4, changePct: 2.04, exchange: "CRYPTO", currency: "USD" },
   { symbol: "RUNEUSD", name: "THORChain", type: "crypto", price: 3.86, changePct: -0.62, exchange: "CRYPTO", currency: "USD" },
@@ -124,11 +130,6 @@ const EXTENDED_MARKET_INSTRUMENTS: TradeInstrument[] = [
   { symbol: "HEATOIL", name: "Kalorifer Yakıtı", type: "commodity", price: 2.24, changePct: 0.29, exchange: "COMEX", currency: "USD" },
   { symbol: "GASOLINE", name: "Benzin", type: "commodity", price: 2.08, changePct: -0.37, exchange: "COMEX", currency: "USD" },
   { symbol: "ALUMINUM", name: "Alüminyum", type: "commodity", price: 2528.0, changePct: 0.46, exchange: "COMEX", currency: "USD" },
-  { symbol: "NICKEL", name: "Nikel", type: "commodity", price: 16120.0, changePct: -0.58, exchange: "COMEX", currency: "USD" },
-  { symbol: "ZINC", name: "Çinko", type: "commodity", price: 2914.0, changePct: 0.31, exchange: "COMEX", currency: "USD" },
-  { symbol: "LEAD", name: "Kurşun", type: "commodity", price: 2068.0, changePct: 0.12, exchange: "COMEX", currency: "USD" },
-  { symbol: "TIN", name: "Kalay", type: "commodity", price: 32980.0, changePct: 0.67, exchange: "COMEX", currency: "USD" },
-  { symbol: "LUMBER", name: "Kereste", type: "commodity", price: 548.2, changePct: -0.44, exchange: "COMEX", currency: "USD" },
 ];
 
 export const TRADE_INSTRUMENTS: TradeInstrument[] = [
@@ -977,7 +978,8 @@ export const TRADE_INSTRUMENTS: TradeInstrument[] = [
   { symbol: "MARMR", name: "Marmara Holding", type: "stock", price: 97.18, changePct: -3.24, exchange: "BIST", currency: "TRY" },
   { symbol: "MARTI", name: "Martı Otel", type: "stock", price: 101.44, changePct: -1.6, exchange: "BIST", currency: "TRY" },
   { symbol: "MAS", name: "Masco", type: "stock", price: 25.61, changePct: 1.72, exchange: "NYSE", currency: "USD" },
-  { symbol: "MATICUSD", name: "Polygon", type: "crypto", price: 0.52, changePct: 0.35, exchange: "CRYPTO", currency: "USD" },
+  { symbol: "MATICUSD", name: "Polygon (legacy)", type: "crypto", price: 0.113, changePct: 0.35, exchange: "CRYPTO", currency: "USD" },
+  { symbol: "POLUSD", name: "Polygon", type: "crypto", price: 0.113, changePct: 0.35, exchange: "CRYPTO", currency: "USD", popular: true },
   { symbol: "MATX", name: "Matson", type: "stock", price: 151.31, changePct: 0.79, exchange: "NASDAQ", currency: "USD" },
   { symbol: "MAVI", name: "Mavi Giyim", type: "stock", price: 107.44, changePct: 1.86, exchange: "BIST", currency: "TRY" },
   { symbol: "MBG", name: "Mercedes-Benz Group", type: "stock", price: 155.52, changePct: -2.25, exchange: "XETRA", currency: "EUR", popular: true },
