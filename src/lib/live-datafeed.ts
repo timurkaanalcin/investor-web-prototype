@@ -65,6 +65,44 @@ function uid(symbol: string, resolution: string, listenerGuid: string) {
   return `${symbol}|${resolution}|${listenerGuid}`;
 }
 
+
+/** Deterministic OHLC fallback so charts never render empty when Yahoo fails. */
+function syntheticBarsFromPrice(price: number, resolution: string): Bar[] {
+  const mid = Number.isFinite(price) && price > 0 ? price : 1;
+  const step =
+    resolution === "1" || resolution === "1m"
+      ? 60
+      : resolution === "5" || resolution === "5m"
+        ? 300
+        : resolution === "15" || resolution === "15m"
+          ? 900
+          : resolution === "60" || resolution === "1h"
+            ? 3600
+            : resolution === "240" || resolution === "4h"
+              ? 14400
+              : resolution === "D" || resolution === "1D"
+                ? 86400
+                : resolution === "W"
+                  ? 604800
+                  : 300;
+  const now = Math.floor(Date.now() / 1000);
+  const end = Math.floor(now / step) * step;
+  const bars: Bar[] = [];
+  let px = mid * 0.98;
+  for (let i = 80; i >= 0; i--) {
+    const time = end - i * step;
+    const drift = (mid - px) * 0.08;
+    const noise = mid * 0.0015 * Math.sin(i * 1.7);
+    const open = px;
+    px = Math.max(mid * 0.5, px + drift + noise);
+    const close = i === 0 ? mid : px;
+    const high = Math.max(open, close) * (1 + 0.0008);
+    const low = Math.min(open, close) * (1 - 0.0008);
+    bars.push({ time, open, high, low, close });
+  }
+  return bars;
+}
+
 export async function getBars(
   symbol: string,
   yahoo: string,
@@ -110,13 +148,31 @@ export async function getBars(
       }
     }
     const sorted = Array.from(map.values()).sort((a, b) => a.time - b.time);
+    const live =
+      typeof data.price === "number" && data.price > 0 ? data.price : undefined;
+    if (!sorted.length) {
+      const seed =
+        live ??
+        (sorted.length ? sorted[sorted.length - 1].close : 0) ??
+        0;
+      const fallback = syntheticBarsFromPrice(seed || 1, resolution);
+      return {
+        bars: fallback,
+        price: live ?? fallback[fallback.length - 1]?.close,
+        error: data.error ? String(data.error) : "ohlc empty — synthetic",
+      };
+    }
     return {
       bars: sorted,
-      price:
-        typeof data.price === "number" && data.price > 0 ? data.price : undefined,
+      price: live,
     };
   } catch (e) {
-    return { bars: [], error: e instanceof Error ? e.message : "ohlc failed" };
+    const fallback = syntheticBarsFromPrice(1, resolution);
+    return {
+      bars: fallback,
+      price: fallback[fallback.length - 1]?.close,
+      error: e instanceof Error ? e.message : "ohlc failed",
+    };
   }
 }
 

@@ -244,10 +244,12 @@ export function getMarketStatus(now = new Date()): {
 }
 
 export function formatVolume(n: number): string {
-  if (n >= 1e9) return `${(n / 1e9).toLocaleString("tr-TR", { maximumFractionDigits: 2 })}B`;
-  if (n >= 1e6) return `${(n / 1e6).toLocaleString("tr-TR", { maximumFractionDigits: 2 })}M`;
-  if (n >= 1e3) return `${(n / 1e3).toLocaleString("tr-TR", { maximumFractionDigits: 1 })}K`;
-  return n.toLocaleString("tr-TR");
+  // Full amount — never abbreviate as K / M / B
+  if (!Number.isFinite(n)) return "0";
+  return n.toLocaleString("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
 }
 
 /** Soft rising account-value series for SDI overview (no range pills). */

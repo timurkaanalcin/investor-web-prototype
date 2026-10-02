@@ -11,23 +11,27 @@ header('Access-Control-Allow-Origin: *');
 
 function yahoo_ticker_from_symbol(string $symbol): string {
   $s = strtoupper(trim($symbol));
-  static $map = [
-    'BTCUSD' => 'BTC-USD', 'ETHUSD' => 'ETH-USD', 'SOLUSD' => 'SOL-USD',
-    'XRPUSD' => 'XRP-USD', 'BNBUSD' => 'BNB-USD', 'ADAUSD' => 'ADA-USD',
-    'DOGEUSD' => 'DOGE-USD', 'AVAXUSD' => 'AVAX-USD', 'DOTUSD' => 'DOT-USD',
-    'LINKUSD' => 'LINK-USD', 'MATICUSD' => 'MATIC-USD', 'LTCUSD' => 'LTC-USD',
-    'TRXUSD' => 'TRX-USD', 'BCHUSD' => 'BCH-USD', 'XLMUSD' => 'XLM-USD',
-    'ATOMUSD' => 'ATOM-USD', 'UNIUSD' => 'UNI-USD', 'NEARUSD' => 'NEAR-USD',
-    'APTUSD' => 'APT-USD', 'ARBUSD' => 'ARB-USD', 'OPUSD' => 'OP-USD',
-    'FILUSD' => 'FIL-USD', 'ETCUSD' => 'ETC-USD', 'ICPUSD' => 'ICP-USD',
-    'SUIUSD' => 'SUI-USD', 'ALGOUSD' => 'ALGO-USD', 'EOSUSD' => 'EOS-USD',
-    'PEPEUSD' => 'PEPE-USD', 'SHIBUSD' => 'SHIB-USD', 'INJUSD' => 'INJ-USD',
-    'AAVEUSD' => 'AAVE-USD', 'XAUUSD' => 'GC=F', 'XAGUSD' => 'SI=F',
-    'USOIL' => 'CL=F', 'UKOIL' => 'BZ=F', 'NATGAS' => 'NG=F',
-    'EURUSD' => 'EURUSD=X', 'GBPUSD' => 'GBPUSD=X', 'USDJPY' => 'USDJPY=X',
-    'AUDUSD' => 'AUDUSD=X', 'USDCAD' => 'USDCAD=X', 'USDCHF' => 'USDCHF=X',
-    'NZDUSD' => 'NZDUSD=X', 'EURGBP' => 'EURGBP=X', 'EURJPY' => 'EURJPY=X',
-    'USDTRY' => 'TRY=X', 'EURTRY' => 'EURTRY=X', 'GBPTRY' => 'GBPTRY=X',
+    static $map = [
+    'BTCUSD' => 'BTC-USD', 'ETHUSD' => 'ETH-USD', 'SOLUSD' => 'SOL-USD', 'XRPUSD' => 'XRP-USD',
+    'BNBUSD' => 'BNB-USD', 'ADAUSD' => 'ADA-USD', 'DOGEUSD' => 'DOGE-USD', 'AVAXUSD' => 'AVAX-USD',
+    'DOTUSD' => 'DOT-USD', 'LINKUSD' => 'LINK-USD', 'MATICUSD' => 'POL28321-USD', 'POLUSD' => 'POL28321-USD',
+    'LTCUSD' => 'LTC-USD', 'TRXUSD' => 'TRX-USD', 'BCHUSD' => 'BCH-USD', 'XLMUSD' => 'XLM-USD',
+    'ATOMUSD' => 'ATOM-USD', 'UNIUSD' => 'UNI7083-USD', 'NEARUSD' => 'NEAR-USD', 'APTUSD' => 'APT21794-USD',
+    'ARBUSD' => 'ARB11841-USD', 'OPUSD' => 'OP-USD', 'FILUSD' => 'FIL-USD', 'ETCUSD' => 'ETC-USD',
+    'ICPUSD' => 'ICP-USD', 'SUIUSD' => 'SUI20947-USD', 'ALGOUSD' => 'ALGO-USD', 'EOSUSD' => 'EOS-USD',
+    'PEPEUSD' => 'PEPE24478-USD', 'SHIBUSD' => 'SHIB-USD', 'INJUSD' => 'INJ-USD', 'AAVEUSD' => 'AAVE-USD',
+    'MKRUSD' => 'MKR-USD', 'KASUSD' => 'KAS-USD', 'RUNEUSD' => 'RUNE-USD', 'TONUSD' => 'TON11419-USD',
+    'RENDERUSD' => 'RENDER-USD', 'SEIUSD' => 'SEI-USD', 'TIAUSD' => 'TIA-USD', 'HBARUSD' => 'HBAR-USD',
+    'WLDUSD' => 'WLD-USD', 'BONKUSD' => 'BONK-USD', 'WIFUSD' => 'WIF-USD', 'XAUUSD' => 'GC=F',
+    'XAGUSD' => 'SI=F', 'XPTUSD' => 'PL=F', 'XPDUSD' => 'PA=F', 'PLATINUM' => 'PL=F',
+    'PALLADIUM' => 'PA=F', 'USOIL' => 'CL=F', 'WTIUSD' => 'CL=F', 'UKOIL' => 'BZ=F',
+    'NATGAS' => 'NG=F', 'COPPER' => 'HG=F', 'ALUMINUM' => 'ALI=F', 'CORN' => 'ZC=F',
+    'WHEAT' => 'ZW=F', 'SOYBEAN' => 'ZS=F', 'COFFEE' => 'KC=F', 'SUGAR' => 'SB=F',
+    'COCOA' => 'CC=F', 'COTTON' => 'CT=F', 'HEATOIL' => 'HO=F', 'GASOLINE' => 'RB=F',
+    'RICE' => 'ZR=F', 'EURUSD' => 'EURUSD=X', 'GBPUSD' => 'GBPUSD=X', 'USDJPY' => 'USDJPY=X',
+    'AUDUSD' => 'AUDUSD=X', 'USDCAD' => 'USDCAD=X', 'USDCHF' => 'USDCHF=X', 'NZDUSD' => 'NZDUSD=X',
+    'EURGBP' => 'EURGBP=X', 'EURJPY' => 'EURJPY=X', 'USDTRY' => 'TRY=X', 'EURTRY' => 'EURTRY=X',
+    'GBPTRY' => 'GBPTRY=X',
   ];
   if (isset($map[$s])) return $map[$s];
   // Crypto PATTERN: XXXUSD → XXX-USD
